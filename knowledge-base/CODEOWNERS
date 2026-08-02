@@ -1,0 +1,46 @@
+# CODEOWNERS
+# This file defines ownership for documentation categories.
+# Each pattern maps to one or more reviewers who will be automatically
+# requested for review when a pull request modifies matching files.
+#
+# Format: <pattern> <owner1> <owner2> ...
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# === Repository-Wide ===
+*                           @knowledge-base-owner
+
+# === Governance ===
+/governance/                @knowledge-base-owner @tech-writing-lead
+
+# === Templates & Metadata ===
+/templates/                 @knowledge-base-owner @ai-engineering-lead
+/metadata/                  @knowledge-base-owner @ai-engineering-lead
+
+# === Banking Products ===
+/docs/accounts/             @retail-banking-sme @tech-writing-lead
+/docs/deposits/             @retail-banking-sme @tech-writing-lead
+/docs/loans/                @lending-sme @tech-writing-lead
+/docs/cards/                @cards-sme @tech-writing-lead
+
+# === Digital & Payments ===
+/docs/digital-banking/      @digital-banking-sme @tech-writing-lead
+/docs/payments/             @payments-sme @tech-writing-lead
+
+# === Services & Support ===
+/docs/services/             @operations-sme @tech-writing-lead
+/docs/customer-support/     @customer-support-lead @tech-writing-lead
+
+# === Policies & Security ===
+/docs/policies/             @compliance-lead @tech-writing-lead
+/docs/security/             @security-lead @tech-writing-lead
+
+# === Reference Data ===
+/docs/charges/              @finance-sme @tech-writing-lead
+/docs/interest-rates/       @finance-sme @tech-writing-lead
+/docs/forms/                @operations-sme @tech-writing-lead
+
+# === Cross-Cutting ===
+/faqs/                      @tech-writing-lead
+/scenarios/                 @tech-writing-lead @customer-support-lead
+/decision-guides/           @tech-writing-lead @retail-banking-sme
+/glossary/                  @tech-writing-lead

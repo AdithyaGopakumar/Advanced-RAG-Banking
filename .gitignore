@@ -1,0 +1,61 @@
+# === OS Generated Files ===
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# === Editor & IDE Files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# === Build & Output ===
+_build/
+_site/
+site/
+public/
+dist/
+out/
+build/
+*.html
+
+# === Node (if using documentation tooling) ===
+node_modules/
+package-lock.json
+yarn.lock
+
+# === Python (if using documentation tooling) ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# === Logs ===
+*.log
+logs/
+
+# === Temporary Files ===
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+
+# === Archives ===
+*.zip
+*.tar.gz
+*.rar
+
+# === Environment & Secrets ===
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.cert
