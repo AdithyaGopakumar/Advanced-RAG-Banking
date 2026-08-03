@@ -1,38 +1,51 @@
-# Documentation Directory
+﻿# Documentation
 
-This is the root directory for all customer-facing banking documentation.
+The core documentation of the Banking Customer Support Knowledge Base, organised by banking domain.
 
 ---
 
-## Structure
+## Product Documentation
 
-| Folder | Description | Document Count |
+| Category | Documents | Description |
 |---|---|---|
-| [accounts/](accounts/) | Bank account products (Savings, Current, Salary, Minor) | Planned |
-| [deposits/](deposits/) | Deposit products (Fixed, Recurring, Tax Saver) | Planned |
-| [loans/](loans/) | Loan products (Home, Personal, Education, Vehicle, Gold, Business) | Planned |
-| [cards/](cards/) | Card products (Credit, Debit, Prepaid) | Planned |
-| [digital-banking/](digital-banking/) | Digital channels (Mobile Banking, Internet Banking, UPI) | Planned |
-| [payments/](payments/) | Payment services (NEFT, RTGS, IMPS, Cheque, Demand Draft) | Planned |
-| [services/](services/) | Operational services (ATM, Locker, Nomination) | Planned |
-| [policies/](policies/) | Customer-facing policies (KYC, Account Closure, Grievance) | Planned |
-| [security/](security/) | Security guidelines and fraud prevention | Planned |
-| [customer-support/](customer-support/) | Complaint process, escalation, and contact channels | Planned |
-| [charges/](charges/) | Fee and charge schedules by category | Planned |
-| [interest-rates/](interest-rates/) | Interest rate schedules for deposits and loans | Planned |
-| [forms/](forms/) | Required documents and forms by process | Planned |
+| [Accounts](accounts/) | 5 | Savings, Current, Salary, Student, Senior Citizen accounts |
+| [Deposits](deposits/) | 3 | Fixed Deposit, Recurring Deposit, Tax Saver |
+| [Loans](loans/) | 7 | Home, Personal, Education, Vehicle, Gold, Business, LAP |
+| [Cards](cards/) | 5 | Credit, Debit, Prepaid, Virtual, Forex |
+
+## Service Documentation
+
+| Category | Documents | Description |
+|---|---|---|
+| [Digital Banking](digital-banking/) | 8 | Mobile, Internet, UPI, QR, Bill Payments, Troubleshooting |
+| [Payments](payments/) | 7 | NEFT, RTGS, IMPS, SWIFT, Cheque, DD, Troubleshooting |
+| [Services](services/) | 9 | ATM, Locker, Nomination, Updates, Closure, Statements |
+
+## Policies and Compliance
+
+| Category | Documents | Description |
+|---|---|---|
+| [Policies](policies/) | 8 | KYC, Closure, Dormant, Grievance, Privacy, Recovery |
+| [Security](security/) | 5 | Guidelines, Fraud Prevention, Phishing, Card Security |
+
+## Support
+
+| Category | Documents | Description |
+|---|---|---|
+| [Customer Support](customer-support/) | 4 | Complaint, Escalation, Contact, Ombudsman |
+
+## Reference Data
+
+| Category | Documents | Description |
+|---|---|---|
+| [Charges](charges/) | 5 | Account, Loan, Card, Payment, Service charges |
+| [Interest Rates](interest-rates/) | 2 | Deposit and Loan interest rates |
+| [Forms](forms/) | 4 | Account, Loan, KYC, Card documents |
 
 ---
 
-## Conventions
-
-- Each sub-folder contains documentation for a single category
-- Every document includes YAML frontmatter metadata
-- Documents are self-contained and independently retrievable
-- Cross-references use document IDs and relative links
-
-See [Governance Documentation](../governance/README.md) for full standards.
+**Total: 72 documents across 13 categories**
 
 ---
 
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

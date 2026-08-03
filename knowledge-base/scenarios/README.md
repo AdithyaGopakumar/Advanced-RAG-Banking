@@ -1,53 +1,24 @@
-# Customer Scenario Library
+﻿# Customer Scenarios
 
-This folder contains end-to-end customer journey walkthroughs for common and complex banking situations.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| new-customer-onboarding.md | Complete journey for a new customer opening their first account | Planned |
-| lost-card-replacement.md | Steps to take when a debit or credit card is lost or stolen | Planned |
-| loan-application-journey.md | End-to-end loan application and disbursement process | Planned |
-| dispute-resolution.md | How to raise and resolve transaction disputes | Planned |
-| account-upgrade.md | Upgrading an account type or adding new services | Planned |
-| deceased-account-handling.md | Process for claiming a deceased person's account | Planned |
+End-to-end customer journey walkthroughs for common banking situations.
 
 ---
 
-## Purpose
+## Documents
 
-Scenarios serve a different purpose than product documents or FAQs:
-
-- **Product Documents** answer "What is this product?"
-- **FAQs** answer "What is the answer to this specific question?"
-- **Scenarios** answer "I am in this situation — what do I do from start to finish?"
-
-Scenarios are particularly valuable for RAG retrieval because customers often describe their situation rather than asking about a specific product.
-
----
-
-## Scenario Format
-
-Each scenario document follows this structure:
-
-1. **Situation** — Description of the customer's starting point
-2. **What You Will Need** — Prerequisites, documents, and information required
-3. **Step-by-Step Process** — Numbered steps from start to finish
-4. **Expected Timelines** — How long each stage takes
-5. **What to Do If Something Goes Wrong** — Troubleshooting and escalation
-6. **Related Documents** — Links to relevant product, policy, and FAQ documents
+| ID | Document | Scenario | Priority |
+|---|---|---|---|
+| SCEN-ONBOARD-001 | [New Customer Onboarding](new-customer-onboarding.md) | First-time customer joining the bank | High |
+| SCEN-CARD-001 | [Lost Card Replacement](lost-card-replacement.md) | Card is lost or stolen | High |
+| SCEN-LOAN-001 | [Loan Application Journey](loan-application-journey.md) | Applying for a loan end-to-end | High |
+| SCEN-DISP-001 | [Dispute Resolution](dispute-resolution.md) | Disputing an unauthorised transaction | High |
+| SCEN-UPGRD-001 | [Account Upgrade](account-upgrade.md) | Upgrading to a better account type | High |
+| SCEN-DEC-001 | [Deceased Account Handling](deceased-account-handling.md) | Claiming from a deceased account | High |
+| SCEN-DIGI-001 | [First-Time Internet Banking](first-time-internet-banking.md) | Setting up net banking for the first time | High |
+| SCEN-DEP-001 | [Fixed Deposit Maturity](fixed-deposit-maturity.md) | What to do when FD matures | High |
+| SCEN-PREP-001 | [Home Loan Prepayment](home-loan-prepayment.md) | Prepaying or foreclosing a home loan | High |
+| SCEN-FRAUD-001 | [Fraud Reporting](fraud-reporting.md) | Reporting a fraud or cyber crime | High |
 
 ---
 
-## Related Folders
-
-- [docs/](../docs/) — Source product and service documentation
-- [faqs/](../faqs/) — Quick answers to specific questions within scenarios
-- [decision-guides/](../decision-guides/) — Guides for choosing between products before starting a scenario
-
----
-
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

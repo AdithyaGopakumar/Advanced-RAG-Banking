@@ -1,38 +1,23 @@
-# Services Documentation
+﻿# Banking Services
 
-This folder contains documentation for operational banking services offered by the Bank.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| atm-services.md | ATM services, cash withdrawal, and ATM card management | Planned |
-| locker-facility.md | Safe Deposit Locker facility documentation | Planned |
-| nomination.md | Nomination facility for accounts, deposits, and lockers | Planned |
+Account operations, service requests, and operational banking services.
 
 ---
 
-## Scope
+## Documents
 
-Documents in this folder cover:
-
-- Service description and eligibility
-- Application process
-- Fees and charges
-- Terms and conditions
-- Related customer rights and responsibilities
-- Frequently asked questions
-
----
-
-## Related Folders
-
-- [accounts/](../accounts/) — Accounts linked to banking services
-- [charges/](../charges/) — Service-specific fee schedules
-- [forms/](../forms/) — Required documents for service applications
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| SVC-ATM-001 | [ATM Services](atm-services.md) | Service | Medium |
+| SVC-LOCK-001 | [Locker Facility](locker-facility.md) | Service | Medium |
+| SVC-NOM-001 | [Nomination](nomination.md) | Process | Medium |
+| SVC-ADDR-001 | [Address Update](address-update.md) | Process | Medium |
+| SVC-MOB-001 | [Mobile Number Update](mobile-number-update.md) | Process | Medium |
+| SVC-CLOSE-001 | [Account Closure](account-closure.md) | Process | Medium |
+| SVC-REACT-001 | [Account Reactivation](account-reactivation.md) | Process | Medium |
+| SVC-STMT-001 | [Statement Requests](statement-requests.md) | Process | Medium |
+| SVC-PB-001 | [Passbook Services](passbook-services.md) | Process | Low |
 
 ---
 
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

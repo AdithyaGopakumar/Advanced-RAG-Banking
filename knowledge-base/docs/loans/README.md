@@ -1,46 +1,31 @@
-# Loans Documentation
+﻿# Loans
 
-This folder contains documentation for all loan products offered by the Bank.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| home-loan.md | Home Loan / Housing Loan product documentation | Planned |
-| personal-loan.md | Personal Loan product documentation | Planned |
-| education-loan.md | Education Loan product documentation | Planned |
-| vehicle-loan.md | Vehicle Loan (Car/Two-Wheeler) product documentation | Planned |
-| gold-loan.md | Gold Loan product documentation | Planned |
-| business-loan.md | Business Loan / MSME Loan product documentation | Planned |
+All lending products available from the Bank.
 
 ---
 
-## Scope
+## Documents
 
-Documents in this folder cover:
-
-- Loan features and benefits
-- Eligibility criteria (age, income, credit score)
-- Interest rates (fixed, floating, MCLR/EBLR linked)
-- Loan amount range and tenure
-- Required documents
-- Processing fees and other charges
-- Repayment options (EMI, pre-payment, foreclosure)
-- Security/collateral requirements
-- Insurance requirements
-- Tax benefits (Section 24, Section 80C, Section 80E)
-- Disbursement process
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| LOAN-HL-001 | [Home Loan](home-loan.md) | Product | High |
+| LOAN-PL-001 | [Personal Loan](personal-loan.md) | Product | High |
+| LOAN-EL-001 | [Education Loan](education-loan.md) | Product | High |
+| LOAN-VL-001 | [Vehicle Loan](vehicle-loan.md) | Product | High |
+| LOAN-GL-001 | [Gold Loan](gold-loan.md) | Product | Medium |
+| LOAN-BL-001 | [Business Loan](business-loan.md) | Product | High |
+| LOAN-LAP-001 | [Loan Against Property](loan-against-property.md) | Product | Medium |
 
 ---
 
-## Related Folders
+## Relationships
 
-- [interest-rates/](../interest-rates/) — Current loan interest rate schedules
-- [charges/](../charges/) — Processing fees, prepayment penalties, and other loan charges
-- [forms/](../forms/) — Required documents for loan applications
+- **Rates**: [Loan Interest Rates](../interest-rates/loan-interest-rates.md)
+- **Charges**: [Loan Charges](../charges/loan-charges.md)
+- **Forms**: [Loan Application Documents](../forms/loan-application-documents.md)
+- **FAQ**: [Loans FAQ](../../faqs/loans-faq.md)
+- **Decision Guide**: [Choose the Right Loan](../../decision-guides/choose-right-loan.md)
 
 ---
 
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

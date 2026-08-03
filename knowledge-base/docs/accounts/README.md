@@ -1,42 +1,29 @@
-# Accounts Documentation
+﻿# Accounts
 
-This folder contains documentation for all bank account products offered by the Bank.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| savings-account.md | Savings Account product documentation | Planned |
-| current-account.md | Current Account product documentation | Planned |
-| salary-account.md | Salary Account product documentation | Planned |
-| minor-account.md | Minor's Account product documentation | Planned |
+Retail banking account products offered by the Bank.
 
 ---
 
-## Scope
+## Documents
 
-Documents in this folder cover:
-
-- Account features and benefits
-- Eligibility criteria
-- Required documents for account opening
-- Interest rates
-- Minimum balance requirements
-- Transaction limits
-- Fees and charges
-- Account-specific processes
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| ACCT-SA-001 | [Savings Account](savings-account.md) | Product | High |
+| ACCT-CA-001 | [Current Account](current-account.md) | Product | High |
+| ACCT-SAL-001 | [Salary Account](salary-account.md) | Product | High |
+| ACCT-STU-001 | [Student Account](student-account.md) | Product | Medium |
+| ACCT-SC-001 | [Senior Citizen Account](senior-citizen-account.md) | Product | Medium |
 
 ---
 
-## Related Folders
+## Relationships
 
-- [charges/](../charges/) — Detailed fee schedules for account operations
-- [interest-rates/](../interest-rates/) — Current interest rate tables
-- [forms/](../forms/) — Required documents for account opening
-- [digital-banking/](../digital-banking/) — Online and mobile banking access for accounts
+- **Charges**: [Account Charges](../charges/account-charges.md)
+- **Forms**: [Account Opening Documents](../forms/account-opening-documents.md)
+- **Rates**: [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md)
+- **FAQ**: [Accounts FAQ](../../faqs/accounts-faq.md)
+- **Decision Guide**: [Choose the Right Account](../../decision-guides/choose-right-account.md)
 
 ---
 
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

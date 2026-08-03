@@ -1,51 +1,19 @@
-# Decision Guides
+﻿# Decision Guides
 
-This folder contains product comparison and selection guides to help customers choose the right banking product for their needs.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| choose-right-account.md | Guide to selecting between Savings, Current, and Salary accounts | Planned |
-| choose-right-loan.md | Guide to selecting the right loan product | Planned |
-| choose-right-card.md | Guide to selecting between Credit, Debit, and Prepaid cards | Planned |
-| choose-right-deposit.md | Guide to selecting between FD, RD, and Tax Saver deposits | Planned |
+Product comparison and selection guides to help customers choose the right product.
 
 ---
 
-## Purpose
+## Documents
 
-Decision guides answer the question: **"Which product is right for me?"**
-
-They are distinct from product documents because they:
-
-1. **Compare** multiple products side by side
-2. **Recommend** based on customer needs, goals, and constraints
-3. **Use decision logic** (if-then guidance) rather than listing features
-4. **Cut across categories** — a single guide may reference accounts, cards, and digital banking
-
----
-
-## Decision Guide Format
-
-Each guide follows this structure:
-
-1. **Who This Guide Is For** — Target audience and common situations
-2. **Key Questions to Ask Yourself** — Decision criteria
-3. **Product Comparison Table** — Side-by-side feature comparison
-4. **Recommendation Scenarios** — "If you need X, choose Y" guidance
-5. **Next Steps** — Links to apply or learn more about the recommended product
+| ID | Document | Compares | Priority |
+|---|---|---|---|
+| GUIDE-ACCT-001 | [Choose the Right Account](choose-right-account.md) | Savings, Current, Salary, Student, Senior Citizen | High |
+| GUIDE-LOAN-001 | [Choose the Right Loan](choose-right-loan.md) | Home, Personal, Education, Vehicle, Gold, Business, LAP | High |
+| GUIDE-CARD-001 | [Choose the Right Card](choose-right-card.md) | Credit, Debit, Prepaid, Virtual, Forex | High |
+| GUIDE-DEP-001 | [Choose the Right Deposit](choose-right-deposit.md) | FD, RD, Tax Saver | High |
+| GUIDE-PAY-001 | [Choose the Right Payment Method](choose-right-payment-method.md) | NEFT, RTGS, IMPS, UPI, Cheque, DD | High |
 
 ---
 
-## Related Folders
-
-- [docs/](../docs/) — Detailed product documentation for each option
-- [scenarios/](../scenarios/) — End-to-end journeys after a product is selected
-- [faqs/](../faqs/) — Specific questions about individual products
-
----
-
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

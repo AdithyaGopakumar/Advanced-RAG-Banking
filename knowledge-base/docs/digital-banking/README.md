@@ -1,41 +1,35 @@
-# Digital Banking Documentation
+﻿# Digital Banking
 
-This folder contains documentation for the Bank's digital banking channels and services.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| mobile-banking.md | Mobile Banking application documentation | Planned |
-| internet-banking.md | Internet Banking (Net Banking) documentation | Planned |
-| upi.md | Unified Payments Interface (UPI) documentation | Planned |
+Mobile banking, internet banking, UPI, and other digital channels.
 
 ---
 
-## Scope
+## Service Documents
 
-Documents in this folder cover:
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| DIGI-MB-001 | [Mobile Banking](mobile-banking.md) | Service | High |
+| DIGI-IB-001 | [Internet Banking](internet-banking.md) | Service | High |
+| DIGI-UPI-001 | [UPI](upi.md) | Service | High |
+| DIGI-QR-001 | [QR Payments](qr-payments.md) | Service | Medium |
+| DIGI-BP-001 | [Bill Payments](bill-payments.md) | Service | Medium |
 
-- Registration and activation process
-- Features and capabilities
-- Transaction limits
-- Security features (MPIN, biometric, OTP)
-- Supported transactions (fund transfer, bill payment, recharge)
-- Beneficiary management
-- Account statements and alerts
-- Device management
-- Troubleshooting common issues
+## Troubleshooting Documents
 
----
-
-## Related Folders
-
-- [payments/](../payments/) — Payment methods accessible through digital channels
-- [security/](../security/) — Online banking security guidelines
-- [customer-support/](../customer-support/) — Support for digital banking issues
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| DIGI-MB-TS-001 | [Mobile Banking Troubleshooting](mobile-banking-troubleshooting.md) | Troubleshooting | High |
+| DIGI-IB-TS-001 | [Internet Banking Troubleshooting](internet-banking-troubleshooting.md) | Troubleshooting | High |
+| DIGI-UPI-TS-001 | [UPI Troubleshooting](upi-troubleshooting.md) | Troubleshooting | High |
 
 ---
 
-*Last updated: 2026-08-02*
+## Relationships
+
+- **FAQ**: [Digital Banking FAQ](../../faqs/digital-banking-faq.md)
+- **Security**: [Security Guidelines](../security/security-guidelines.md)
+- **Scenario**: [First-Time Internet Banking](../../scenarios/first-time-internet-banking.md)
+
+---
+
+*Last updated: 2026-08-03*

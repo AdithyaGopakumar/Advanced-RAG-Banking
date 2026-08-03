@@ -1,49 +1,22 @@
-# Policies Documentation
+﻿# Policies
 
-This folder contains customer-facing policy documents that describe the Bank's rules, procedures, and regulatory obligations relevant to customers.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| kyc-policy.md | Know Your Customer (KYC) policy and requirements | Planned |
-| account-closure-policy.md | Account closure process and policy | Planned |
-| dormant-account-policy.md | Dormant/inactive account policy and reactivation | Planned |
-| grievance-redressal-policy.md | Customer grievance redressal framework | Planned |
-| fair-practice-code.md | Fair Practice Code for lending and customer dealings | Planned |
+Customer-facing regulatory and compliance policies.
 
 ---
 
-## Scope
+## Documents
 
-Documents in this folder cover:
-
-- Policy objectives and scope
-- Customer rights and obligations
-- Regulatory basis (RBI guidelines, Banking Regulation Act)
-- Step-by-step processes
-- Timelines and SLAs
-- Escalation procedures
-- Exceptions and special cases
-
----
-
-## Important Notes
-
-- All policies must align with current RBI guidelines
-- Policy documents are subject to compliance review before publishing
-- Significant policy changes require approval from the Compliance Lead
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| POL-KYC-001 | [KYC Policy](kyc-policy.md) | Policy | High |
+| POL-CLOSE-001 | [Account Closure Policy](account-closure-policy.md) | Policy | Medium |
+| POL-DORM-001 | [Dormant Account Policy](dormant-account-policy.md) | Policy | Medium |
+| POL-GRIEV-001 | [Grievance Redressal Policy](grievance-redressal-policy.md) | Policy | High |
+| POL-FPC-001 | [Fair Practice Code](fair-practice-code.md) | Policy | Medium |
+| POL-PRIV-001 | [Privacy Policy](privacy-policy.md) | Policy | Medium |
+| POL-CHQ-001 | [Cheque Return Policy](cheque-return-policy.md) | Policy | Medium |
+| POL-RECOV-001 | [Loan Recovery Policy](loan-recovery-policy.md) | Policy | Medium |
 
 ---
 
-## Related Folders
-
-- [customer-support/](../customer-support/) — Complaint and escalation processes
-- [forms/](../forms/) — Documents required for policy-related processes
-- [security/](../security/) — Security policies and guidelines
-
----
-
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

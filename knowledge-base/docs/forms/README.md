@@ -1,38 +1,18 @@
-# Forms & Required Documents
+﻿# Forms and Required Documents
 
-This folder contains documentation listing the forms and documents required for various banking processes.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| account-opening-documents.md | Documents required for opening bank accounts | Planned |
-| loan-application-documents.md | Documents required for loan applications | Planned |
-| kyc-documents.md | Acceptable KYC documents and verification process | Planned |
+Checklists of required documents for various banking processes.
 
 ---
 
-## Scope
+## Documents
 
-Documents in this folder cover:
-
-- List of required documents per process
-- Acceptable document types and formats
-- Self-attestation requirements
-- Special requirements for NRIs, minors, businesses, and trusts
-- Document submission channels (branch, online, courier)
-- Processing timelines after document submission
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| FORM-ACCT-001 | [Account Opening Documents](account-opening-documents.md) | Form | High |
+| FORM-LOAN-001 | [Loan Application Documents](loan-application-documents.md) | Form | High |
+| FORM-KYC-001 | [KYC Documents](kyc-documents.md) | Form | High |
+| FORM-CARD-001 | [Card Application Documents](card-application-documents.md) | Form | High |
 
 ---
 
-## Related Folders
-
-- [accounts/](../accounts/) — Account opening processes
-- [loans/](../loans/) — Loan application processes
-- [policies/](../policies/) — KYC policy and regulatory requirements
-
----
-
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

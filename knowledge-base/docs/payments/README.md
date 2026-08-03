@@ -1,42 +1,34 @@
-# Payments Documentation
+﻿# Payments
 
-This folder contains documentation for all payment services and channels offered by the Bank.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| neft.md | National Electronic Funds Transfer (NEFT) documentation | Planned |
-| rtgs.md | Real Time Gross Settlement (RTGS) documentation | Planned |
-| imps.md | Immediate Payment Service (IMPS) documentation | Planned |
-| cheque-services.md | Cheque book and cheque-related services documentation | Planned |
-| demand-draft.md | Demand Draft (DD) services documentation | Planned |
+Fund transfer and payment instrument services.
 
 ---
 
-## Scope
+## Service Documents
 
-Documents in this folder cover:
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| PAY-NEFT-001 | [NEFT](neft.md) | Service | High |
+| PAY-RTGS-001 | [RTGS](rtgs.md) | Service | High |
+| PAY-IMPS-001 | [IMPS](imps.md) | Service | High |
+| PAY-SWIFT-001 | [SWIFT Transfer](swift.md) | Service | Medium |
+| PAY-CHQ-001 | [Cheque Services](cheque-services.md) | Service | Medium |
+| PAY-DD-001 | [Demand Draft](demand-draft.md) | Service | Low |
 
-- Service overview and how it works
-- Transaction limits (minimum, maximum, daily)
-- Processing times and settlement windows
-- Charges and fees
-- Channels available (branch, internet banking, mobile banking)
-- Required information for initiating transfers
-- Cancellation and reversal processes
-- RBI guidelines and regulations
+## Troubleshooting Documents
 
----
-
-## Related Folders
-
-- [digital-banking/](../digital-banking/) — Channels for initiating payments
-- [charges/](../charges/) — Detailed payment service charges
-- [customer-support/](../customer-support/) — Support for failed or disputed payments
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| PAY-TS-001 | [Payment Troubleshooting](payment-troubleshooting.md) | Troubleshooting | High |
 
 ---
 
-*Last updated: 2026-08-02*
+## Relationships
+
+- **Charges**: [Payment Charges](../charges/payment-charges.md)
+- **FAQ**: [Payments FAQ](../../faqs/payments-faq.md)
+- **Decision Guide**: [Choose the Right Payment Method](../../decision-guides/choose-right-payment-method.md)
+
+---
+
+*Last updated: 2026-08-03*

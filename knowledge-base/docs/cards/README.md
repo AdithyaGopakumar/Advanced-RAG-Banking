@@ -1,44 +1,30 @@
-# Cards Documentation
+﻿# Cards
 
-This folder contains documentation for all card products offered by the Bank.
-
----
-
-## Planned Documents
-
-| Document | Description | Status |
-|---|---|---|
-| credit-card.md | Credit Card product documentation | Planned |
-| debit-card.md | Debit Card product documentation | Planned |
-| prepaid-card.md | Prepaid Card product documentation | Planned |
+Debit, credit, prepaid, virtual, and forex card products.
 
 ---
 
-## Scope
+## Documents
 
-Documents in this folder cover:
-
-- Card features and benefits
-- Eligibility criteria
-- Card variants and tiers
-- Annual fees and charges
-- Interest rates (for credit cards)
-- Transaction limits (POS, ATM, online)
-- Reward programmes and cashback
-- EMI conversion options
-- Card security features (chip, PIN, CVV, 3D Secure)
-- Card blocking and replacement
-- International usage and forex charges
-- Add-on/supplementary card options
+| ID | Document | Type | Priority |
+|---|---|---|---|
+| CARD-CC-001 | [Credit Card](credit-card.md) | Product | High |
+| CARD-DC-001 | [Debit Card](debit-card.md) | Product | High |
+| CARD-PC-001 | [Prepaid Card](prepaid-card.md) | Product | Medium |
+| CARD-VC-001 | [Virtual Card](virtual-card.md) | Product | Medium |
+| CARD-FC-001 | [Forex Card](forex-card.md) | Product | Medium |
 
 ---
 
-## Related Folders
+## Relationships
 
-- [charges/](../charges/) — Detailed card fee schedules
-- [security/](../security/) — Card security and fraud prevention guidelines
-- [digital-banking/](../digital-banking/) — Card management through digital channels
+- **Charges**: [Card Charges](../charges/card-charges.md)
+- **Forms**: [Card Application Documents](../forms/card-application-documents.md)
+- **Security**: [Card Security](../security/card-security.md)
+- **FAQ**: [Cards FAQ](../../faqs/cards-faq.md)
+- **Decision Guide**: [Choose the Right Card](../../decision-guides/choose-right-card.md)
+- **Scenario**: [Lost Card Replacement](../../scenarios/lost-card-replacement.md)
 
 ---
 
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*

@@ -6,6 +6,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.3.0] — 2026-08-03
+
+### Added
+
+- Complete knowledge inventory: 96 document skeletons across 17 categories
+  - Accounts: 5 products (Savings, Current, Salary, Student, Senior Citizen)
+  - Deposits: 3 products (Fixed Deposit, Recurring Deposit, Tax Saver)
+  - Loans: 7 products (Home, Personal, Education, Vehicle, Gold, Business, LAP)
+  - Cards: 5 products (Credit, Debit, Prepaid, Virtual, Forex)
+  - Digital Banking: 8 documents (5 services + 3 troubleshooting)
+  - Payments: 7 documents (6 services + 1 troubleshooting)
+  - Banking Services: 9 process/service documents
+  - Policies: 8 customer-facing policies
+  - Security: 5 security guidance documents
+  - Customer Support: 4 support process documents
+  - Charges: 5 fee schedule documents (dynamic content)
+  - Interest Rates: 2 rate documents (dynamic content)
+  - Forms: 4 document requirement checklists
+  - FAQs: 8 category-specific FAQ collections
+  - Scenarios: 10 customer journey walkthroughs
+  - Decision Guides: 5 product comparison guides
+  - Glossary: 1 banking terminology document
+- Meta documents
+  - Master knowledge map with architecture diagram and full document inventory
+  - Coverage matrix with status, ownership, and priority tracking
+  - Reusable components identification with canonical source mapping
+  - Validation report (all checks passed)
+- All skeleton documents include
+  - Complete YAML frontmatter metadata
+  - Standardized section headings from templates
+  - TODO markers with owner, priority, phase, and dependencies
+  - Cross-reference placeholders to related documents
+
+### Changed
+
+- Updated 18 category README indexes with document listings
+- Updated docs/README.md with master documentation index
+- Updated metadata/README.md with new meta documents
+
+---
+
 ## [0.2.0] — 2026-08-02
 
 ### Added
