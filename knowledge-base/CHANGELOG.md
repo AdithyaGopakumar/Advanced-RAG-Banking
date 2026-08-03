@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.4.0] — 2026-08-03
+
+### Added
+
+- **Phase 4 — Knowledge Base Validation & AI Readiness Audit**: Added comprehensive master quality and AI preparedness audit report to governance documentation ([ai-readiness-audit.md](governance/ai-readiness-audit.md)).
+  - **Repository Structure & Knowledge Coverage Reports**: Verified 100% adherence to lowercase kebab-case naming conventions, 100% README coverage across all 22 directory levels, and zero orphaned or duplicate document concepts across 96 document skeletons. Identified future growth gaps (wealth management, insurance, NRI banking).
+  - **Metadata & Template Consistency Reports**: Confirmed 100% valid YAML syntax, required attribute declaration, H1-H2-H3 markdown heading hierarchy, and zero-content guardrail compliance. Identified 47 documents requiring explicit `related_documents` frontmatter population prior to RAG graph ingestion.
+  - **Cross-Reference & Duplicate Content Risk Reports**: Verified 0 broken inline hyperlinks out of 240+ checked links. Established strict single-source canonical referencing rules for fees, rates, KYC checklists, and dispute escalation to prevent content divergence.
+  - **AI Readiness & Future Expansion Assessment**: Confirmed modular chunk-friendly markdown formatting and hybrid search compatibility. Recommended RAG ingestion header preprocessing (`[Title | ID] - Section:`) to maintain context independence during vectorization.
+  - **Risk Register & Final Readiness Scorecard**: Formulated 7 prioritized risk scenarios with specific mitigation plans. Awarded an overall repository Readiness Score of **94/100 (HIGH)**, formally certifying the repository for production content authoring.
+- Registered audit report in `governance/README.md` under new Quality Assurance and Audits section.
+
+---
+
 ## [0.3.0] — 2026-08-03
 
 ### Added

@@ -50,6 +50,12 @@ This folder contains the standards, guidelines, and processes that govern how th
 | [information-architecture-guide.md](information-architecture-guide.md) | How to extend the knowledge base |
 | [multilingual-strategy.md](multilingual-strategy.md) | Future multilingual support architecture |
 
+### Quality Assurance and Audits
+
+| Document | Description |
+|---|---|
+| [ai-readiness-audit.md](ai-readiness-audit.md) | Comprehensive validation report, RAG readiness assessment, risk register, and quality scorecard (Phase 4 baseline) |
+
 ---
 
 ## Reading Order for New Contributors
@@ -73,4 +79,4 @@ This folder contains the standards, guidelines, and processes that govern how th
 
 ---
 
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*
