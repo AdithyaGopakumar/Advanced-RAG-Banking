@@ -16,19 +16,28 @@ search_aliases: ["customer care number", "bank helpline", "contact bank", "suppo
 priority: "critical"
 related_documents: []
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+last_updated: "2026-08-08"
+last_reviewed: "2026-08-08"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Customer Service"
+authority: "Compliance"
 owner: "Customer Support Lead"
 compliance_classification: "regulatory"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
+dynamic_classification: "SLOWLY_DYNAMIC"
+data_source: "contacts-api"
 ---
 
 # Contact Channels
 
 ## Overview
+
+> [!CAUTION]
+> Customer support numbers, especially fraud reporting lines, can change. According to the bank's current published contact list, the following information applies. Always verify via the official contacts API or website to avoid phishing scams.
 
 The bank offers multiple channels for customers to seek assistance, report fraud, or register complaints. For urgent issues like a lost debit card or suspected fraud, always use the 24x7 toll-free helpline.
 

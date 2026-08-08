@@ -59,7 +59,7 @@ Credit and Debit cards offer incredible convenience, but they are also prime tar
 If your card is lost, stolen, or swallowed by an ATM:
 1. **Block Immediately:** Open the Mobile Banking app and select "Hotlist / Block Card".
 2. **SMS Blocking:** Send an SMS `BLOCK <Last 4 digits of card>` to `<!-- BANK-SPECIFIC: 56767XX -->` from your registered mobile number.
-3. **Call Center:** Call the 24x7 helpline `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to report the loss and request a replacement card.
+3. **Call Center:** Call the 24x7 helpline [24x7 Customer Care](../customer-support/contact-channels.md) to report the loss and request a replacement card.
 
 ---
 

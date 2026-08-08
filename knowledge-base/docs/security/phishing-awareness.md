@@ -58,7 +58,7 @@ Phishing is a cybercrime where targets are contacted by email, telephone (Vishin
 If you have accidentally clicked a phishing link or shared your details:
 1. **Change Passwords:** Immediately log in (by typing the URL manually) and change your Internet Banking password and UPI PIN.
 2. **Block Accounts:** Use the mobile app to block all cards.
-3. **Notify the Bank:** Call the 24x7 helpline `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to report a potential compromise.
+3. **Notify the Bank:** Call the 24x7 helpline [24x7 Customer Care](../customer-support/contact-channels.md) to report a potential compromise.
 
 ---
 

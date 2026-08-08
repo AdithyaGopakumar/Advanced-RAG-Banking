@@ -16,21 +16,28 @@ search_aliases: ["loan rates", "home loan EMI rate", "current loan rate", "EBLR 
 priority: "critical"
 related_documents: []
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-03"
 last_reviewed: "2026-08-03"
-effective_date: "2026-08-01"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "ALCO Circular 2026-08"
+authority: "ALCO"
 owner: "Finance SME"
 compliance_classification: "informational"
 confidentiality: "public"
 dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 data_source: "interest-rate-api"
 ---
 
 # Loan Interest Rates
 
 ## Overview
+
+> [!WARNING]
+> Rates are subject to change. According to the bank's current published tariff, the following information applies. Always refer to the current rate schedule or live API for real-time information.
 
 This document serves as the Single Source of Truth (SSOT) for all retail loan interest rates. It outlines the current reference rates (EBLR/Repo) and the applicable spread for each loan product. All product-specific documentation must link to this document for pricing information.
 

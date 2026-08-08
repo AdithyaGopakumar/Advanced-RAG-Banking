@@ -57,7 +57,7 @@ These general Security Guidelines form the core policy that governs how the bank
 ## How to Report
 If you notice any suspicious login activity on your account (e.g., receiving an OTP when you didn't initiate a transaction):
 1. Immediately change your Internet Banking password using the "Forgot Password" flow.
-2. Call the bank's toll-free helpline at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to freeze your digital access temporarily.
+2. Call the bank's toll-free helpline at [24x7 Customer Care](../customer-support/contact-channels.md) to freeze your digital access temporarily.
 
 ---
 

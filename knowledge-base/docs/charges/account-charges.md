@@ -16,21 +16,29 @@ search_aliases: ["bank account fees", "account maintenance charges", "penalty ch
 priority: "high"
 related_documents: ["ACCT-SA-001", "ACCT-CA-001"]
 version: "1.0"
-status: "approved"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-08"
 last_reviewed: "2026-08-08"
-effective_date: "2026-08-01"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Official Schedule of Charges"
+authority: "Finance Pricing Team"
 owner: "Finance SME"
 compliance_classification: "informational"
 confidentiality: "public"
 dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 data_source: "charges-api"
 ---
 
 # Account Charges
 
 ## Overview
+
+> [!WARNING]
+> Charges are subject to change. According to the bank's current published tariff, the following information applies. Always refer to the current rate schedule or live API for real-time information.
+
 This document details the standard fees and charges applicable to retail banking accounts. These charges are subject to change, and the most current rates are published in the Bank's Schedule of Charges.
 
 <!-- BANK-SPECIFIC: Link to official Schedule of Charges PDF | Source: Finance/Pricing | Effective: TBD -->

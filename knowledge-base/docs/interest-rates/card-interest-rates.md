@@ -15,16 +15,24 @@ search_aliases: ["credit card APR", "card interest", "finance charge rate"]
 priority: "high"
 related_documents: ["CARD-CC-001", "CHG-CARD-001"]
 version: "1.0"
-status: "published"
+status: "current"
 created_date: "2026-08-08"
 last_updated: "2026-08-08"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Official Bank Schedule"
+authority: "Credit Cards Team"
 owner: "Finance SME"
 compliance_classification: "regulatory"
 confidentiality: "public"
 dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 ---
 
 # Card Interest Rates
+
+> [!WARNING]
+> Rates are subject to change. According to the bank's current published tariff, the following information applies. Always refer to the current rate schedule or live API for real-time information.
 
 This document serves as the Single Source of Truth (SSOT) for all interest rates and finance charges applicable to Credit Cards.
 

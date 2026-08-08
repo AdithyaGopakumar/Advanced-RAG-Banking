@@ -16,14 +16,19 @@ search_aliases: ["KYC papers", "identity documents", "valid ID proof", "address 
 priority: "high"
 related_documents: []
 version: "1.0"
-status: "approved"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-08"
 last_reviewed: "2026-08-08"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Official Bank Policy"
+authority: "Compliance"
 owner: "Operations SME"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 ---
 
 # KYC Documents

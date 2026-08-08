@@ -193,7 +193,7 @@ Every Markdown document begins with a YAML frontmatter block enclosed in triple 
 #### `status` — Document Lifecycle Status
 - **Type**: String (enum)
 - **Required**: Yes
-- **Allowed Values**: `draft`, `in-review`, `approved`, `published`, `deprecated`, `archived`
+- **Allowed Values**: `draft`, `in-review`, `approved`, `published`, `deprecated`, `archived`, `current`, `future`, `superseded`, `expired`, `withdrawn`, `unknown`, `unverified`
 - **Default**: `"draft"`
 - **Example**: `"published"`
 - **Purpose**: Tracks document lifecycle stage. See [Document Lifecycle](../governance/document-lifecycle.md).
@@ -224,12 +224,31 @@ Every Markdown document begins with a YAML frontmatter block enclosed in triple 
 - **Example**: `"2026-11-02"`
 - **Purpose**: Proactive review scheduling.
 
-#### `effective_date` — Content Effective Date
+#### `effective_from` — Content Effective Date
 - **Type**: String
 - **Required**: Conditional (required for reference data: charges, interest rates)
 - **Format**: `YYYY-MM-DD`
 - **Example**: `"2026-08-01"`
 - **Purpose**: When the documented information takes effect. Critical for rates and charges.
+
+#### `effective_until` — Content Expiry Date
+- **Type**: String
+- **Required**: Optional
+- **Format**: `YYYY-MM-DD`
+- **Example**: `"2027-08-01"`
+- **Purpose**: When the documented information expires.
+
+#### `source` — Information Source
+- **Type**: String
+- **Required**: Conditional (for dynamic content)
+- **Example**: `"ALCO Circular 2026-08"`
+- **Purpose**: The original source document or system.
+
+#### `authority` — Source Authority
+- **Type**: String
+- **Required**: Conditional (for dynamic content)
+- **Example**: `"ALCO"`
+- **Purpose**: The authoritative body (e.g., RBI, ALCO, Operations).
 
 ---
 
@@ -287,6 +306,13 @@ Every Markdown document begins with a YAML frontmatter block enclosed in triple 
 - **Default**: `false`
 - **Example**: `true`
 - **Purpose**: Flags documents that may become dynamic data sources in the future RAG system. Typically `true` for interest rates and charges.
+
+#### `dynamic_classification` — Volatility Tier
+- **Type**: String (enum)
+- **Required**: Conditional (when dynamic_content is true)
+- **Allowed Values**: `STATIC`, `SLOWLY_DYNAMIC`, `PERIODICALLY_DYNAMIC`, `FREQUENTLY_DYNAMIC`, `REAL_TIME`
+- **Example**: `"PERIODICALLY_DYNAMIC"`
+- **Purpose**: Indicates how frequently the information materially changes.
 
 #### `data_source` — External Data Source Reference
 - **Type**: String

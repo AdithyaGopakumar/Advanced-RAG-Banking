@@ -16,19 +16,26 @@ search_aliases: ["credit card fees", "debit card charges", "card annual fee"]
 priority: "high"
 related_documents: ["CARD-CC-001", "CARD-DC-001"]
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-03"
 last_reviewed: "2026-08-03"
-effective_date: "2026-08-01"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Official Schedule of Charges"
+authority: "Finance Pricing Team"
 owner: "Finance SME"
 compliance_classification: "informational"
 confidentiality: "public"
 dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 data_source: "charges-api"
 ---
 
 # Card Charges
+
+> [!WARNING]
+> Charges are subject to change. According to the bank's current published tariff, the following information applies. Always refer to the current rate schedule or live API for real-time information.
 
 This document serves as the Single Source of Truth (SSOT) for all fees and charges related to Debit, Credit, Prepaid, Virtual, and Forex cards.
 

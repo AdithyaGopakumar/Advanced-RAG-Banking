@@ -58,7 +58,7 @@ Practicing good cyber hygiene is essential for keeping your financial data secur
 ## How to Report
 If you lose your device with the banking app installed:
 1. Immediately contact your telecom provider to block the SIM card (to prevent OTP interception).
-2. Call the bank's 24x7 customer care at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to temporarily disable Mobile Banking on your account.
+2. Call the bank's 24x7 customer care at [24x7 Customer Care](../customer-support/contact-channels.md) to temporarily disable Mobile Banking on your account.
 
 ---
 

@@ -16,21 +16,28 @@ search_aliases: ["loan fees", "loan processing fee", "EMI late fee"]
 priority: "high"
 related_documents: ["LOAN-HL-001", "LOAN-PL-001"]
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-03"
 last_reviewed: "2026-08-03"
-effective_date: "2026-08-01"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Official Schedule of Charges"
+authority: "Finance Pricing Team"
 owner: "Finance SME"
 compliance_classification: "informational"
 confidentiality: "public"
 dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 data_source: "charges-api"
 ---
 
 # Loan Charges
 
 ## Overview
+
+> [!WARNING]
+> Charges are subject to change. According to the bank's current published tariff, the following information applies. Always refer to the current rate schedule or live API for real-time information.
 
 This document is the Single Source of Truth (SSOT) for all fees and charges associated with retail lending products. It covers processing fees, late payment penalties, and foreclosure charges.
 

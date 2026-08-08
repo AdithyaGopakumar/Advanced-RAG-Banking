@@ -59,7 +59,7 @@ Fraud prevention is a shared responsibility between the bank and the customer. T
 ## How to Report Fraud
 If you suspect that your account has been compromised, you must act immediately to minimize your liability under the [Customer Liability Policy](../policies/customer-liability-policy.md):
 1. **Block the Channel:** Instantly block your Debit/Credit card or freeze your UPI ID using the Mobile Banking app.
-2. **Call Customer Care:** Dial the 24x7 toll-free helpline at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to report the unauthorized transaction.
+2. **Call Customer Care:** Dial the 24x7 toll-free helpline at [24x7 Customer Care](../customer-support/contact-channels.md) to report the unauthorized transaction.
 3. **Cyber Crime Portal:** Register a formal complaint on the National Cyber Crime Reporting Portal (https://cybercrime.gov.in) or dial 1930.
 
 ---

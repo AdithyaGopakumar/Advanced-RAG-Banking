@@ -16,15 +16,20 @@ search_aliases: ["loan default policy", "recovery agents", "debt collection"]
 priority: "medium"
 related_documents: []
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-03"
 last_reviewed: "2026-08-03"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "Official Bank Policy"
+authority: "Compliance"
 owner: "Compliance Lead"
 reviewer: "Knowledge Base Owner"
 compliance_classification: "regulatory"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
+dynamic_classification: "SLOWLY_DYNAMIC"
 ---
 
 # Loan Recovery Policy

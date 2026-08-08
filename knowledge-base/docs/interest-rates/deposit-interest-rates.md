@@ -16,21 +16,29 @@ search_aliases: ["FD rates", "bank deposit rates", "savings interest rate", "cur
 priority: "critical"
 related_documents: []
 version: "1.0"
-status: "approved"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-08"
 last_reviewed: "2026-08-08"
-effective_date: "2026-08-01"
+effective_from: "2026-08-01"
+effective_until: ""
+source: "ALCO Circular 2026-08"
+authority: "ALCO"
 owner: "Finance SME"
 compliance_classification: "informational"
 confidentiality: "public"
 dynamic_content: true
+dynamic_classification: "PERIODICALLY_DYNAMIC"
 data_source: "interest-rate-api"
 ---
 
 # Deposit Interest Rates
 
 ## Overview
+
+> [!WARNING]
+> Rates are subject to change. According to the bank's current published tariff, the following information applies. Always refer to the current rate schedule or live API for real-time information.
+
 This document outlines the interest rates offered on various deposit accounts, including savings accounts and term deposits (Fixed Deposits, Recurring Deposits). Rates are determined by the Bank's Asset Liability Committee (ALCO).
 
 <!-- BANK-SPECIFIC: Link to official Interest Rates Circular | Source: Treasury/ALCO | Effective: TBD -->
