@@ -31,42 +31,47 @@ dynamic_content: false
 # Locker Facility
 
 ## Overview
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Medium | Phase: 4 -->
-
----
-
-## Locker Sizes and Availability
-<!-- TODO -->
+The bank offers Safe Deposit Lockers at select branches for customers to store valuables. Lockers are allotted subject to availability and KYC compliance.
 
 ---
 
 ## Eligibility
-<!-- TODO -->
+- Individual customers (singly or jointly).
+- Minor accounts are generally not eligible.
+- Priority is given to existing customers with a satisfactory relationship.
 
 ---
 
-## Rental Charges
-<!-- TODO: Depends on: CHG-SVC-001 -->
+## Allotment Process
+1. Visit a branch offering locker facilities.
+2. Check for availability of the desired size (Small, Medium, Large, Extra Large).
+3. Sign the standard Locker Agreement.
+4. The bank may require a Fixed Deposit covering 3 years' rent as a security measure (if permitted by RBI guidelines).
 
 ---
 
-## How to Apply
-<!-- TODO -->
+## Charges
+- Locker rent is charged annually in advance.
+- Rent varies based on the size of the locker and the branch location (Metro, Urban, Semi-Urban, Rural).
+- Refer to [Service Charges](../charges/service-charges.md) for the exact tariff.
 
 ---
 
-## Access Rules
-<!-- TODO -->
+## Operations
+- **Access:** Can be operated during specific branch hours.
+- **Mandate:** Can be operated jointly or by specific mandate ("Either or Survivor").
+- **Key:** The customer holds one key, and the bank holds the master key. Both are required to open the locker.
 
 ---
 
 ## Nomination
-<!-- TODO -->
+Customers are highly encouraged to add a nominee to their locker. See [Nomination](nomination.md) for details.
 
 ---
 
 ## Related Documents
-- [Service Charges](../charges/service-charges.md) — <!-- TODO -->
+- [Nomination](nomination.md)
+- [Service Charges](../charges/service-charges.md)
 
 ---
 

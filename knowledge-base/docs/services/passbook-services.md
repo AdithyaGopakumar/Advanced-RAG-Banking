@@ -30,28 +30,34 @@ dynamic_content: false
 # Passbook Services
 
 ## Overview
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Low | Phase: 5 -->
+A passbook is a physical booklet that records all transactions in a savings or current account. It is traditionally used by customers who prefer physical records over digital statements.
 
 ---
 
-## How to Update Passbook
-<!-- TODO -->
+## How to Get a Passbook
+- **First Issuance:** Issued free of charge at the time of account opening (if requested at a branch).
+- **Duplicate Passbook:** If lost or damaged, a duplicate can be requested at the home branch for a fee.
+- **Passbook Update:** Customers can update their passbook at any branch or using automated Passbook Printing Kiosks available at major branches.
 
 ---
 
-## How to Request a New Passbook
-<!-- TODO -->
+## Passbook Update Process (Kiosk)
+1. Open the passbook to the last printed page.
+2. Insert it into the automated kiosk (barcode facing up).
+3. The machine will automatically fetch the unprinted transactions and print them.
+4. If the page is full, the machine will prompt you to turn to the next page.
 
 ---
 
 ## Charges
-<!-- TODO: Depends on: CHG-SVC-001 -->
+- First passbook: Free.
+- Duplicate passbook: See [Service Charges](../charges/service-charges.md).
 
 ---
 
 ## Related Documents
-- [Statement Requests](statement-requests.md) — <!-- TODO -->
-- [Service Charges](../charges/service-charges.md) — <!-- TODO -->
+- [Statement Requests](statement-requests.md)
+- [Service Charges](../charges/service-charges.md)
 
 ---
 

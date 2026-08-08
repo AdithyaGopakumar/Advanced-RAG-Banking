@@ -30,45 +30,53 @@ dynamic_content: false
 # Address Update
 
 ## Overview
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Medium | Phase: 4 -->
+
+Customers can update their registered communication or permanent address at any time by providing valid proof of the new address. Keeping the address updated ensures that essential banking communications, debit cards, and cheque books reach the correct destination.
 
 ---
 
-## Before You Start
-<!-- TODO -->
+## What You Need Before You Start
+
+- You must have an Officially Valid Document (OVD) that clearly shows your new address. 
+- Accepted OVDs include Aadhaar Card, Passport, Voter ID, Driving License, or NREGA Job Card.
+- Refer to [KYC Documents](../forms/kyc-documents.md) for the complete list of accepted address proofs.
 
 ---
 
-## Step-by-Step Process
-<!-- TODO -->
+## How to Submit a Request
 
-### Via Internet Banking
-<!-- TODO -->
+### 1. Via Internet Banking (Recommended)
+This is the fastest method, utilizing Aadhaar-based OTP authentication or document upload.
+1. Log in to Internet Banking and navigate to `Services > Profile > Update Address`.
+2. **Option A (Aadhaar OTP):** If your new address is already updated on your Aadhaar card, enter your Aadhaar number, authenticate with the UIDAI OTP, and the address is updated instantly.
+3. **Option B (Document Upload):** Select the OVD you hold, manually enter the new address, and upload a clear scanned copy of the document.
 
-### Via Mobile Banking
-<!-- TODO -->
+### 2. Via Mobile Banking
+1. Log in to the Mobile Banking App.
+2. Go to `Profile Settings > Manage Address`.
+3. Follow the same Aadhaar OTP or Document Upload flow as Internet Banking.
 
-### Via branch
-<!-- TODO -->
+### 3. At the Branch
+1. Visit any branch.
+2. Fill out the **Customer Profile Update Form**.
+3. Submit a self-attested photocopy of your new address proof and carry the original for verification.
 
 ---
 
-## Expected Timeline
-<!-- TODO -->
+## Processing Time and Outcome
 
----
+- **Aadhaar OTP (Digital):** Instant.
+- **Document Upload (Digital):** Takes 1 to 2 working days as the uploaded document must be manually verified by the bank's backend operations team.
+- **Branch Request:** Takes 1 to 3 working days after submission.
 
-## Required Documents
-<!-- TODO: Depends on: FORM-KYC-001 -->
+You will receive an SMS and Email confirmation once the address has been successfully updated.
 
 ---
 
 ## Related Documents
-- [Mobile Number Update](mobile-number-update.md) — <!-- TODO -->
-- [KYC Policy](../policies/kyc-policy.md) — <!-- TODO -->
-- [KYC Documents](../forms/kyc-documents.md) — <!-- TODO -->
-- [Accounts FAQ](../../faqs/accounts-faq.md) — <!-- TODO -->
+- [Other Profile Updates](other-profile-updates.md)
+- [Mobile Number Update](mobile-number-update.md)
+- [KYC Documents](../forms/kyc-documents.md)
+- [KYC Services](kyc-services.md)
 
 ---
-
-*Last updated: 2026-08-03*

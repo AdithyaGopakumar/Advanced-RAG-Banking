@@ -132,7 +132,7 @@ flowchart TD
 | PAY-UPI-001 | UPI Payment Mechanism | `upi-rail.md` | High | 10 |
 | PAY-TS-001 | Payment Troubleshooting | `payment-troubleshooting.md` | High | 5 |
 
-#### Banking Services (`docs/services/`) — 9 documents
+#### Banking Services (`docs/services/`) — 13 documents
 
 | ID | Document | File | Priority | Phase |
 |---|---|---|---|---|
@@ -145,6 +145,10 @@ flowchart TD
 | SVC-REACT-001 | Account Reactivation | `account-reactivation.md` | Medium | 4 |
 | SVC-STMT-001 | Statement Requests | `statement-requests.md` | Medium | 4 |
 | SVC-PB-001 | Passbook Services | `passbook-services.md` | Low | 5 |
+| SVC-CERT-001 | Customer Certificates | `customer-certificates.md` | Medium | 11 |
+| SVC-PROF-001 | Other Profile Updates | `other-profile-updates.md` | Medium | 11 |
+| SVC-KYC-001 | KYC and Re-KYC Services | `kyc-services.md` | High | 11 |
+| SVC-CLAIM-001 | Deceased Customer Claims | `deceased-claims.md` | High | 11 |
 
 ---
 
@@ -265,13 +269,13 @@ flowchart TD
 | Domain | Categories | Documents |
 |---|---|---|
 | Products | 4 | 27 |
-| Services | 3 | 26 |
+| Services | 3 | 30 |
 | Policies and Compliance | 2 | 13 |
 | Customer Support | 1 | 4 |
 | Reference Data | 2 | 7 |
 | Forms | 1 | 4 |
 | Cross-Cutting | 4 | 24 |
-| **Total** | **17** | **105** |
+| **Total** | **17** | **109** |
 
 ---
 

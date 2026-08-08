@@ -27,38 +27,61 @@ confidentiality: "public"
 dynamic_content: false
 ---
 
-# Account Reactivation
+# Account Reactivation (Dormant/Inoperative Accounts)
 
 ## Overview
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Medium | Phase: 4 -->
+
+As per RBI guidelines, if a customer does not conduct any customer-induced transactions (like cash deposit, withdrawal, or digital transfer) in their savings or current account for a period of **24 months**, the account is classified as **Dormant** or **Inoperative**. 
+
+This is a security measure to prevent fraud in unattended accounts.
 
 ---
 
-## Before You Start
-<!-- TODO -->
+## What Happens When an Account is Dormant?
+
+- Debit transactions (ATM, UPI, NetBanking, Cheques) are completely blocked.
+- Credit transactions (like receiving funds) may also be restricted depending on the bank's internal risk policy.
+- The bank continues to credit regular interest to the account.
+- **No charges** are levied for maintaining a dormant account or for reactivating it.
 
 ---
 
-## Step-by-Step Process
-<!-- TODO -->
+## How to Reactivate Your Account
 
----
+To reactivate a dormant account, a fresh KYC (Know Your Customer) update is mandatory.
 
-## Required Documents
-<!-- TODO: Depends on: FORM-KYC-001 -->
+### 1. Branch Visit (Standard Method)
+1. Visit your **Home Branch**.
+2. Submit a written request or fill out the **Account Reactivation Form**.
+3. Submit self-attested copies of your OVDs (Officially Valid Documents) for Re-KYC (e.g., Aadhaar Card and PAN Card).
+4. Perform a small customer-induced transaction (like a cash deposit of ₹100).
+
+### 2. Video KYC (Digital Method)
+If supported by the bank, you can initiate a Re-KYC process digitally:
+1. Log in to the Mobile Banking app.
+2. If prompted that the account is dormant, select the **Video KYC** option.
+3. Keep your original PAN card ready and ensure you have a stable internet connection.
+4. Complete the video verification with the bank agent.
 
 ---
 
 ## Expected Timeline
-<!-- TODO -->
+
+- **Branch Reactivation:** Usually processed within **24 to 48 hours** of submitting the documents and performing the activation transaction.
+- **Video KYC Reactivation:** Usually processed within **1 working day** after a successful video call.
+
+---
+
+## Unclaimed Deposits
+
+If an account remains inoperative for **10 years**, the funds are transferred to the RBI's **Depositor Education and Awareness (DEA) Fund**. Customers can still claim these funds by visiting the branch, submitting KYC, and filling out the DEA Fund claim form. Settlement in these cases takes longer (usually 15-30 days).
 
 ---
 
 ## Related Documents
-- [Dormant Account Policy](../policies/dormant-account-policy.md) — <!-- TODO -->
-- [KYC Documents](../forms/kyc-documents.md) — <!-- TODO -->
-- [Accounts FAQ](../../faqs/accounts-faq.md) — <!-- TODO -->
+- [Dormant Account Policy](../policies/dormant-account-policy.md)
+- [KYC Documents](../forms/kyc-documents.md)
+- [KYC Services](kyc-services.md)
+- [Accounts FAQ](../../faqs/accounts-faq.md)
 
 ---
-
-*Last updated: 2026-08-03*

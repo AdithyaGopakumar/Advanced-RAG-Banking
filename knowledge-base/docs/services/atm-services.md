@@ -30,33 +30,34 @@ dynamic_content: false
 # ATM Services
 
 ## Overview
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Medium | Phase: 4 -->
+Automated Teller Machines (ATMs) provide 24x7 access to cash and basic account services without the need to visit a branch.
 
 ---
 
-## Available Services
-<!-- TODO -->
+## Available Services at ATMs
+- Cash Withdrawal
+- Balance Enquiry & Mini Statement
+- PIN Generation and Change
+- Mobile Number Update (for specific banks)
+- Cheque Book Request
 
 ---
 
-## Transaction Limits
-<!-- TODO -->
+## Cash Deposit Machines (CDMs)
+Select branches are equipped with CDMs where customers can deposit cash directly into their accounts 24x7. Deposits made via Debit Card are generally free, while cardless deposits (using account number) may incur a small fee.
 
 ---
 
 ## Charges
-<!-- TODO: Depends on: CHG-SVC-001 -->
-
----
-
-## ATM Safety Tips
-<!-- TODO -->
+- **Own Bank ATMs:** Typically, the first 5 transactions per month are free.
+- **Other Bank ATMs:** Typically, the first 3 transactions in Metro cities and 5 in Non-Metro cities are free.
+- Transactions beyond the free limit attract a flat fee. See [Service Charges](../charges/service-charges.md).
 
 ---
 
 ## Related Documents
-- [Debit Card](../cards/debit-card.md) — <!-- TODO -->
-- [Service Charges](../charges/service-charges.md) — <!-- TODO -->
+- [Debit Card](../cards/debit-card.md)
+- [Service Charges](../charges/service-charges.md)
 
 ---
 
