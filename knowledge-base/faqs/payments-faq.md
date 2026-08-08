@@ -16,14 +16,14 @@ search_aliases: ["transfer FAQ", "payment help", "NEFT questions"]
 priority: "high"
 related_documents: []
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-03"
 last_reviewed: "2026-08-03"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
 # Payments — Frequently Asked Questions
@@ -34,26 +34,38 @@ This document answers the most commonly asked questions about Payments.
 
 ---
 
-## General Questions
 
-### Q: <!-- TODO: Question 1 in natural customer language -->
-<!-- TODO: Answer | Phase: 5 -->
+# Payments FAQ
 
----
+## 1. Fund Transfer Types and Limits
+### Intent: `compare_transfers_limits`
+**Variations**:
+- What is the difference between NEFT and IMPS?
+- What is the maximum amount I can transfer via RTGS?
+- What is my daily UPI limit?
 
-### Q: <!-- TODO: Question 2 -->
-<!-- TODO: Answer | Phase: 5 -->
+**Response Route**: `STATIC_RAG` / `DYNAMIC_KNOWLEDGE`
+**Answer**: IMPS and UPI are for instant transfers, while NEFT settles in batches. RTGS is for high-value transfers (minimum ₹2 Lakhs). Transfer limits are governed by regulatory thresholds and your specific customer profile.
+**Canonical Documents**: [NEFT](../docs/payments/neft.md), [IMPS](../docs/payments/imps.md), and [Regulatory Thresholds](../docs/policies/regulatory-thresholds.md)
 
----
+## 2. Transfer Charges
+### Intent: `check_transfer_charges`
+**Variations**:
+- Is there a fee for NEFT transfers online?
+- How much does an IMPS transfer cost?
+- Are RTGS transfers free?
 
-### Q: <!-- TODO: Question 3 -->
-<!-- TODO: Answer | Phase: 5 -->
+**Response Route**: `DYNAMIC_KNOWLEDGE`
+**Answer**: Digital transfers (via Mobile/Internet banking) are typically free for savings account customers, but branch-initiated transfers may attract charges.
+**Canonical Document**: [Payment Charges](../docs/charges/payment-charges.md)
 
----
+## 3. Transaction Status (Live Data)
+### Intent: `check_payment_status`
+**Variations**:
+- Why hasn't my NEFT transfer reached the beneficiary?
+- My UPI payment failed but money was deducted, what now?
+- How do I check the status of my RTGS transfer?
 
-## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
-
----
-
-*Last updated: 2026-08-03*
+**Response Route**: `LIVE_API` / `STATIC_RAG`
+**Answer**: I cannot check live transaction statuses from static memory. Please check the 'Recent Transactions' or 'Payment History' section in the Mobile App. If a transaction fails and money is debited, it is usually auto-refunded within a specified timeframe.
+**Canonical Document**: [Payment Troubleshooting](../docs/payments/payment-troubleshooting.md)

@@ -16,67 +16,50 @@ search_aliases: ["fraud FAQ", "security help", "safety questions"]
 priority: "high"
 related_documents: []
 version: "1.0"
-status: "draft"
+status: "current"
 created_date: "2026-08-03"
 last_updated: "2026-08-03"
 last_reviewed: "2026-08-03"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Security — Frequently Asked Questions
+# Security & Fraud FAQs
 
-## Overview
+> [!CAUTION]
+> This document routes critical security queries. All fraud and scam queries must direct the user to block their accounts and contact the official helpline immediately.
 
-This document answers the most commonly asked questions about Banking Security, Phishing, Scams, and protecting your credentials.
+## 1. Reporting Fraud or Unauthorized Transactions
+### Intent: `report_fraud`
+**Variations**:
+- Someone withdrew money from my account without my permission!
+- I received an SMS for a transaction I didn't do.
+- How do I report online fraud?
 
----
+**Response Route**: `STATIC_RAG` (Emergency Protocol)
+**Answer**: If you notice an unauthorized transaction, immediately block your card or freeze your account via the Mobile App. Then, report the fraud by calling the 24x7 Customer Care helpline.
+**Canonical Documents**: [Fraud Prevention](../docs/security/fraud-prevention.md) and [Contact Channels](../docs/customer-support/contact-channels.md)
 
-## Passwords, PINs, and OTPs
+## 2. Phishing and Fake Calls
+### Intent: `verify_communication`
+**Variations**:
+- Is this email asking for my KYC update genuine?
+- I got a call from someone claiming to be from the bank asking for an OTP.
+- The bank sent me a link to update my PAN, is it safe?
 
-### Q: Will the bank ever call me to ask for my OTP or PIN?
-**No. Never.** The bank, RBI, police, or any government authority will **never** call, email, or SMS you to ask for your One-Time Password (OTP), ATM PIN, UPI PIN, Internet Banking Password, or CVV. If someone asks for these details, it is a scam. Hang up immediately.
+**Response Route**: `STATIC_RAG`
+**Answer**: The bank will **never** ask you for your PIN, OTP, CVV, or passwords over a call, SMS, or email. Do not click on suspicious links. If you receive such communication, do not respond and report it to the bank's customer care.
+**Canonical Document**: [Phishing Awareness](../docs/security/phishing-awareness.md)
 
-### Q: Do I need to enter my UPI PIN to receive money?
-**No.** You only need to enter your UPI PIN when you are *sending* money or making a payment. If you receive a "Collect Request" and the app asks for your UPI PIN to "receive a refund" or "accept cash," it is a scam. Decline the request.
+## 3. Safe Digital Banking
+### Intent: `security_best_practices`
+**Variations**:
+- How can I keep my internet banking safe?
+- Is it safe to use public Wi-Fi for banking?
+- Should I save my card details on shopping websites?
 
----
-
-## Phishing, Vishing, and Smishing
-
-### Q: What should I do if I clicked a suspicious link in an SMS?
-If you clicked a link in a fake SMS (Smishing) and entered any details:
-1. **Change Passwords:** Immediately log into Internet Banking or Mobile Banking and change your password and MPIN.
-2. **Block Cards:** Use the app to block your debit or credit cards if you entered card details.
-3. **Report:** Call the 24x7 helpline at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to secure your account.
-
-### Q: Someone claiming to be from the bank's "KYC Department" is asking me to download an app. Should I?
-**No.** This is a Remote-Access Scam. Scammers ask you to download screen-sharing apps (like AnyDesk, TeamViewer, or QuickSupport). Once installed, they can see your screen, read your OTPs, and steal your money. The bank will never ask you to install third-party screen-sharing apps for KYC.
-
----
-
-## Devices and SIM Cards
-
-### Q: What should I do if I lose my mobile phone?
-Your mobile phone is tied to your banking. If lost:
-1. **Block the SIM:** Call your telecom provider immediately to block the SIM card to prevent fraudsters from receiving your OTPs.
-2. **Deregister Device:** Call the bank at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` and ask to deregister Mobile Banking for that device.
-
-### Q: My phone suddenly lost network connection, and I haven't traveled. Is this dangerous?
-Yes. If your phone loses cellular signal for an extended period in an area where you normally have coverage, you may be the victim of **SIM-Swap Fraud**. A scammer may have convinced your telecom provider to issue a duplicate SIM in your name.
-- Connect to Wi-Fi and check your email for banking transaction alerts.
-- Contact your telecom provider immediately from another phone.
-- Contact the bank to freeze your accounts as a precaution.
-
----
-
-## Related Documents
-- [Fraud Reporting](../scenarios/fraud-reporting.md)
-- [Fraud Prevention](../docs/security/fraud-prevention.md)
-- [Customer Liability Policy](../docs/policies/customer-liability-policy.md)
-
----
-
-*Last updated: 2026-08-08*
+**Response Route**: `STATIC_RAG`
+**Answer**: Always use secure networks (avoid public Wi-Fi) for banking. Keep your apps updated, use strong unique passwords, and do not share your device or credentials.
+**Canonical Document**: [Safe Banking Tips](../docs/security/safe-banking-tips.md)
