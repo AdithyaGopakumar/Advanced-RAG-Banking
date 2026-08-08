@@ -19,7 +19,7 @@ flowchart TD
     KB --> D7["Cross-Cutting"]
     
     D1 --> ACCT["Accounts (12)"]
-    D1 --> DEP["Deposits (3)"]
+    D1 --> DEP["Deposits (7)"]
     D1 --> LOAN["Loans (7)"]
     D1 --> CARD["Cards (5)"]
     
@@ -47,7 +47,7 @@ flowchart TD
 
 ## Complete Document Inventory
 
-### Domain 1 — Products (20 documents)
+### Domain 1 — Products (24 documents)
 
 #### Accounts (`docs/accounts/`) — 12 documents
 
@@ -66,13 +66,17 @@ flowchart TD
 | ACCT-FCNR-001 | FCNR Account | `fcnr-account.md` | Medium | 5 |
 | ACCT-PMJDY-001 | PMJDY Account | `pmjdy-account.md` | High | 5 |
 
-#### Deposits (`docs/deposits/`) — 3 documents
+#### Deposits (`docs/deposits/`) — 7 documents
 
 | ID | Document | File | Priority | Phase |
 |---|---|---|---|---|
 | DEP-FD-001 | Fixed Deposit | `fixed-deposit.md` | High | 4 |
 | DEP-RD-001 | Recurring Deposit | `recurring-deposit.md` | High | 4 |
 | DEP-TS-001 | Tax Saver Fixed Deposit | `tax-saver-deposit.md` | Medium | 4 |
+| DEP-SC-001 | Senior Citizen Fixed Deposit | `senior-citizen-deposit.md` | High | 6 |
+| DEP-FLX-001 | Flexi / Sweep Deposit | `flexi-deposit.md` | Medium | 6 |
+| DEP-NRE-001 | NRE Fixed Deposit | `nre-fixed-deposit.md` | High | 6 |
+| DEP-NRO-001 | NRO Fixed Deposit | `nro-fixed-deposit.md` | High | 6 |
 
 #### Loans (`docs/loans/`) — 7 documents
 

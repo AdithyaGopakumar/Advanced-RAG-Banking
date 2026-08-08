@@ -52,6 +52,10 @@ Banking products that customers can open, hold, or subscribe to.
 | **Deposits** | Fixed Deposit | `docs/deposits/` |
 | | Recurring Deposit | `docs/deposits/` |
 | | Tax Saver Fixed Deposit | `docs/deposits/` |
+| | Senior Citizen Fixed Deposit | `docs/deposits/` |
+| | Flexi / Sweep Deposit | `docs/deposits/` |
+| | NRE Fixed Deposit | `docs/deposits/` |
+| | NRO Fixed Deposit | `docs/deposits/` |
 | **Loans** | Home Loan | `docs/loans/` |
 | | Personal Loan | `docs/loans/` |
 | | Education Loan | `docs/loans/` |

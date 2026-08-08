@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.6.0] — 2026-08-08
+
+### Added
+
+- **Phase 6 — Deposits Domain Documentation**: Fully authored 7 customer-facing deposit product documents with complete structural content and Single Source of Truth (SSOT) markers.
+  - Authored comprehensive product documentation for 7 deposit types (Fixed Deposit, Recurring Deposit, Tax Saver, Senior Citizen, Flexi/Sweep, NRE, NRO) incorporating accurate eligibility rules, features, benefits, and SSOT cross-references.
+  - Updated the knowledge taxonomy and master knowledge map to formally register the new deposit products.
+  - Conducted rigorous Phase 6C QA Audit confirming zero factual hallucinations, proper SSOT isolation for dynamic rates and penalties, and 100% RAG-readiness. Transitioned all 7 files to `status: "approved"`.
+
+---
+
 ## [0.5.0] — 2026-08-08
 
 ### Added
