@@ -55,77 +55,118 @@ dynamic_content: false
 
 ## Overview
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+The Education Loan provides financial assistance to deserving students pursuing higher education in India or abroad. It covers tuition fees, hostel charges, examination fees, and other related expenses.
 
 ---
 
 ## Key Features
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+| Feature | Details |
+|---|---|
+| Maximum Loan Amount | Up to <!-- BANK-SPECIFIC: ₹50 Lakhs --> (Higher amounts subject to collateral). |
+| Maximum Tenure | Up to <!-- BANK-SPECIFIC: 15 Years --> (post moratorium). |
+| Margin Money | Nil up to <!-- BANK-SPECIFIC: ₹4 Lakhs -->. <!-- BANK-SPECIFIC: 5% --> for studies in India, <!-- BANK-SPECIFIC: 15% --> for abroad above <!-- BANK-SPECIFIC: ₹4 Lakhs -->. |
+| Moratorium Period | Course Period + <!-- BANK-SPECIFIC: 1 Year --> (or 6 months after getting a job, whichever is earlier). |
+| Repayment Mode | EMI commences after the moratorium period. |
 
 ---
 
 ## Eligibility
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+| Criterion | Requirement |
+|---|---|
+| Nationality | Must be a Resident Indian (NRIs eligible under specific conditions). |
+| Admission | Secured admission to a recognized professional/technical course through entrance test/merit selection. |
+| Co-applicant | Mandatory. Can be parents, spouse, or parents-in-law. |
+
+### Collateral Requirements
+
+| Loan Amount | Collateral Requirement |
+|---|---|
+| Up to <!-- BANK-SPECIFIC: ₹4 Lakhs --> | None (Co-obligation of parents). |
+| <!-- BANK-SPECIFIC: ₹4 Lakhs --> to <!-- BANK-SPECIFIC: ₹7.5 Lakhs --> | Tangible collateral or third-party guarantee acceptable to the bank. |
+| Above <!-- BANK-SPECIFIC: ₹7.5 Lakhs --> | Tangible collateral security (Property, FD, LIC policy) equal to 100% of the loan amount. |
 
 ---
 
 ## Courses Covered
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+The loan covers graduation, post-graduation (including regular technical and professional degree/diploma courses), and approved vocational courses conducted by recognized colleges/universities approved by UGC/AICTE/IMC/Govt. etc.
 
 ---
 
 ## Interest Rates
 
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: RATE-LOAN-001 -->
+Education Loans are typically offered at floating rates. Concessions are often provided for female students and under government subsidy schemes (e.g., CSIS). See [Loan Interest Rates](../interest-rates/loan-interest-rates.md).
 
 ---
 
 ## Fees and Charges
 
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: CHG-LOAN-001 -->
+Processing fees are generally nil for loans up to a certain threshold (e.g., ₹20 Lakhs) for studies in India. For studies abroad, a standard processing fee applies. There are no prepayment penalties. See [Loan Charges](../charges/loan-charges.md).
 
 ---
 
 ## Required Documents
 
-<!-- TODO: Content Required | Owner: Operations SME | Priority: High | Phase: 4 | Depends on: FORM-LOAN-001 -->
+Includes admission proof, fee schedule, student KYC, and co-applicant KYC/Income proofs. Refer to [Loan Application Documents](../forms/loan-application-documents.md).
 
 ---
 
 ## Moratorium Period
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+The moratorium period (repayment holiday) is defined as the Course Period plus 1 year, or 6 months after getting a job, whichever is earlier. During this period, servicing of simple interest is optional but recommended to reduce the overall EMI burden.
 
 ---
 
 ## Repayment Options
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+Repayment starts after the moratorium period ends. The loan is typically repaid in Equated Monthly Installments (EMI) over the chosen tenure. Electronic Clearing Service (ECS) or Standing Instruction (SI) is recommended for timely payments.
 
 ---
 
 ## Tax Benefits
 
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 -->
+Under **Section 80E** of the Income Tax Act, the interest paid on an education loan is completely tax-deductible for up to 8 consecutive years. There is no upper limit on the amount of interest that can be claimed as a deduction.
 
 ---
 
 ## How to Apply
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+Applications can be initiated online through our internet banking portal or by visiting your nearest branch. Ensure all documents are scanned and kept ready for the digital application process.
+
+---
+
+## Prepayment and Foreclosure
+
+Borrowers can make prepayments or foreclose the loan without any penalty. Prepayment can be initiated during the moratorium period (by servicing interest) or after the EMI begins.
+
+---
+
+## Default
+
+Defaults on education loans impact both the student and the co-applicant (parent). Late payments attract penal interest and negatively impact the credit histories of both parties.
+
+---
+
+## Closure and NOC
+
+After the loan is fully repaid, an NOC is issued. If tangible collateral (like property or an FD) was pledged, the original documents/lien will be released upon closure.
+
+---
+
+## Co-applicant and Guarantor
+
+A co-applicant (parent or guardian) is mandatory for all education loans. A third-party guarantor may be required for loans exceeding ₹4 Lakhs if no tangible collateral is provided.
 
 ---
 
 ## Related Documents
 
-- [Loan Interest Rates](../interest-rates/loan-interest-rates.md) — <!-- TODO -->
-- [Loan Charges](../charges/loan-charges.md) — <!-- TODO -->
-- [Loan Application Documents](../forms/loan-application-documents.md) — <!-- TODO -->
-- [Loans FAQ](../../faqs/loans-faq.md) — <!-- TODO -->
-- [Choose the Right Loan](../../decision-guides/choose-right-loan.md) — <!-- TODO -->
+- [Loan Interest Rates](../interest-rates/loan-interest-rates.md)
+- [Loan Charges](../charges/loan-charges.md)
+- [Loan Application Documents](../forms/loan-application-documents.md)
+- [Student Account](../accounts/student-account.md)
 
 ---
 

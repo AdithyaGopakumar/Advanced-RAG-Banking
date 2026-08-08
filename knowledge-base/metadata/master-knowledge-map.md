@@ -20,7 +20,7 @@ flowchart TD
     
     D1 --> ACCT["Accounts (12)"]
     D1 --> DEP["Deposits (7)"]
-    D1 --> LOAN["Loans (7)"]
+    D1 --> LOAN["Loans (8)"]
     D1 --> CARD["Cards (5)"]
     
     D2 --> DIGI["Digital Banking (8)"]
@@ -47,7 +47,7 @@ flowchart TD
 
 ## Complete Document Inventory
 
-### Domain 1 — Products (24 documents)
+### Domain 1 — Products (25 documents)
 
 #### Accounts (`docs/accounts/`) — 12 documents
 
@@ -78,7 +78,7 @@ flowchart TD
 | DEP-NRE-001 | NRE Fixed Deposit | `nre-fixed-deposit.md` | High | 6 |
 | DEP-NRO-001 | NRO Fixed Deposit | `nro-fixed-deposit.md` | High | 6 |
 
-#### Loans (`docs/loans/`) — 7 documents
+#### Loans (`docs/loans/`) — 8 documents
 
 | ID | Document | File | Priority | Phase |
 |---|---|---|---|---|
@@ -89,6 +89,7 @@ flowchart TD
 | LOAN-GL-001 | Gold Loan | `gold-loan.md` | Medium | 4 |
 | LOAN-BL-001 | Business Loan | `business-loan.md` | High | 4 |
 | LOAN-LAP-001 | Loan Against Property | `loan-against-property.md` | Medium | 4 |
+| LOAN-LAFD-001 | Loan Against Fixed Deposit | `loan-against-fd.md` | High | 7 |
 
 #### Cards (`docs/cards/`) — 5 documents
 

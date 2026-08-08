@@ -1,4 +1,4 @@
-﻿---
+---
 id: "RATE-LOAN-001"
 title: "Loan Interest Rates"
 slug: "loan-interest-rates"
@@ -31,28 +31,55 @@ data_source: "interest-rate-api"
 # Loan Interest Rates
 
 ## Overview
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Critical | Phase: 4 -->
+
+This document serves as the Single Source of Truth (SSOT) for all retail loan interest rates. It outlines the current reference rates (EBLR/Repo) and the applicable spread for each loan product. All product-specific documentation must link to this document for pricing information.
 
 ---
 
 ## Rate Table
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Critical | Phase: 4 -->
+
+> [!NOTE]
+> All floating rates are linked to the External Benchmark Lending Rate (EBLR), which is currently pegged to the RBI Repo Rate.
+
+| Loan Product | Rate Type | Base Rate (EBLR) | Applicable Spread | Final Interest Rate (p.a.) |
+|---|---|---|---|---|
+| Home Loan | Floating | <!-- BANK-SPECIFIC: Repo Rate --> | <!-- BANK-SPECIFIC: Spread % --> | <!-- BANK-SPECIFIC: Final % --> |
+| Personal Loan | Fixed | N/A | N/A | <!-- BANK-SPECIFIC: Fixed % --> |
+| Education Loan | Floating | <!-- BANK-SPECIFIC: Repo Rate --> | <!-- BANK-SPECIFIC: Spread % --> | <!-- BANK-SPECIFIC: Final % --> |
+| Vehicle Loan | Fixed/Floating | <!-- BANK-SPECIFIC: Repo Rate --> | <!-- BANK-SPECIFIC: Spread % --> | <!-- BANK-SPECIFIC: Final % --> |
+| Gold Loan | Fixed | N/A | N/A | <!-- BANK-SPECIFIC: Fixed % --> |
+| Loan Against Property | Floating | <!-- BANK-SPECIFIC: Repo Rate --> | <!-- BANK-SPECIFIC: Spread % --> | <!-- BANK-SPECIFIC: Final % --> |
+| Loan Against FD | Fixed | N/A | N/A | FD Rate + <!-- BANK-SPECIFIC: Spread % --> |
 
 ---
 
-## Senior Citizen Rates
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Critical | Phase: 4 -->
+## Concessional Rates
+
+| Category | Applicable Concession |
+|---|---|
+| Female Co-applicant (Home Loan) | <!-- BANK-SPECIFIC: -0.05% --> |
+| Bank Salary Account Holders | <!-- BANK-SPECIFIC: -0.25% --> |
+| Priority Sector (Education Loan) | As per RBI guidelines |
 
 ---
 
 ## Rate Change History
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Medium | Phase: 5 -->
+
+Historical rate changes are managed by the internal treasury department and updated in the core banking system. The rates in this document reflect the currently effective EBLR.
 
 ---
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 4 -->
+
+- [Home Loan](../loans/home-loan.md)
+- [Personal Loan](../loans/personal-loan.md)
+- [Education Loan](../loans/education-loan.md)
+- [Vehicle Loan](../loans/vehicle-loan.md)
+- [Gold Loan](../loans/gold-loan.md)
+- [Business Loan](../loans/business-loan.md)
+- [Loan Against Property](../loans/loan-against-property.md)
+- [Loan Against Fixed Deposit](../loans/loan-against-fd.md)
 
 ---
 
-*Effective from: <!-- TODO --> | Last updated: 2026-08-03*
+*Effective from: <!-- BANK-SPECIFIC: Date --> | Last updated: 2026-08-08*

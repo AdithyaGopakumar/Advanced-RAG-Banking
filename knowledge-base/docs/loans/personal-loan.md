@@ -51,74 +51,112 @@ dynamic_content: false
 
 ## Overview
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+The Personal Loan is an unsecured term loan provided for personal end-uses such as medical emergencies, weddings, travel, or debt consolidation. It does not require any collateral and features quick disbursal based on the applicant's income and credit history.
 
 ---
 
 ## Key Features
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
-
 | Feature | Details |
 |---|---|
-| Loan Amount | <!-- TODO --> |
-| Tenure | <!-- TODO --> |
-| Interest Rate Type | <!-- TODO --> |
-| Collateral Required | <!-- TODO --> |
+| Maximum Loan Amount | Up to <!-- BANK-SPECIFIC: ₹20 Lakhs --> (Subject to FOIR). |
+| Maximum Tenure | Up to <!-- BANK-SPECIFIC: 60 Months -->. |
+| Interest Rate Type | Fixed Interest Rate. |
+| Repayment Mode | Equated Monthly Installment (EMI) via Auto-Debit or NACH. |
+| Collateral Required | None (Unsecured Loan). |
 
 ---
 
 ## Eligibility
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+Personal loans heavily rely on the Fixed Obligation to Income Ratio (FOIR) and credit scores due to the lack of collateral.
 
 ### For salaried individuals
 
-<!-- TODO -->
+| Criterion | Requirement |
+|---|---|
+| Age | Minimum 21 years to Maximum 60 years. |
+| Minimum Income | <!-- BANK-SPECIFIC: ₹20,000 --> net monthly income. |
+| Employment Tenure | Minimum 1 year of work experience (with at least 6 months in current job). |
+| Credit Score (CIBIL) | Minimum <!-- BANK-SPECIFIC: 720 -->. |
 
 ### For self-employed individuals
 
-<!-- TODO -->
+| Criterion | Requirement |
+|---|---|
+| Age | Minimum 21 years to Maximum 65 years. |
+| Minimum Income | Minimum Annual Income of <!-- BANK-SPECIFIC: ₹3 Lakhs --> as per ITR. |
+| Business Vintage | Minimum 2 years in the same business. |
+| Credit Score (CIBIL) | Minimum <!-- BANK-SPECIFIC: 720 -->. |
 
 ---
 
 ## Interest Rates
 
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: RATE-LOAN-001 -->
+Personal loans are offered at fixed interest rates that depend on the applicant's credit score and employer category. For the current schedule, see [Loan Interest Rates](../interest-rates/loan-interest-rates.md).
 
 ---
 
 ## Fees and Charges
 
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: CHG-LOAN-001 -->
+A processing fee is deducted from the loan amount at the time of disbursal. Prepayment/Foreclosure is allowed only after a lock-in period (typically 6-12 EMIs) and attracts a penalty charge. See [Loan Charges](../charges/loan-charges.md) for details.
 
 ---
 
 ## Required Documents
 
-<!-- TODO: Content Required | Owner: Operations SME | Priority: High | Phase: 4 | Depends on: FORM-LOAN-001 -->
+The application requires Identity Proof, Address Proof, and Income Proof (Latest 3 months salary slips / Latest ITR). No collateral documents are needed. Refer to [Loan Application Documents](../forms/loan-application-documents.md).
+
+---
+
+## Prepayment and Foreclosure
+
+Borrowers can foreclose the loan or make part payments after a minimum lock-in period. Refer to [Loan Charges](../charges/loan-charges.md) for applicable penalties (if any).
+
+---
+
+## Default
+
+Missed EMIs attract bounce charges and penal interest on the overdue amount. Since this is an unsecured loan, severe defaults will drastically reduce the CIBIL score, affecting future borrowing capacity.
+
+---
+
+## Closure and NOC
+
+Once the final EMI or foreclosure amount is cleared, the loan account is closed automatically. A digital NOC is generated and emailed to the registered email address.
+
+---
+
+## Tax Benefits
+
+Personal loans generally do not offer tax benefits unless the loan amount is explicitly used for home renovation or business purposes, subject to auditor certification.
+
+---
+
+## Co-applicant and Guarantor
+
+Adding a co-applicant is optional but can help increase loan eligibility by clubbing incomes. Guarantors are generally not required unless the applicant's profile is marginal.
 
 ---
 
 ## How to Apply
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+Applications can be submitted via the bank's mobile app, internet banking portal, or by visiting the nearest branch with the required documents.
 
 ---
 
 ## Repayment Options
 
-<!-- TODO: Content Required | Owner: Lending SME | Priority: High | Phase: 4 -->
+Repayment is facilitated through automated monthly deductions via NACH or ECS from the registered salary account.
 
 ---
 
 ## Related Documents
 
-- [Loan Interest Rates](../interest-rates/loan-interest-rates.md) — <!-- TODO -->
-- [Loan Charges](../charges/loan-charges.md) — <!-- TODO -->
-- [Loan Application Documents](../forms/loan-application-documents.md) — <!-- TODO -->
-- [Loans FAQ](../../faqs/loans-faq.md) — <!-- TODO -->
-- [Choose the Right Loan](../../decision-guides/choose-right-loan.md) — <!-- TODO -->
+- [Loan Interest Rates](../interest-rates/loan-interest-rates.md)
+- [Loan Charges](../charges/loan-charges.md)
+- [Loan Application Documents](../forms/loan-application-documents.md)
+- [Salary Account](../accounts/salary-account.md)
 
 ---
 

@@ -62,6 +62,8 @@ Banking products that customers can open, hold, or subscribe to.
 | | Vehicle Loan | `docs/loans/` |
 | | Gold Loan | `docs/loans/` |
 | | Business Loan | `docs/loans/` |
+| | Loan Against Property | `docs/loans/` |
+| | Loan Against Fixed Deposit | `docs/loans/` |
 | **Cards** | Credit Card | `docs/cards/` |
 | | Debit Card | `docs/cards/` |
 | | Prepaid Card | `docs/cards/` |
