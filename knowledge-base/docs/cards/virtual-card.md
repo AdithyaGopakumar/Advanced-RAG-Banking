@@ -30,46 +30,64 @@ dynamic_content: false
 # Virtual Card
 
 ## Overview
-<!-- TODO: Content Required | Owner: Cards SME | Priority: Medium | Phase: 4 -->
+
+A Virtual Card is a digital-only representation of a debit or credit card. It exists purely within the Mobile Banking or Internet Banking app and has no physical plastic form. It provides an instant, highly secure way to make online and in-app payments.
 
 ---
 
 ## Features and Benefits
-<!-- TODO: Content Required | Owner: Cards SME | Priority: Medium | Phase: 4 -->
+
+- **Instant Issuance:** Generated immediately upon request; no waiting for postal delivery.
+- **Enhanced Security:** Perfect for online shopping. Customers can generate disposable or single-use virtual cards to protect their primary account details.
+- **E-commerce Ready:** Supports all standard online transactions requiring a 16-digit card number, Expiry Date, and CVV.
+- **Wallet Integration:** Easily provisioned into digital wallets like Apple Pay or Google Pay for contactless NFC payments at physical POS terminals.
+- **Zero Physical Risk:** Cannot be lost or stolen in the physical sense.
 
 ---
 
 ## How to Generate
-<!-- TODO: Content Required | Owner: Cards SME | Priority: Medium | Phase: 4 -->
+
+1. Log in to Mobile Banking or Internet Banking.
+2. Navigate to the **Cards** section and select **Generate Virtual Card**.
+3. Choose the funding source (Savings/Current account or an existing Credit Card limit).
+4. Set the card limits and validity.
+5. The 16-digit card number, CVV, and expiry date are instantly displayed on screen.
 
 ---
 
 ## Transaction Limits
-<!-- TODO: Content Required | Owner: Cards SME | Priority: Medium | Phase: 4 -->
+
+- **Maximum Limit:** The user can define the maximum limit for the virtual card at the time of creation (up to the available balance in the linked account or credit limit).
+- **Usage Scope:** Exclusively for Online (E-commerce) transactions and mobile wallet tokenization. Not valid for ATM withdrawals.
 
 ---
 
 ## Validity and Expiry
-<!-- TODO: Content Required | Owner: Cards SME | Priority: Medium | Phase: 4 -->
+
+- **Single-Use Cards:** Automatically expire immediately after the first successful transaction.
+- **Multi-Use Virtual Cards:** Can be set to expire after a specific duration (e.g., 24 hours, 30 days, or up to 5 years).
+- **Manual Deactivation:** Customers can instantly delete or deactivate a virtual card at any time via the app.
 
 ---
 
 ## Fees and Charges
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Medium | Phase: 4 | Depends on: CHG-CARD-001 -->
+
+Virtual Cards are generally issued completely **free of charge** and carry no issuance or annual maintenance fees. Standard transaction fees apply to the underlying funding account.
+See [Card Charges](../charges/card-charges.md).
 
 ---
 
 ## Security Features
-<!-- TODO: Content Required | Owner: Cards SME | Priority: Medium | Phase: 4 -->
+
+- **Dynamic CVV:** Some virtual cards offer a dynamic CVV that changes every few minutes for added security.
+- **OTP Authentication:** All domestic online transactions require standard OTP authentication.
+- **Isolation:** If the virtual card details are compromised on a merchant site, the customer's primary physical card and core bank account remain entirely safe.
 
 ---
 
 ## Related Documents
-- [Debit Card](debit-card.md) — <!-- TODO -->
-- [Credit Card](credit-card.md) — <!-- TODO -->
-- [Card Security](../security/card-security.md) — <!-- TODO -->
-- [Cards FAQ](../../faqs/cards-faq.md) — <!-- TODO -->
+- [Debit Card](debit-card.md)
+- [Credit Card](credit-card.md)
+- [Card Charges](../charges/card-charges.md)
 
 ---
-
-*Last updated: 2026-08-03*

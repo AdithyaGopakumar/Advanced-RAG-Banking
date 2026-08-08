@@ -33,7 +33,7 @@ flowchart TD
     D4 --> SUP["Support (4)"]
     
     D5 --> CHG["Charges (5)"]
-    D5 --> RATE["Interest Rates (2)"]
+    D5 --> RATE["Interest Rates (3)"]
     
     D6 --> FORM["Forms (4)"]
     
@@ -195,6 +195,7 @@ flowchart TD
 | CHG-SVC-001 | Service Charges | `service-charges.md` | High | 4 |
 | RATE-DEP-001 | Deposit Interest Rates | `deposit-interest-rates.md` | Critical | 4 |
 | RATE-LOAN-001 | Loan Interest Rates | `loan-interest-rates.md` | Critical | 4 |
+| RATE-CARD-001 | Card Interest Rates | `card-interest-rates.md` | Critical | 8 |
 
 ---
 

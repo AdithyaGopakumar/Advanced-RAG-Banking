@@ -131,6 +131,7 @@ Frequently changing reference information.
 | | Payment Charges | `docs/charges/` |
 | **Interest Rates** | Deposit Interest Rates | `docs/interest-rates/` |
 | | Loan Interest Rates | `docs/interest-rates/` |
+| | Card Interest Rates | `docs/interest-rates/` |
 
 ---
 
