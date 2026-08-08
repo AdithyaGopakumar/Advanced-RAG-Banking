@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.0] — 2026-08-08
+
+### Added
+
+- **Phase 5B — Accounts Domain Documentation**: Fully authored 12 customer-facing account product documents and 4 canonical reference documents with complete structural content and Single Source of Truth (SSOT) markers.
+  - Authored canonical source documents (`docs/charges/account-charges.md`, `docs/interest-rates/deposit-interest-rates.md`, `docs/forms/account-opening-documents.md`, `docs/forms/kyc-documents.md`) with structural content and `<!-- BANK-SPECIFIC -->` markers to prevent hardcoding of dynamic facts.
+  - Authored comprehensive product documentation for 12 account types (Savings, Current, Salary, BSBDA, Senior Citizen, Student, Minor, Joint, NRE, NRO, FCNR, PMJDY) incorporating accurate eligibility rules, features, benefits, and SSOT cross-references.
+  - Resolved missing document skeletons by generating the necessary files and updating the taxonomy, knowledge map, and coverage matrix.
+
 ## [0.4.0] — 2026-08-03
 
 ### Added

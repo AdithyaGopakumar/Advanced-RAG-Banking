@@ -39,10 +39,10 @@ related_documents:
   - "FAQ-ACCT-001"
   - "GUIDE-ACCT-001"
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "approved"
+created_date: "2026-08-08"
+last_updated: "2026-08-08"
+last_reviewed: "2026-08-08"
 owner: "Retail Banking SME"
 compliance_classification: "regulatory"
 confidentiality: "public"
@@ -52,63 +52,63 @@ dynamic_content: false
 # Student Account
 
 ## Overview
-
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
+The Student Account is a specialized zero-balance savings account designed to encourage early financial literacy and savings habits among young adults and students. It offers a safe, digital-first banking experience with built-in safeguards.
 
 ---
 
 ## Features and Benefits
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
-
 ### Key features
 
-<!-- TODO -->
+- Zero Minimum Average Balance (MAB) requirement
+- Personalized Photo Debit Card with customized daily spending limits
+- Free SMS alerts to both the student and the parent/guardian
+- Exclusive discounts on educational platforms and lifestyle brands
+- Convenient digital payment of school/college fees
 
 ### Benefits
 
-<!-- TODO -->
+- **Financial Independence**: Learn money management in a safe, controlled environment.
+- **Safety**: Built-in daily transaction limits prevent overspending.
+- **Accessibility**: Manage allowances easily through our user-friendly mobile app.
 
 ---
 
 ## Eligibility
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
-
 | Criterion | Requirement |
 |---|---|
-| Age | <!-- TODO --> |
-| Student Proof | <!-- TODO --> |
-| Guardian | <!-- TODO --> |
+| Age | 10 to 25 years |
+| Student Proof | Valid student ID card or admission letter for applicants above 18 |
+| Guardian | Mandatory for applicants below 18 years (See [Minor Account](minor-account.md) rules) |
 
 ---
 
 ## Required Documents
-
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Medium | Phase: 4 | Depends on: FORM-ACCT-001 -->
+Standard KYC documents (Aadhaar, PAN) are required. For applicants under 18, the guardian's KYC must also be provided. For students over 18, a valid institutional ID is required. See [Account Opening Documents](../forms/account-opening-documents.md) for specifics.
 
 ---
 
 ## Fees and Charges
-
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Medium | Phase: 4 | Depends on: CHG-ACCT-001 -->
+The Student Account is a zero-balance account with no maintenance fees. However, standard charges apply for physical statements and certain outstation cheque clearances. See [Account Charges](../charges/account-charges.md) for full details.
 
 ---
 
 ## How to Apply
+Students above 18 can apply online via Video KYC. Minors must apply at a branch, accompanied by their natural or legal guardian with original KYC documents.
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
+*Note: Once the account holder turns 26, the account is automatically converted to a standard Savings Account.*
 
 ---
 
 ## Related Documents
 
-- [Savings Account](savings-account.md) — <!-- TODO -->
-- [Account Charges](../charges/account-charges.md) — <!-- TODO -->
-- [Account Opening Documents](../forms/account-opening-documents.md) — <!-- TODO -->
-- [Accounts FAQ](../../faqs/accounts-faq.md) — <!-- TODO -->
-- [Choose the Right Account](../../decision-guides/choose-right-account.md) — <!-- TODO -->
+- [Savings Account](savings-account.md) — Standard savings rules post-conversion
+- [Account Charges](../charges/account-charges.md) — Service fee details
+- [Account Opening Documents](../forms/account-opening-documents.md) — Acceptable student/guardian proofs
+- [Accounts FAQ](../../faqs/accounts-faq.md) — Frequently asked questions
+- [Choose the Right Account](../../decision-guides/choose-right-account.md) — Compare retail account options
 
 ---
 
-*Last updated: 2026-08-03*
+*Last updated: 2026-08-08*

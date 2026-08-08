@@ -109,6 +109,13 @@ This document tracks the implementation status, ownership, and priority of every
 
 | ID | Document | Owner | Priority | Status | Notes |
 |---|---|---|---|---|---|
+| ACCT-BSBDA-001 | Basic Savings Bank Deposit Account (BSBDA) | Retail Banking SME | High | 🔴 Skeleton | |
+| ACCT-JNT-001 | Joint Account | Retail Banking SME | High | 🔴 Skeleton | |
+| ACCT-MIN-001 | Minor Account | Retail Banking SME | High | 🔴 Skeleton | |
+| ACCT-NRE-001 | NRE Account | Retail Banking SME | High | 🔴 Skeleton | |
+| ACCT-NRO-001 | NRO Account | Retail Banking SME | High | 🔴 Skeleton | |
+| ACCT-FCNR-001 | FCNR Account | Retail Banking SME | Medium | 🔴 Skeleton | |
+| ACCT-PMJDY-001 | PMJDY Account | Retail Banking SME | High | 🔴 Skeleton | |
 | SVC-PB-001 | Passbook Services | Operations SME | Low | 🔴 Skeleton | |
 | PAY-DD-001 | Demand Draft | Payments SME | Low | 🔴 Skeleton | |
 | DIGI-MB-TS-001 | Mobile Banking Troubleshooting | Digital Banking SME | High | 🔴 Skeleton | |
@@ -146,12 +153,12 @@ This document tracks the implementation status, ownership, and priority of every
 
 | Metric | Count |
 |---|---|
-| Total documents | 96 |
+| Total documents | 103 |
 | Phase 4 (Core) | 66 |
-| Phase 5 (Cross-cutting) | 30 |
+| Phase 5 (Cross-cutting) | 37 |
 | Critical priority | 6 |
-| High priority | 66 |
-| Medium priority | 20 |
+| High priority | 72 |
+| Medium priority | 21 |
 | Low priority | 4 |
 | Dynamic content documents | 7 |
 | Unique owners | 8 |

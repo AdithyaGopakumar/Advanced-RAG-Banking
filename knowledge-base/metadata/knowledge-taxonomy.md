@@ -42,7 +42,13 @@ Banking products that customers can open, hold, or subscribe to.
 | **Accounts** | Savings Account | `docs/accounts/` |
 | | Current Account | `docs/accounts/` |
 | | Salary Account | `docs/accounts/` |
-| | Minor's Account | `docs/accounts/` |
+| | Minor Account | `docs/accounts/` |
+| | Basic Savings Bank Deposit Account (BSBDA) | `docs/accounts/` |
+| | Joint Account | `docs/accounts/` |
+| | NRE Account | `docs/accounts/` |
+| | NRO Account | `docs/accounts/` |
+| | FCNR Account | `docs/accounts/` |
+| | PMJDY Account | `docs/accounts/` |
 | **Deposits** | Fixed Deposit | `docs/deposits/` |
 | | Recurring Deposit | `docs/deposits/` |
 | | Tax Saver Fixed Deposit | `docs/deposits/` |

@@ -40,10 +40,10 @@ related_documents:
   - "FAQ-ACCT-001"
   - "GUIDE-ACCT-001"
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "approved"
+created_date: "2026-08-08"
+last_updated: "2026-08-08"
+last_reviewed: "2026-08-08"
 owner: "Retail Banking SME"
 compliance_classification: "regulatory"
 confidentiality: "public"
@@ -53,70 +53,67 @@ dynamic_content: false
 # Senior Citizen Account
 
 ## Overview
-
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
+The Senior Citizen Account is a privileged savings account tailored exclusively for individuals aged 60 and above. It offers preferential interest rates, priority branch servicing, and health-focused lifestyle benefits to ensure a comfortable and rewarding banking experience.
 
 ---
 
 ## Features and Benefits
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
-
 ### Key features
 
-<!-- TODO -->
+- Preferential interest rates on associated term deposits
+- Free doorstep banking services (cash pickup/delivery, cheque pickup)
+- Lifetime free Debit Card with higher ATM withdrawal limits
+- Dedicated priority queues at all bank branches
+- Waiver on SMS alert charges and physical statement fees
 
 ### Benefits
 
-<!-- TODO -->
+- **Maximized Returns**: Earn higher interest on savings and fixed deposits to secure your retirement funds.
+- **Ultimate Convenience**: Bank from the comfort of your home with our free doorstep services.
+- **Healthcare Perks**: Access exclusive discounts on health checkups and pharmacy networks via the debit card.
 
 ---
 
 ## Eligibility
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
-
 | Criterion | Requirement |
 |---|---|
-| Age | <!-- TODO --> |
-| Residency | <!-- TODO --> |
-| Documentation | <!-- TODO --> |
+| Age | 60 years and above (at the time of account opening) |
+| Residency | Resident Indian |
+| Documentation | Standard KYC (Aadhaar/PAN/Passport) with age proof |
 
 ---
 
 ## Required Documents
-
-<!-- TODO: Content Required | Owner: Operations SME | Priority: Medium | Phase: 4 | Depends on: FORM-ACCT-001 -->
+Standard KYC documents (Aadhaar, PAN) are required, along with definitive age proof if not clearly established by the primary KYC document. See [Account Opening Documents](../forms/account-opening-documents.md) for full details.
 
 ---
 
 ## Interest Rates
-
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Medium | Phase: 4 | Depends on: RATE-DEP-001 -->
+The account offers competitive savings interest. Additionally, customers earn a premium on fixed deposits. For exact rates and the senior citizen premium, refer to [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md).
 
 ---
 
 ## Fees and Charges
-
-<!-- TODO: Content Required | Owner: Finance SME | Priority: Medium | Phase: 4 | Depends on: CHG-ACCT-001 -->
+The account features lower minimum balance requirements and waivers on several standard charges. For a complete fee schedule, see [Account Charges](../charges/account-charges.md).
 
 ---
 
 ## How to Apply
-
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: Medium | Phase: 4 -->
+Eligible customers can open this account digitally via Video KYC, or request a doorstep account opening appointment. Alternatively, they can visit any branch for priority onboarding.
 
 ---
 
 ## Related Documents
 
-- [Savings Account](savings-account.md) — <!-- TODO -->
-- [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md) — <!-- TODO -->
-- [Account Charges](../charges/account-charges.md) — <!-- TODO -->
-- [Account Opening Documents](../forms/account-opening-documents.md) — <!-- TODO -->
-- [Accounts FAQ](../../faqs/accounts-faq.md) — <!-- TODO -->
-- [Choose the Right Account](../../decision-guides/choose-right-account.md) — <!-- TODO -->
+- [Savings Account](savings-account.md) — Standard savings account rules
+- [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md) — Premium rates for senior citizens
+- [Account Charges](../charges/account-charges.md) — Fee waivers and requirements
+- [Account Opening Documents](../forms/account-opening-documents.md) — Accepted KYC and age proofs
+- [Accounts FAQ](../../faqs/accounts-faq.md) — Frequently asked questions
+- [Choose the Right Account](../../decision-guides/choose-right-account.md) — Compare retail account options
 
 ---
 
-*Last updated: 2026-08-03*
+*Last updated: 2026-08-08*

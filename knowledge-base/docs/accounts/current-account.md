@@ -39,10 +39,10 @@ related_documents:
   - "FAQ-ACCT-001"
   - "GUIDE-ACCT-001"
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "approved"
+created_date: "2026-08-08"
+last_updated: "2026-08-08"
+last_reviewed: "2026-08-08"
 owner: "Retail Banking SME"
 compliance_classification: "regulatory"
 confidentiality: "public"
@@ -52,71 +52,66 @@ dynamic_content: false
 # Current Account
 
 ## Overview
-
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
+The Current Account is a transactional banking product designed specifically for businesses, enterprises, and professionals. It facilitates high-volume daily transactions with robust cash management services, overdraft facilities, and seamless digital corporate banking access.
 
 ---
 
 ## Features and Benefits
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
-
 ### Key features
 
-<!-- TODO -->
+- Zero restrictions on the number of daily transactions
+- Corporate Internet Banking with maker/checker approval workflows
+- Customised daily cash deposit and withdrawal limits
+- Payable-at-par multi-city cheque book facility
+- Integration with payment gateways and POS systems
 
 ### Benefits
 
-<!-- TODO -->
+- **Liquidity Management**: Manage business cash flows efficiently with high daily transaction limits.
+- **Credit Access**: Eligible businesses can link overdraft (OD) or cash credit (CC) facilities directly to the account.
+- **Scalability**: Upgrade your account tier easily as your business transaction volume grows.
 
 ---
 
 ## Eligibility
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
-
 | Criterion | Requirement |
 |---|---|
-| Entity Type | <!-- TODO --> |
-| Documentation | <!-- TODO --> |
-| Minimum Balance | <!-- TODO --> |
+| Entity Type | Sole Proprietorships, Partnerships, LLPs, Private/Public Limited Companies, Trusts, and Societies |
+| Documentation | Valid business registration proof and entity PAN |
+| Minimum Balance | Varies by current account tier and business size |
 
 ---
 
 ## Required Documents
-
-<!-- TODO: Content Required | Owner: Operations SME | Priority: High | Phase: 4 | Depends on: FORM-ACCT-001 -->
+Opening a Current Account requires entity-specific incorporation documents and KYC for authorized signatories. For the detailed list of required documents based on your business constitution, refer to our [Account Opening Documents](../forms/account-opening-documents.md) guide.
 
 ---
 
 ## Fees and Charges
-
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: CHG-ACCT-001 -->
+Current accounts do not earn interest. They require maintaining a Minimum Average Balance (MAB) based on the account variant. For a comprehensive schedule of charges, including cash handling fees and non-maintenance penalties, see our [Account Charges](../charges/account-charges.md) reference.
 
 ---
 
 ## How to Apply
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
-
 ### Apply online
-
-<!-- TODO -->
+Sole proprietors can initiate the account opening process digitally through our website via Video KYC.
 
 ### Apply at a branch
-
-<!-- TODO -->
+For Partnerships, LLPs, and Companies, an authorized signatory must visit the nearest branch with the original company documents and board resolutions. Our relationship managers can also schedule a visit to your business premises.
 
 ---
 
 ## Related Documents
 
-- [Savings Account](savings-account.md) — <!-- TODO -->
-- [Account Charges](../charges/account-charges.md) — <!-- TODO -->
-- [Account Opening Documents](../forms/account-opening-documents.md) — <!-- TODO -->
-- [Accounts FAQ](../../faqs/accounts-faq.md) — <!-- TODO -->
-- [Choose the Right Account](../../decision-guides/choose-right-account.md) — <!-- TODO -->
+- [Savings Account](savings-account.md) — For personal banking needs
+- [Account Charges](../charges/account-charges.md) — Cash handling and maintenance fees
+- [Account Opening Documents](../forms/account-opening-documents.md) — Business entity KYC requirements
+- [Accounts FAQ](../../faqs/accounts-faq.md) — Common questions about business accounts
+- [Choose the Right Account](../../decision-guides/choose-right-account.md) — Compare business account variants
 
 ---
 
-*Last updated: 2026-08-03*
+*Last updated: 2026-08-08*

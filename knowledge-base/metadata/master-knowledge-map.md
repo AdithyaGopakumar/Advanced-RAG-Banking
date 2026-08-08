@@ -18,7 +18,7 @@ flowchart TD
     KB --> D6["Forms"]
     KB --> D7["Cross-Cutting"]
     
-    D1 --> ACCT["Accounts (5)"]
+    D1 --> ACCT["Accounts (12)"]
     D1 --> DEP["Deposits (3)"]
     D1 --> LOAN["Loans (7)"]
     D1 --> CARD["Cards (5)"]
@@ -49,7 +49,7 @@ flowchart TD
 
 ### Domain 1 — Products (20 documents)
 
-#### Accounts (`docs/accounts/`) — 5 documents
+#### Accounts (`docs/accounts/`) — 12 documents
 
 | ID | Document | File | Priority | Phase |
 |---|---|---|---|---|
@@ -58,6 +58,13 @@ flowchart TD
 | ACCT-SAL-001 | Salary Account | `salary-account.md` | High | 4 |
 | ACCT-STU-001 | Student Account | `student-account.md` | Medium | 4 |
 | ACCT-SC-001 | Senior Citizen Account | `senior-citizen-account.md` | Medium | 4 |
+| ACCT-BSBDA-001 | Basic Savings Bank Deposit Account (BSBDA) | `bsbda.md` | High | 5 |
+| ACCT-JNT-001 | Joint Account | `joint-account.md` | High | 5 |
+| ACCT-MIN-001 | Minor Account | `minor-account.md` | High | 5 |
+| ACCT-NRE-001 | NRE Account | `nre-account.md` | High | 5 |
+| ACCT-NRO-001 | NRO Account | `nro-account.md` | High | 5 |
+| ACCT-FCNR-001 | FCNR Account | `fcnr-account.md` | Medium | 5 |
+| ACCT-PMJDY-001 | PMJDY Account | `pmjdy-account.md` | High | 5 |
 
 #### Deposits (`docs/deposits/`) — 3 documents
 
@@ -249,14 +256,14 @@ flowchart TD
 
 | Domain | Categories | Documents |
 |---|---|---|
-| Products | 4 | 20 |
+| Products | 4 | 27 |
 | Services | 3 | 24 |
 | Policies and Compliance | 2 | 13 |
 | Customer Support | 1 | 4 |
 | Reference Data | 2 | 7 |
 | Forms | 1 | 4 |
 | Cross-Cutting | 4 | 24 |
-| **Total** | **17** | **96** |
+| **Total** | **17** | **103** |
 
 ---
 

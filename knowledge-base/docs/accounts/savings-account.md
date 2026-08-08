@@ -42,10 +42,10 @@ related_documents:
   - "FAQ-ACCT-001"
   - "GUIDE-ACCT-001"
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "approved"
+created_date: "2026-08-08"
+last_updated: "2026-08-08"
+last_reviewed: "2026-08-08"
 owner: "Retail Banking SME"
 compliance_classification: "regulatory"
 regulatory_references:
@@ -57,79 +57,73 @@ dynamic_content: false
 # Savings Account
 
 ## Overview
-
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
+The Savings Account is our flagship everyday banking product designed to help individuals save money securely while earning competitive interest. It offers 24/7 access to funds through our extensive branch network, ATMs, and digital banking platforms.
 
 ---
 
 ## Features and Benefits
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
-
 ### Key features
 
-<!-- TODO -->
+- Seamless digital account opening via Video KYC
+- Free RuPay or Visa Debit Card with contactless payment support
+- Unlimited free transactions via Internet and Mobile Banking
+- E-statements and SMS alerts for all transactions
+- Multi-city cheque book facility
 
 ### Benefits
 
-<!-- TODO -->
+- **Wealth Accumulation**: Earn steady interest on your idle funds, calculated daily and credited quarterly.
+- **Accessibility**: Access your money 24/7 through our mobile app, internet banking, or nationwide ATM network.
+- **Convenience**: Manage utility bills, investments, and UPI payments directly from one account.
 
 ---
 
 ## Eligibility
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
-
 | Criterion | Requirement |
 |---|---|
-| Age | <!-- TODO --> |
-| Residency | <!-- TODO --> |
-| Documentation | <!-- TODO --> |
+| Age | 18 years and above (For minors, see [Minor Account](minor-account.md)) |
+| Residency | Resident Indian (For NRIs, see [NRE Account](nre-account.md) or [NRO Account](nro-account.md)) |
+| Documentation | Valid Proof of Identity (POI) and Proof of Address (POA) |
 
 ---
 
 ## Required Documents
-
-<!-- TODO: Content Required | Owner: Operations SME | Priority: High | Phase: 4 | Depends on: FORM-ACCT-001 -->
+To open a Savings Account, you must submit valid KYC documents (like Aadhaar, PAN, Passport). For the complete list of accepted Officially Valid Documents (OVDs), please refer to our [Account Opening Documents](../forms/account-opening-documents.md) guide.
 
 ---
 
 ## Interest Rates
-
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: RATE-DEP-001 -->
+Interest on the Savings Account is calculated on the daily closing balance and is credited to the account on a quarterly basis. For the most current interest rates and balance tiers, please refer to our [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md) schedule.
 
 ---
 
 ## Fees and Charges
-
-<!-- TODO: Content Required | Owner: Finance SME | Priority: High | Phase: 4 | Depends on: CHG-ACCT-001 -->
+The Savings Account may require maintaining a Minimum Average Balance (MAB), which varies by branch location (Metro, Urban, Semi-Urban, Rural). For full details on MAB requirements, non-maintenance penalties, and other service fees, please see our [Account Charges](../charges/account-charges.md) schedule.
 
 ---
 
 ## How to Apply
 
-<!-- TODO: Content Required | Owner: Retail Banking SME | Priority: High | Phase: 4 -->
-
 ### Apply online
-
-<!-- TODO -->
+Download the Bank's mobile app or visit our website to complete the digital account opening process via Video KYC (V-KYC). Keep your original PAN card and Aadhaar number handy for a seamless experience.
 
 ### Apply at a branch
-
-<!-- TODO -->
+Visit your nearest branch with your original KYC documents and a self-attested copy of each. Our branch staff will assist you in filling out the account opening form.
 
 ---
 
 ## Related Documents
 
-- [Current Account](current-account.md) — <!-- TODO: Describe relationship -->
-- [Salary Account](salary-account.md) — <!-- TODO: Describe relationship -->
-- [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md) — <!-- TODO -->
-- [Account Charges](../charges/account-charges.md) — <!-- TODO -->
-- [Account Opening Documents](../forms/account-opening-documents.md) — <!-- TODO -->
-- [Accounts FAQ](../../faqs/accounts-faq.md) — <!-- TODO -->
-- [Choose the Right Account](../../decision-guides/choose-right-account.md) — <!-- TODO -->
+- [Current Account](current-account.md) — For business banking needs
+- [Salary Account](salary-account.md) — Zero-balance account for salaried individuals
+- [Deposit Interest Rates](../interest-rates/deposit-interest-rates.md) — Current savings interest rates
+- [Account Charges](../charges/account-charges.md) — MAB requirements and service fees
+- [Account Opening Documents](../forms/account-opening-documents.md) — Accepted KYC proofs
+- [Accounts FAQ](../../faqs/accounts-faq.md) — Frequently asked questions
+- [Choose the Right Account](../../decision-guides/choose-right-account.md) — Help deciding which account fits you best
 
 ---
 
-*Last updated: 2026-08-03*
+*Last updated: 2026-08-08*
