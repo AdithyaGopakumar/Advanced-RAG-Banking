@@ -1,4 +1,4 @@
-﻿---
+---
 id: "SEC-GUIDE-001"
 title: "Security Guidelines"
 slug: "security-guidelines"
@@ -29,28 +29,41 @@ dynamic_content: false
 # Security Guidelines
 
 ## Overview
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+These general Security Guidelines form the core policy that governs how the bank secures its digital channels and what security hygiene is expected from customers. It encompasses password management, device security, and the overarching principles of digital banking safety.
 
 ---
 
 ## Key Guidelines
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+- **Multi-Factor Authentication (MFA):** The bank uses MFA for all high-risk transactions. This typically involves something you *know* (your password) and something you *have* (your registered mobile device for OTPs).
+- **Session Timeouts:** Internet Banking and Mobile Banking sessions will automatically time out after `<!-- BANK-SPECIFIC: 5 minutes -->` of inactivity to prevent unauthorized access.
+- **Biometric Authentication:** The bank supports fingerprint and facial recognition for app login. Ensure that only your biometrics are registered on your device.
 
 ---
 
 ## Dos and Don'ts
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+
+### Dos (Password Management)
+- **Do** create strong passwords that are at least 8-12 characters long, combining uppercase, lowercase, numbers, and special characters.
+- **Do** change your Internet Banking password and ATM PIN periodically (e.g., every 90 days).
+- **Do** use a unique password for your banking. Never reuse passwords from social media or email accounts.
+
+### Don'ts
+- **Don't** use easily guessable passwords like your name, date of birth, sequential numbers (123456), or "password".
+- **Don't** save your banking passwords in plain text files on your desktop or in your phone's notes app.
+- **Don't** perform banking transactions over unsecured, public Wi-Fi networks (e.g., at coffee shops or airports) without a trusted VPN.
 
 ---
 
 ## How to Report
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+If you notice any suspicious login activity on your account (e.g., receiving an OTP when you didn't initiate a transaction):
+1. Immediately change your Internet Banking password using the "Forgot Password" flow.
+2. Call the bank's toll-free helpline at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to freeze your digital access temporarily.
 
 ---
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 4 -->
+- [Safe Banking Tips](safe-banking-tips.md)
+- [Fraud Prevention](fraud-prevention.md)
+- [Phishing Awareness](phishing-awareness.md)
 
 ---
-
-*Last updated: 2026-08-03*

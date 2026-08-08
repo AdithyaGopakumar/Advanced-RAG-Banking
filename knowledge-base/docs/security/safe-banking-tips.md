@@ -1,4 +1,4 @@
-﻿---
+---
 id: "SEC-SAFE-001"
 title: "Safe Banking Tips"
 slug: "safe-banking-tips"
@@ -29,28 +29,41 @@ dynamic_content: false
 # Safe Banking Tips
 
 ## Overview
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+Practicing good cyber hygiene is essential for keeping your financial data secure. These safe banking tips provide a foundational baseline for everyday secure banking across digital and physical channels.
 
 ---
 
 ## Key Guidelines
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+- **Device Security:** Keep your smartphone, tablet, and computer operating systems updated. Ensure you have reputable antivirus software installed.
+- **App Permissions:** When installing the bank's mobile app, only grant necessary permissions. Be wary of third-party apps requesting SMS or screen-recording permissions.
+- **Public Computers:** Avoid logging into Internet Banking from cyber cafes, hotel business centers, or any shared public computer.
 
 ---
 
 ## Dos and Don'ts
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+
+### Dos
+- **Do** log out of your Internet Banking session and close the browser window immediately after completing your transactions.
+- **Do** clear your browser cache and history periodically.
+- **Do** verify the payee details carefully before authorizing a fund transfer via NEFT, RTGS, or UPI.
+- **Do** shred old bank statements, chequebook covers, and expired debit/credit cards before throwing them away.
+
+### Don'ts
+- **Don't** use the "Remember Password" or "Autofill" feature in your web browser for banking credentials.
+- **Don't** leave your mobile phone or laptop unlocked and unattended in public spaces.
+- **Don't** write your ATM PIN on the back of your card or keep it on a slip of paper inside your wallet.
 
 ---
 
 ## How to Report
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+If you lose your device with the banking app installed:
+1. Immediately contact your telecom provider to block the SIM card (to prevent OTP interception).
+2. Call the bank's 24x7 customer care at `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to temporarily disable Mobile Banking on your account.
 
 ---
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 4 -->
+- [Security Guidelines](security-guidelines.md)
+- [Card Security](card-security.md)
 
 ---
-
-*Last updated: 2026-08-03*

@@ -27,7 +27,7 @@ flowchart TD
     D2 --> PAY["Payments (7)"]
     D2 --> SVC["Services (9)"]
     
-    D3 --> POL["Policies (8)"]
+    D3 --> POL["Policies (10)"]
     D3 --> SEC["Security (5)"]
     
     D4 --> SUP["Support (4)"]
@@ -152,9 +152,9 @@ flowchart TD
 
 ---
 
-### Domain 3 — Policies and Compliance (13 documents)
+### Domain 3 — Policies and Compliance (15 documents)
 
-#### Policies (`docs/policies/`) — 8 documents
+#### Policies (`docs/policies/`) — 10 documents
 
 | ID | Document | File | Priority | Phase |
 |---|---|---|---|---|
@@ -166,6 +166,8 @@ flowchart TD
 | POL-PRIV-001 | Privacy Policy | `privacy-policy.md` | Medium | 4 |
 | POL-CHQ-001 | Cheque Return Policy | `cheque-return-policy.md` | Medium | 4 |
 | POL-RECOV-001 | Loan Recovery Policy | `loan-recovery-policy.md` | Medium | 4 |
+| POL-DICGC-001 | Deposit Insurance Policy | `deposit-insurance-policy.md` | High | 12 |
+| POL-LIAB-001 | Customer Liability Policy | `customer-liability-policy.md` | High | 12 |
 
 #### Security (`docs/security/`) — 5 documents
 
@@ -270,12 +272,12 @@ flowchart TD
 |---|---|---|
 | Products | 4 | 27 |
 | Services | 3 | 30 |
-| Policies and Compliance | 2 | 13 |
+| Policies and Compliance | 2 | 15 |
 | Customer Support | 1 | 4 |
 | Reference Data | 2 | 7 |
 | Forms | 1 | 4 |
 | Cross-Cutting | 4 | 24 |
-| **Total** | **17** | **109** |
+| **Total** | **17** | **111** |
 
 ---
 

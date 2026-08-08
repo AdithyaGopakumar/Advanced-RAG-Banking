@@ -1,4 +1,4 @@
-﻿---
+---
 id: "SEC-CARD-001"
 title: "Card Security"
 slug: "card-security"
@@ -29,28 +29,42 @@ dynamic_content: false
 # Card Security
 
 ## Overview
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+Credit and Debit cards offer incredible convenience, but they are also prime targets for fraudsters through techniques like skimming, cloning, and online credential theft. Following proper card security protocols ensures your funds remain safe.
 
 ---
 
 ## Key Guidelines
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+- **Card Controls (RBI Mandate):** Use your Mobile Banking app to manage your card's risk exposure. You can instantly turn ON/OFF domestic, international, contactless (NFC), and online (E-commerce) transactions. Keep international and online transactions turned OFF unless you are actively making a purchase.
+- **Tokenization:** When saving your card on merchant apps (like Amazon or Swiggy), ensure the card is "tokenized" (saved as a secure token rather than the actual 16-digit card number), as per RBI guidelines.
+- **PIN Changes:** Change your ATM PIN immediately upon receiving a new card and periodically thereafter (e.g., every 6 months).
 
 ---
 
 ## Dos and Don'ts
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+
+### Dos
+- **Do** memorize your CVV (the 3 digits on the back) and scratch it off or obscure it with a permanent marker. This prevents a cashier from easily copying your card details.
+- **Do** cover the ATM keypad with your free hand while entering your PIN to shield it from hidden cameras.
+- **Do** inspect ATMs and Point-of-Sale (PoS) machines for any loose, bulky, or suspicious attachments (skimmers) before inserting your card.
+- **Do** insist that the PoS machine is brought to you at restaurants; never let the waiter take your card out of your sight.
+
+### Don'ts
+- **Don't** write your PIN anywhere on the card or keep it in the same wallet/purse.
+- **Don't** accept help from strangers at an ATM, even if the machine appears to be stuck.
+- **Don't** share photos of the front or back of your credit/debit card on social media or messaging apps.
 
 ---
 
 ## How to Report
-<!-- TODO: Content Required | Owner: Security SME | Priority: high | Phase: 4 -->
+If your card is lost, stolen, or swallowed by an ATM:
+1. **Block Immediately:** Open the Mobile Banking app and select "Hotlist / Block Card".
+2. **SMS Blocking:** Send an SMS `BLOCK <Last 4 digits of card>` to `<!-- BANK-SPECIFIC: 56767XX -->` from your registered mobile number.
+3. **Call Center:** Call the 24x7 helpline `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` to report the loss and request a replacement card.
 
 ---
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 4 -->
+- [Fraud Prevention](fraud-prevention.md)
+- [Customer Liability Policy](../policies/customer-liability-policy.md)
 
 ---
-
-*Last updated: 2026-08-03*
