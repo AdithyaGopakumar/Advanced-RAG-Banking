@@ -30,47 +30,102 @@ dynamic_content: false
 # Internet Banking
 
 ## Overview
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 -->
+
+Internet Banking (or Net Banking) is a secure web-based portal that allows customers to manage their accounts, conduct complex financial transactions, and request banking services from any internet-connected computer. It is optimized for comprehensive account management and bulk transactions.
 
 ---
 
 ## Features
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 -->
+
+- **Comprehensive Dashboard:** View all linked accounts, cards, loans, and deposits in a single unified view.
+- **Advanced Fund Transfers:** Support for NEFT, RTGS, and IMPS, including bulk uploads for corporate/business accounts.
+- **Beneficiary Management:** Add, modify, and delete payees securely.
+- **Tax and Utility Payments:** Direct integration with income tax portals and the Bharat Bill Payment System (BBPS).
+- **Extensive Service Requests:** Request cheque books, block/replace cards, update address/email, and manage standing instructions.
 
 ---
 
-## How to Register
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 -->
+## Eligibility and Prerequisites
+
+- **Eligibility:** Available to all Savings, Current, and Corporate account holders.
+- **Prerequisites:**
+  - An active Customer ID (CIF).
+  - The registered mobile number must be active to receive OTPs for 2FA.
+  - A secure web browser.
 
 ---
 
-## How to Use
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 -->
+## Registration and Setup
+
+1. **Visit the Portal:** Go to the official bank website and click on "Net Banking Login", then select "Register for New User".
+2. **Online Registration:**
+   - Enter your Customer ID and Registered Mobile Number.
+   - Enter the OTP received on your mobile.
+   - Verify identity using an active Debit Card (Card Number, Expiry, ATM PIN).
+3. **Branch Registration:** Alternatively, customers without a debit card can submit a physical form at the branch to receive a physical PIN mailer.
+4. **Set Passwords:**
+   - Create a strong **Login Password** (for accessing the dashboard).
+   - Create a distinct **Transaction Password** (required for initiating financial transfers).
+
+---
+
+## Supported Operations
+
+### Fund Transfers
+Initiate secure NEFT, RTGS, or IMPS transfers.
+1. Navigate to **Transfers** > **Send to Saved Beneficiary**.
+2. Select the payee and enter the amount.
+3. Authenticate the transaction using your Transaction Password and the OTP sent to your mobile.
+- *See [Payments Domain](../payments/README.md) for detailed rail mechanics.*
+
+### Beneficiary Management
+To add a new payee:
+1. Navigate to **Manage Payees** > **Add New**.
+2. Enter the payee's Account Number, IFSC, and Name.
+3. Authenticate with OTP.
+4. **Cooling Period:** A standard cooling period of <!-- BANK-SPECIFIC: 30 minutes --> applies before the beneficiary is activated. During the first <!-- BANK-SPECIFIC: 24 hours -->, transfers to this new beneficiary are capped at a security limit (e.g., <!-- BANK-SPECIFIC: ₹50,000 -->).
 
 ---
 
 ## Transaction Limits
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 -->
+
+Internet Banking offers the highest transaction limits among all digital channels.
+
+- **Daily Overall Limit:** Up to <!-- BANK-SPECIFIC: ₹25,00,000 --> per day for retail customers (customizable).
+- **RTGS Minimum:** ₹2,00,000 per transaction (as per RBI guidelines).
+- **IMPS Maximum:** <!-- BANK-SPECIFIC: ₹5,00,000 --> per transaction.
 
 ---
 
-## Security Features
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 -->
+## Authentication and Security Features
+
+- **Two-Factor Authentication (2FA):** All logins require a password and an OTP (or Captcha). All financial transactions require a Transaction Password + OTP.
+- **Virtual Keyboard:** Protects against keyloggers when entering passwords.
+- **Security Questions:** Used for password resets or unusual login attempts.
+- **Last Login Stamp:** The dashboard displays the date, time, and IP address of the last successful login.
+- **Auto-Logout:** The session expires automatically after <!-- BANK-SPECIFIC: 5 minutes --> of inactivity.
+
+---
+
+## Fees and Charges
+
+- Internet Banking registration and usage are free.
+- Transfer fees (NEFT/RTGS) may apply depending on the account variant.
+- See [Service Charges](../charges/service-charges.md) for details.
 
 ---
 
 ## Troubleshooting
-<!-- TODO: Content Required | Owner: Digital Banking SME | Priority: High | Phase: 4 | See: DIGI-IB-TS-001 -->
+
+For issues such as locked accounts, forgotten passwords, or transaction state inquiries, please see:
+**[Internet Banking Troubleshooting](internet-banking-troubleshooting.md)**
 
 ---
 
 ## Related Documents
-- [Mobile Banking](mobile-banking.md) — <!-- TODO -->
-- [Internet Banking Troubleshooting](internet-banking-troubleshooting.md) — <!-- TODO -->
-- [Digital Banking FAQ](../../faqs/digital-banking-faq.md) — <!-- TODO -->
-- [First-Time Internet Banking](../../scenarios/first-time-internet-banking.md) — <!-- TODO -->
-- [Security Guidelines](../security/security-guidelines.md) — <!-- TODO -->
+- [Mobile Banking](mobile-banking.md)
+- [Internet Banking Troubleshooting](internet-banking-troubleshooting.md)
+- [Digital Banking FAQ](../../faqs/digital-banking-faq.md)
+- [Security Guidelines](../security/security-guidelines.md)
 
 ---
-
-*Last updated: 2026-08-03*

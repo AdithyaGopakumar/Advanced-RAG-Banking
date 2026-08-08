@@ -118,7 +118,7 @@ flowchart TD
 | DIGI-IB-TS-001 | Internet Banking Troubleshooting | `internet-banking-troubleshooting.md` | High | 5 |
 | DIGI-UPI-TS-001 | UPI Troubleshooting | `upi-troubleshooting.md` | High | 5 |
 
-#### Payments (`docs/payments/`) — 7 documents
+#### Payments (`docs/payments/`) — 9 documents
 
 | ID | Document | File | Priority | Phase |
 |---|---|---|---|---|
@@ -128,6 +128,8 @@ flowchart TD
 | PAY-SWIFT-001 | SWIFT Transfer | `swift.md` | Medium | 4 |
 | PAY-CHQ-001 | Cheque Services | `cheque-services.md` | Medium | 4 |
 | PAY-DD-001 | Demand Draft | `demand-draft.md` | Low | 5 |
+| PAY-NACH-001 | NACH and E-Mandates | `nach-mandates.md` | Medium | 10 |
+| PAY-UPI-001 | UPI Payment Mechanism | `upi-rail.md` | High | 10 |
 | PAY-TS-001 | Payment Troubleshooting | `payment-troubleshooting.md` | High | 5 |
 
 #### Banking Services (`docs/services/`) — 9 documents
@@ -263,13 +265,13 @@ flowchart TD
 | Domain | Categories | Documents |
 |---|---|---|
 | Products | 4 | 27 |
-| Services | 3 | 24 |
+| Services | 3 | 26 |
 | Policies and Compliance | 2 | 13 |
 | Customer Support | 1 | 4 |
 | Reference Data | 2 | 7 |
 | Forms | 1 | 4 |
 | Cross-Cutting | 4 | 24 |
-| **Total** | **17** | **103** |
+| **Total** | **17** | **105** |
 
 ---
 

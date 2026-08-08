@@ -28,53 +28,69 @@ confidentiality: "public"
 dynamic_content: false
 ---
 
-# SWIFT Transfer
+# SWIFT Transfer (International Remittance)
 
 ## Overview
-<!-- TODO: Content Required | Owner: Payments SME | Priority: Medium | Phase: 4 -->
+
+A SWIFT (Society for Worldwide Interbank Financial Telecommunication) transfer is the global standard for international wire transfers. It is used to securely transmit funds and messaging between banks across borders. 
+
+In India, outward international remittances for resident individuals are heavily regulated under the **Liberalised Remittance Scheme (LRS)** administered by the Reserve Bank of India (RBI) and the Foreign Exchange Management Act (FEMA).
 
 ---
 
-## Features
-<!-- TODO -->
+## Transaction Flow
+
+1. **Initiation:** The customer initiates an outward remittance via the branch or Internet Banking, providing the beneficiary's details, IBAN/Account Number, and the receiving bank's SWIFT/BIC code.
+2. **Purpose Declaration:** The customer must declare the specific "Purpose Code" (e.g., S0305 for Travel, S1301 for Family Maintenance).
+3. **FX Conversion:** The bank converts INR to the destination currency based on the prevailing Foreign Exchange (FX) rate.
+4. **Routing:** The bank sends a SWIFT message (usually MT103). If there is no direct relationship between the remitting and receiving banks, the funds are routed through an Intermediary (Correspondent) Bank.
+5. **Credit:** The receiving bank credits the beneficiary's account.
 
 ---
 
-## How It Works
-<!-- TODO -->
+## LRS Limits (Regulatory Requirements)
+
+Under the RBI's Liberalised Remittance Scheme:
+- **Maximum Limit:** Resident individuals can freely remit up to **USD 250,000** (or its equivalent in other currencies) per financial year (April to March) for permissible current or capital account transactions.
+- **TCS (Tax Collected at Source):** A TCS is applicable on remittances exceeding certain thresholds (e.g., above ₹7 Lakhs) depending on the purpose of remittance (education, travel, etc.). 
+- *Note: Limits and TCS rates are defined by the government and are subject to change in the annual Union Budget.*
 
 ---
 
-## How to Use
-<!-- TODO -->
+## Beneficiary Requirements
+
+To send a SWIFT transfer, you need:
+- Beneficiary Name and Address
+- Beneficiary Account Number or IBAN (International Bank Account Number)
+- Receiving Bank's SWIFT / BIC Code
+- Receiving Bank's Name and Address
+- Sort Code / Routing Number (varies by destination country, e.g., ABA Routing Number for the US, BSB for Australia)
 
 ---
 
-## Transaction Limits and LRS
-<!-- TODO -->
+## Charges and Fees
 
----
+International transfers involve multiple fee layers:
+1. **Remitter Bank Commission:** A flat or percentage-based fee charged by the originating bank.
+2. **FX Markup:** A margin applied to the currency conversion rate.
+3. **Correspondent/Intermediary Bank Charges:** If an intermediary bank is used, they may deduct a fee from the principal amount before it reaches the beneficiary (unless the remitter opts to bear all charges via the `OUR` billing code).
+4. **TCS:** Withheld tax (which can be claimed back during income tax filing, if applicable).
 
-## Charges
-<!-- TODO: Depends on: CHG-PAY-001 -->
-
----
-
-## FEMA Compliance
-<!-- TODO -->
+*Refer to the [Payment Charges](../charges/payment-charges.md) and Forex branch desk for current fees and real-time exchange rates.*
 
 ---
 
 ## Timings and Settlement
-<!-- TODO -->
+
+- SWIFT transfers are not real-time.
+- **Credit Timeline:** Funds typically reach the beneficiary within `T+2` to `T+5` working days, depending on the destination country, time zone differences, and the number of intermediary banks involved.
+- **Compliance Hold:** Transactions may be delayed if they are flagged by international Anti-Money Laundering (AML) filters for manual review.
 
 ---
 
 ## Related Documents
-- [NEFT](neft.md) — <!-- TODO -->
-- [Payment Charges](../charges/payment-charges.md) — <!-- TODO -->
-- [Payments FAQ](../../faqs/payments-faq.md) — <!-- TODO -->
+- [NEFT](neft.md)
+- [Payment Charges](../charges/payment-charges.md)
+- [Payments FAQ](../../faqs/payments-faq.md)
 
 ---
-
-*Last updated: 2026-08-03*

@@ -31,47 +31,73 @@ dynamic_content: false
 # RTGS
 
 ## Overview
-<!-- TODO: Content Required | Owner: Payments SME | Priority: High | Phase: 4 -->
+
+Real-Time Gross Settlement (RTGS) is an electronic fund transfer system operated by the Reserve Bank of India (RBI). Unlike NEFT, which operates in batches, RTGS processes transactions continuously and settles them on a one-to-one, gross basis. It is primarily designed for high-value transactions that require immediate clearing.
 
 ---
 
 ## Features
-<!-- TODO -->
+
+- **Real-Time Settlement:** Funds are settled instantly at the RBI level.
+- **Finality:** Once processed, RTGS payments are final and irrevocable.
+- **High Value:** Exclusively used for transfers of ₹2,00,000 or more.
 
 ---
 
-## How It Works
-<!-- TODO -->
+## How It Works (Transaction Flow)
+
+1. **Initiation:** The remitter submits a transfer request via Internet Banking, Corporate Banking portals, or a physical branch.
+2. **Validation:** The bank verifies the minimum amount (₹2 Lakhs) and account balance.
+3. **Transmission:** The request is sent immediately to the RBI's RTGS system.
+4. **Settlement:** RBI debits the remitter bank's settlement account and credits the beneficiary bank's account instantly.
+5. **Credit:** The beneficiary bank receives the RTGS message and credits the beneficiary's account.
 
 ---
 
-## How to Use
-<!-- TODO -->
+## Required Information
+
+To initiate an RTGS transfer, the remitter must provide:
+- Beneficiary Name
+- Beneficiary Account Number
+- Beneficiary Bank Name
+- Beneficiary Branch IFSC
+- Amount to be transferred (must be ≥ ₹2,00,000)
 
 ---
 
 ## Transaction Limits
-<!-- TODO -->
+
+- **Minimum Limit:** ₹2,00,000 (Mandated by RBI). The system will automatically reject any RTGS request below this amount.
+- **Maximum Limit:** No upper limit mandated by RBI. However, the bank imposes a default daily digital limit of <!-- BANK-SPECIFIC: ₹25,00,000 --> for retail customers. Corporate accounts have customizable limits.
 
 ---
 
 ## Charges
-<!-- TODO: Depends on: CHG-PAY-001 -->
+
+- Inward RTGS (receiving money) is completely **Free of Charge**.
+- Outward RTGS initiated via digital channels for Savings Accounts is **Free of Charge** (as mandated by RBI).
+- Outward RTGS initiated at a branch is chargeable based on the time of transaction and amount. See [Payment Charges](../charges/payment-charges.md) for details.
 
 ---
 
 ## Timings and Settlement
-<!-- TODO -->
+
+- **Availability:** RTGS operates 24x7, 365 days a year.
+- **Credit Timeline:** The beneficiary bank is expected to credit the beneficiary's account within 30 minutes of receiving the funds transfer message from RBI.
+
+## Failed Transactions and Reversals
+
+If the funds cannot be credited to the beneficiary (e.g., account frozen or invalid account number):
+- The beneficiary bank must return the funds to the originating bank within **1 hour** or before the end of the RTGS business day, whichever is earlier.
+- Once returned by the beneficiary bank, the remitter's account is credited immediately.
 
 ---
 
 ## Related Documents
-- [NEFT](neft.md) — <!-- TODO -->
-- [IMPS](imps.md) — <!-- TODO -->
-- [Payment Charges](../charges/payment-charges.md) — <!-- TODO -->
-- [Payments FAQ](../../faqs/payments-faq.md) — <!-- TODO -->
-- [Choose the Right Payment Method](../../decision-guides/choose-right-payment-method.md) — <!-- TODO -->
+- [NEFT](neft.md)
+- [IMPS](imps.md)
+- [Payment Troubleshooting](payment-troubleshooting.md)
+- [Payment Charges](../charges/payment-charges.md)
+- [Payments FAQ](../../faqs/payments-faq.md)
 
 ---
-
-*Last updated: 2026-08-03*
