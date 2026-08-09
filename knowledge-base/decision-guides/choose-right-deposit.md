@@ -1,66 +1,89 @@
-﻿---
-id: "GUIDE-DEP-001"
-title: "Choose the Right Deposit"
+---
+id: "DG-DEP-001"
+title: "Choose Right Deposit Decision Guide"
 slug: "choose-right-deposit"
 domain: "cross-cutting"
 category: "decision-guides"
 sub_category: "choose-right-deposit"
 document_type: "decision-guide"
-applicable_to: "both"
-target_audience: "prospective-customer"
+applicable_to: "individual"
+target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["which deposit", "best deposit", "FD vs RD", "compare deposits", "deposit comparison"]
-tags: ["intent:compare", "topic:comparison", "product:fixed-deposit", "product:recurring-deposit"]
-search_aliases: ["FD or RD", "best deposit option", "deposit comparison"]
+keywords: ["choose FD", "which FD", "compare deposits", "deposit type"]
+search_aliases: ["help me pick an FD", "should I open an FD or RD"]
+tags: ["process:decision", "product:deposit"]
 priority: "high"
-related_documents: []
+related_documents: ["DEP-FD-001", "DEP-RD-001"]
+related_faqs: ["deposits-faq.md"]
+related_scenarios: ["fixed-deposit-maturity.md"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Choose the Right Deposit
+# Choose Right Deposit Decision Guide
 
-## Who This Guide Is For
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Purpose
+To evaluate a customer's investment horizon, liquidity needs, and tax-saving goals to suggest the appropriate deposit product type.
 
----
+## Applicable Intent
+`open_deposit` / `check_fd_rate`
 
-## Key Questions to Ask Yourself
-<!-- TODO: Content Required | Phase: 5 -->
+## Inputs
+- `tenure_preference` (Short, Medium, Long)
+- `tax_saving_required` (Yes, No)
+- `liquidity_required` (Yes, No)
 
----
+## Missing Information
+If `liquidity_required` or `tax_saving_required` is missing, clarify:
+"Are you looking to save tax under Section 80C, and do you need the option to break the deposit early?"
 
-## Product Comparison
-<!-- TODO: Content Required | Phase: 5 -->
+## Decision Logic
+IF `tax_saving_required` = YES
+    THEN Route to Tax Saver FD (Note: 5-year lock-in applies)
+    
+IF `tax_saving_required` = NO AND `liquidity_required` = YES
+    THEN Route to Flexi/Sweep-in Deposit
+    
+IF `tax_saving_required` = NO AND `liquidity_required` = NO
+    IF deposit method is monthly recurring
+        THEN Route to Recurring Deposit (RD)
+    ELSE
+        THEN Route to Standard Fixed Deposit (FD)
 
----
+## Outcomes
+- Standard Fixed Deposit
+- Tax Saver FD
+- Recurring Deposit
+- Flexi Deposit
 
-## Which Option Is Right for You
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Customer Action
+Review the current interest rates and initiate the deposit opening via Internet/Mobile Banking.
 
----
+## Exceptions
+- Senior citizens typically receive a premium rate.
 
-## Quick Summary
-<!-- TODO: Content Required | Phase: 5 -->
+## Escalation
+If deposit amount is exceptionally large (e.g., bulk deposits over Rs 2 Crore), escalate to Branch for negotiated rates.
 
----
+## Dynamic Data
+- Current Deposit Interest Rates (`deposit-interest-rates.md`).
 
-## Next Steps
-<!-- TODO: Content Required | Phase: 5 -->
+## Live Data
+- None.
 
----
+## Safety / Compliance
+- Tax Saver FDs cannot be broken prematurely under any circumstance except the death of the depositor.
 
-## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
+## Related FAQs
+- [Deposits FAQ](../faqs/deposits-faq.md)
 
----
+## Related Scenarios
+- [Fixed Deposit Maturity](../scenarios/fixed-deposit-maturity.md)
 
-*Last updated: 2026-08-03*
+## Canonical Documents
+- [Fixed Deposit](../docs/deposits/fixed-deposit.md)

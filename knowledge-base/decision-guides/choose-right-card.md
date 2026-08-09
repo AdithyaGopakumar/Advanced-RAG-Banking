@@ -1,66 +1,84 @@
-﻿---
-id: "GUIDE-CARD-001"
-title: "Choose the Right Card"
+---
+id: "DG-CARD-001"
+title: "Choose Right Card Decision Guide"
 slug: "choose-right-card"
 domain: "cross-cutting"
 category: "decision-guides"
 sub_category: "choose-right-card"
 document_type: "decision-guide"
-applicable_to: "both"
-target_audience: "prospective-customer"
+applicable_to: "individual"
+target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["which card", "best card", "compare cards", "credit vs debit", "card comparison"]
-tags: ["intent:compare", "topic:comparison", "product:credit-card", "product:debit-card"]
-search_aliases: ["best credit card", "card comparison", "which card to get"]
+keywords: ["choose card", "which card", "compare cards", "credit card type"]
+search_aliases: ["help me pick a credit card", "best credit card"]
+tags: ["process:decision", "product:card"]
 priority: "high"
-related_documents: []
+related_documents: ["CARD-CC-001"]
+related_faqs: ["cards-faq.md"]
+related_scenarios: []
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Choose the Right Card
+# Choose Right Card Decision Guide
 
-## Who This Guide Is For
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Purpose
+To suggest the appropriate credit card variant based on the customer's primary spending habits and lifestyle needs.
 
----
+## Applicable Intent
+`apply_card`
 
-## Key Questions to Ask Yourself
-<!-- TODO: Content Required | Phase: 5 -->
+## Inputs
+- `primary_spend_category` (Travel, Shopping, Cashback, Basic)
+- `income_bracket` (Standard, High Net Worth)
 
----
+## Missing Information
+If `primary_spend_category` is unknown, clarify:
+"Are you looking for a card primarily for travel rewards, shopping cashback, or just a basic card with no annual fee?"
 
-## Product Comparison
-<!-- TODO: Content Required | Phase: 5 -->
+## Decision Logic
+IF `income_bracket` = High Net Worth AND `primary_spend_category` = Travel
+    THEN Route to Premium Travel Credit Card
+    
+IF `primary_spend_category` = Cashback OR Shopping
+    THEN Route to Cashback/Rewards Credit Card
+    
+IF `primary_spend_category` = Basic
+    THEN Route to Entry-level Zero Fee Card
 
----
+## Outcomes
+- Premium Card
+- Rewards Card
+- Basic Card
 
-## Which Option Is Right for You
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Customer Action
+Apply via the Cards section in Internet Banking.
 
----
+## Exceptions
+- Card issuance is subject to credit score checks.
 
-## Quick Summary
-<!-- TODO: Content Required | Phase: 5 -->
+## Escalation
+None.
 
----
+## Dynamic Data
+- Annual fees and joining fees (`card-charges.md`).
 
-## Next Steps
-<!-- TODO: Content Required | Phase: 5 -->
+## Live Data
+- Pre-approved limit checks (`LIVE_API`).
 
----
+## Safety / Compliance
+- Do not promise specific credit limits.
 
-## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
+## Related FAQs
+- [Cards FAQ](../faqs/cards-faq.md)
 
----
+## Related Scenarios
+- None.
 
-*Last updated: 2026-08-03*
+## Canonical Documents
+- [Credit Card](../docs/cards/credit-card.md)

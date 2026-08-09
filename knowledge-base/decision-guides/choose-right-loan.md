@@ -1,66 +1,85 @@
-﻿---
-id: "GUIDE-LOAN-001"
-title: "Choose the Right Loan"
+---
+id: "DG-LOAN-001"
+title: "Choose Right Loan Decision Guide"
 slug: "choose-right-loan"
 domain: "cross-cutting"
 category: "decision-guides"
 sub_category: "choose-right-loan"
 document_type: "decision-guide"
-applicable_to: "both"
-target_audience: "prospective-customer"
+applicable_to: "individual"
+target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["which loan", "best loan", "compare loans", "loan comparison", "personal vs home loan"]
-tags: ["intent:compare", "topic:comparison", "product:home-loan", "product:personal-loan"]
-search_aliases: ["best loan for me", "loan comparison", "which loan to take"]
+keywords: ["choose loan", "which loan", "compare loans", "loan type"]
+search_aliases: ["help me pick a loan", "what kind of loan do I need"]
+tags: ["process:decision", "product:loan"]
 priority: "high"
-related_documents: []
+related_documents: ["LOAN-HL-001", "LOAN-PL-001"]
+related_faqs: ["loans-faq.md"]
+related_scenarios: ["loan-application-journey.md"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Choose the Right Loan
+# Choose Right Loan Decision Guide
 
-## Who This Guide Is For
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Purpose
+To map a customer's borrowing need and collateral availability to the correct loan product category.
 
----
+## Applicable Intent
+`apply_loan`
 
-## Key Questions to Ask Yourself
-<!-- TODO: Content Required | Phase: 5 -->
+## Inputs
+- `purpose` (Home, Auto, Education, General)
+- `collateral_available` (Yes, No)
 
----
+## Missing Information
+If `purpose` is general/missing, clarify:
+"Are you looking for a loan for a specific purpose like buying a home or car, or a general personal loan?"
 
-## Product Comparison
-<!-- TODO: Content Required | Phase: 5 -->
+## Decision Logic
+IF `purpose` = Home OR `purpose` = Property
+    THEN Route to Home Loan / LAP
+    
+IF `purpose` = Auto
+    THEN Route to Auto Loan
+    
+IF `purpose` = General OR `collateral_available` = NO
+    THEN Route to Personal Loan
 
----
+## Outcomes
+- Home Loan
+- Auto Loan
+- Personal Loan
 
-## Which Option Is Right for You
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Customer Action
+Check eligibility using the online calculator and submit an application lead.
 
----
+## Exceptions
+- None.
 
-## Quick Summary
-<!-- TODO: Content Required | Phase: 5 -->
+## Escalation
+Complex or high-value business loans route to Corporate Banking.
 
----
+## Dynamic Data
+- Current Loan Interest Rates (`loan-interest-rates.md`).
 
-## Next Steps
-<!-- TODO: Content Required | Phase: 5 -->
+## Live Data
+- Checking if customer has a pre-approved offer (`LIVE_API`).
 
----
+## Safety / Compliance
+- Do not guarantee loan approval. Approval is subject to credit underwriting.
 
-## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
+## Related FAQs
+- [Loans FAQ](../faqs/loans-faq.md)
 
----
+## Related Scenarios
+- [Loan Application Journey](../scenarios/loan-application-journey.md)
 
-*Last updated: 2026-08-03*
+## Canonical Documents
+- [Personal Loan](../docs/loans/personal-loan.md)
+- [Home Loan](../docs/loans/home-loan.md)

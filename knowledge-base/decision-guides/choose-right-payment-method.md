@@ -1,66 +1,86 @@
-﻿---
-id: "GUIDE-PAY-001"
-title: "Choose the Right Payment Method"
+---
+id: "DG-PAY-001"
+title: "Choose Right Payment Method Decision Guide"
 slug: "choose-right-payment-method"
 domain: "cross-cutting"
 category: "decision-guides"
 sub_category: "choose-right-payment-method"
 document_type: "decision-guide"
 applicable_to: "both"
-target_audience: "prospective-customer"
+target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["which payment method", "NEFT vs RTGS vs IMPS", "best way to transfer", "compare payments"]
-tags: ["intent:compare", "topic:comparison", "process:fund-transfer"]
-search_aliases: ["NEFT or RTGS", "best transfer method", "how to send money"]
+keywords: ["choose payment method", "NEFT vs RTGS", "UPI limit", "transfer type"]
+search_aliases: ["how should I transfer money", "best way to send large amount"]
+tags: ["process:decision", "product:payments"]
 priority: "high"
-related_documents: []
+related_documents: ["PAY-NEFT-001", "PAY-IMPS-001", "PAY-RTGS-001"]
+related_faqs: ["payments-faq.md"]
+related_scenarios: ["payment-failure-resolution.md"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Choose the Right Payment Method
+# Choose Right Payment Method Decision Guide
 
-## Who This Guide Is For
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Purpose
+To evaluate a customer's transfer amount and urgency to recommend the correct payment rail (UPI, NEFT, RTGS, IMPS).
 
----
+## Applicable Intent
+`compare_transfers_limits`
 
-## Key Questions to Ask Yourself
-<!-- TODO: Content Required | Phase: 5 -->
+## Inputs
+- `amount` (Below 1 Lakh, 1-2 Lakhs, Above 2 Lakhs)
+- `urgency` (Instant, Same Day)
 
----
+## Missing Information
+If `amount` is unknown, clarify:
+"Approximately how much are you trying to transfer? Some methods like RTGS have a minimum limit."
 
-## Product Comparison
-<!-- TODO: Content Required | Phase: 5 -->
+## Decision Logic
+IF `amount` < 1 Lakh AND `urgency` = Instant
+    THEN Route to UPI or IMPS
+    
+IF `amount` >= 2 Lakhs AND `urgency` = Instant
+    THEN Route to RTGS
+    
+IF `urgency` = Same Day (Not Instant)
+    THEN Route to NEFT
 
----
+## Outcomes
+- UPI
+- IMPS
+- NEFT
+- RTGS
 
-## Which Option Is Right for You
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Customer Action
+Initiate the chosen transfer type via Mobile Banking or Internet Banking.
 
----
+## Exceptions
+- If the payee is not added as a beneficiary, a cooling-off period (usually 24 hours with a reduced limit) applies to NEFT/RTGS/IMPS.
 
-## Quick Summary
-<!-- TODO: Content Required | Phase: 5 -->
+## Escalation
+None.
 
----
+## Dynamic Data
+- Transfer charges for the specific rail (`payment-charges.md`).
 
-## Next Steps
-<!-- TODO: Content Required | Phase: 5 -->
+## Live Data
+- None.
 
----
+## Safety / Compliance
+- Limits are bound by RBI regulations and the customer's profile limits.
 
-## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
+## Related FAQs
+- [Payments FAQ](../faqs/payments-faq.md)
 
----
+## Related Scenarios
+- [Payment Failure Resolution](../scenarios/payment-failure-resolution.md)
 
-*Last updated: 2026-08-03*
+## Canonical Documents
+- [NEFT](../docs/payments/neft.md)
+- [RTGS](../docs/payments/rtgs.md)
