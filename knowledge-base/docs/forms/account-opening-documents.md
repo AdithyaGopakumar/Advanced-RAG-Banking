@@ -10,7 +10,7 @@ applicable_to: "both"
 target_audience: "both"
 language: "en"
 region: "IN"
-keywords: ["account opening documents", "KYC for account", "documents required", "identity proof", "address proof"]
+keywords: ["account opening documents", "KYC for account", "documents required", "identity proof", "OVD (Officially Valid Document)"]
 tags: ["topic:documents-required", "reference:forms", "process:account-opening", "process:kyc"]
 search_aliases: ["documents for bank account", "papers needed for account", "account opening form"]
 priority: "high"
@@ -59,7 +59,7 @@ This document specifies the required documentation for opening various types of 
 - **NRI Accounts (NRE / NRO / FCNR)**:
   - Copy of valid passport (pages containing details like name, address, date of birth, date of issue, expiry, etc.).
   - Copy of valid visa or residence permit.
-  - Overseas address proof.
+  - Overseas OVD (Officially Valid Document).
 - **Joint Account**:
   - KYC documents and photographs for all joint holders.
   - Mandate for account operation (e.g., "Either or Survivor").

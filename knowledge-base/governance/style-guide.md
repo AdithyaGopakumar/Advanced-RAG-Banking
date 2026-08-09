@@ -92,7 +92,7 @@ All documentation is written for **bank customers**. Assume the reader:
 
 **Good:**
 
-> To open a Savings Account, visit your nearest branch with a valid ID proof and address proof. The account is activated within 1 working day.
+> To open a Savings Account, visit your nearest branch with a valid ID proof and OVD (Officially Valid Document). The account is activated within 1 working day.
 
 **Bad:**
 
@@ -123,14 +123,14 @@ All documentation is written for **bank customers**. Assume the reader:
 - Valid PAN card
 - Aadhaar card or Voter ID
 - Recent passport-size photograph
-- Address proof (utility bill or bank statement)
+- OVD (Officially Valid Document) (utility bill or bank statement)
 
 **Bad (inconsistent structure):**
 
 - PAN card is needed
 - Aadhaar card
 - You should bring a photograph
-- An address proof document such as a utility bill
+- An OVD (Officially Valid Document) document such as a utility bill
 
 ---
 

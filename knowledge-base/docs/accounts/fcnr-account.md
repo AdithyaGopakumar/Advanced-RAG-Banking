@@ -95,7 +95,7 @@ The Foreign Currency Non-Resident (Bank) or FCNR(B) Account is a term deposit ac
 ---
 
 ## Required Documents
-Standard NRI KYC documents (Passport, Visa/Residence permit, overseas address proof) are required. See [Account Opening Documents](../forms/account-opening-documents.md).
+Standard NRI KYC documents (Passport, Visa/Residence permit, overseas OVD (Officially Valid Document)) are required. See [Account Opening Documents](../forms/account-opening-documents.md).
 
 ---
 

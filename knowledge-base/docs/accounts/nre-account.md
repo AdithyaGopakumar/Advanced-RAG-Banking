@@ -88,7 +88,7 @@ The Non-Resident External (NRE) Account is a Rupee-denominated savings account t
 | Criterion | Requirement |
 |---|---|
 | Residency Status | Must be a Non-Resident Indian (NRI) or Person of Indian Origin (PIO) / Overseas Citizen of India (OCI) |
-| Documentation | Valid passport, proof of NRI status (visa/residence permit), and overseas address proof |
+| Documentation | Valid passport, proof of NRI status (visa/residence permit), and overseas OVD (Officially Valid Document) |
 | Joint Holding | Permitted with other NRIs/PIOs. Permitted with resident close relative (as defined in Companies Act) strictly on a "Former or Survivor" basis. |
 
 ---

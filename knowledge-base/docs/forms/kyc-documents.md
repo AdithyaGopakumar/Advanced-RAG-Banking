@@ -10,9 +10,9 @@ applicable_to: "both"
 target_audience: "both"
 language: "en"
 region: "IN"
-keywords: ["KYC documents", "identity proof", "address proof", "Aadhaar", "PAN card", "passport"]
+keywords: ["KYC documents", "identity proof", "OVD (Officially Valid Document)", "Aadhaar", "PAN card", "passport"]
 tags: ["topic:documents-required", "reference:forms", "process:kyc", "compliance:kyc"]
-search_aliases: ["KYC papers", "identity documents", "valid ID proof", "address proof list"]
+search_aliases: ["KYC papers", "identity documents", "valid ID proof", "OVD (Officially Valid Document) list"]
 priority: "high"
 related_documents: []
 version: "1.0"

@@ -47,7 +47,7 @@ Settling the accounts of a deceased customer is a sensitive priority. The docume
 - **Information Required:** Deceased customer's details, Nominee's details, Destination account details.
 - **Supporting Documents:**
   - Original Death Certificate (for OSV by the bank).
-  - KYC of the Nominee (Identity and Address Proof).
+  - KYC of the Nominee (Identity and OVD (Officially Valid Document)).
   - Passbook / Unused Cheques / Debit Card of the deceased.
 - **Signature/Authorization:** Signature of the Nominee.
 - **Where to Obtain:** Bank Branch or `<!-- BANK-SPECIFIC: Download URL -->`.

@@ -80,7 +80,7 @@ A nominal valuation fee is charged by the appraiser. Processing fees are general
 
 ## Required Documents
 
-Only basic KYC (Identity and Address Proof) is required. Income proof is not required. See [Loan Application Documents](../forms/loan-application-documents.md).
+Only basic KYC (Identity and OVD (Officially Valid Document)) is required. Income proof is not required. See [Loan Application Documents](../forms/loan-application-documents.md).
 
 ---
 

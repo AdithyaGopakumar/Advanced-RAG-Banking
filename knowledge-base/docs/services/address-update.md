@@ -39,7 +39,7 @@ Customers can update their registered communication or permanent address at any 
 
 - You must have an Officially Valid Document (OVD) that clearly shows your new address. 
 - Accepted OVDs include Aadhaar Card, Passport, Voter ID, Driving License, or NREGA Job Card.
-- Refer to [KYC Documents](../forms/kyc-documents.md) for the complete list of accepted address proofs.
+- Refer to [KYC Documents](../forms/kyc-documents.md) for the complete list of accepted OVD (Officially Valid Document)s.
 
 ---
 
@@ -59,7 +59,7 @@ This is the fastest method, utilizing Aadhaar-based OTP authentication or docume
 ### 3. At the Branch
 1. Visit any branch.
 2. Fill out the **Customer Profile Update Form**.
-3. Submit a self-attested photocopy of your new address proof and carry the original for verification.
+3. Submit a self-attested photocopy of your new OVD (Officially Valid Document) and carry the original for verification.
 
 ---
 

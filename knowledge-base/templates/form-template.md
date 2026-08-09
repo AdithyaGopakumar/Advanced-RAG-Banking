@@ -102,11 +102,11 @@ The following documents are accepted as identity proof:
 
 ---
 
-## Acceptable Address Proof Documents
+## Acceptable OVD (Officially Valid Document) Documents
 
 <!-- CONDITIONAL: Include if KYC-related. [REMOVE IF NOT APPLICABLE] -->
 
-The following documents are accepted as address proof:
+The following documents are accepted as OVD (Officially Valid Document):
 
 - 
 

@@ -88,7 +88,7 @@ The Non-Resident Ordinary (NRO) Account is a Rupee-denominated savings account d
 | Criterion | Requirement |
 |---|---|
 | Residency Status | Must be a Non-Resident Indian (NRI) or Person of Indian Origin (PIO) / Overseas Citizen of India (OCI) |
-| Documentation | Valid passport, proof of NRI status (visa/residence permit), and overseas address proof |
+| Documentation | Valid passport, proof of NRI status (visa/residence permit), and overseas OVD (Officially Valid Document) |
 | Joint Holding | Permitted with other NRIs/PIOs. Permitted with resident Indians on a "Former or Survivor" basis. |
 
 ---

@@ -57,7 +57,7 @@ dynamic_content: false
 # Savings Account
 
 ## Overview
-The Savings Account is our flagship everyday banking product designed to help individuals save money securely while earning competitive interest. It offers 24/7 access to funds through our extensive branch network, ATMs, and digital banking platforms.
+The Savings Account is our flagship everyday banking product designed to help individuals save money securely while earning competitive interest. It offe[Refer to current dynamic limits]/7 access to funds through our extensive branch network, ATMs, and digital banking platforms.
 
 ---
 

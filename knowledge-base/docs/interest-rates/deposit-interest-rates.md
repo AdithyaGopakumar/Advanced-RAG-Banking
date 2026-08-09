@@ -99,7 +99,7 @@ Historical rate changes are tracked internally. The rates displayed on this page
 ## Related Documents
 
 - [Savings Account](../accounts/savings-account.md) — Savings account product details
-- [Fixed Deposit](fixed-deposit.md) — Term deposit product details
+- [Fixed Deposit](../deposits/fixed-deposit.md) — Term deposit product details
 - [Senior Citizen Account](../accounts/senior-citizen-account.md) — Senior citizen specific accounts
 
 ---

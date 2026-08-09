@@ -105,7 +105,7 @@ A processing fee is deducted from the loan amount at the time of disbursal. Prep
 
 ## Required Documents
 
-The application requires Identity Proof, Address Proof, and Income Proof (Latest 3 months salary slips / Latest ITR). No collateral documents are needed. Refer to [Loan Application Documents](../forms/loan-application-documents.md).
+The application requires Identity Proof, OVD (Officially Valid Document), and Income Proof (Latest 3 months salary slips / Latest ITR). No collateral documents are needed. Refer to [Loan Application Documents](../forms/loan-application-documents.md).
 
 ---
 

@@ -50,7 +50,7 @@ This document specifies the required documentation for applying for Credit Cards
 - **Applicable Product/Service:** Credit Cards.
 - **Information Required:** Personal details, employment details, gross annual income, existing credit card details (if applying basis another card).
 - **Supporting Documents:**
-  - **KYC:** Identity and Address Proof (Aadhaar, Passport, etc. - see [KYC Documents](kyc-documents.md)).
+  - **KYC:** Identity and OVD (Officially Valid Document) (Aadhaar, Passport, etc. - see [KYC Documents](kyc-documents.md)).
   - **Income Proof (Salaried):** Latest 2 months salary slips and 3 months bank statement.
   - **Income Proof (Self-Employed):** Latest ITR with computation of income and business continuity proof.
 - **Signature/Authorization:** Wet signature required on physical forms. Aadhaar-based e-Sign required for digital journeys.
