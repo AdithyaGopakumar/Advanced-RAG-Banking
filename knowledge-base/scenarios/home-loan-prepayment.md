@@ -1,4 +1,4 @@
-﻿---
+---
 id: "SCEN-PREP-001"
 title: "Home Loan Prepayment"
 slug: "home-loan-prepayment"
@@ -10,61 +10,65 @@ applicable_to: "individual"
 target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["home loan prepayment", "part payment", "foreclosure", "loan closure", "reduce EMI"]
-tags: ["product:home-loan", "feature:prepayment", "intent:close"]
-search_aliases: ["pay off home loan early", "part payment home loan", "close home loan"]
+keywords: ["home loan prepayment", "foreclose loan", "part payment", "loan closure", "pay off loan"]
+search_aliases: ["prepay home loan", "foreclosure charges", "close loan early"]
+tags: ["intent:prepayment", "product:home-loan"]
 priority: "high"
-related_documents: []
+related_documents: ["CHG-LOAN-001"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Home Loan Prepayment
+# Home Loan Prepayment Scenario
 
-## The Situation
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Situation
+The customer has excess funds and wants to make a part-payment or fully foreclose their active home loan to save on interest.
 
----
+## Customer Intent
+`loan_prepayment`
 
-## What You Will Need
-<!-- TODO: Content Required | Phase: 5 -->
+## What the Customer May Say
+- "I want to pay off a chunk of my home loan."
+- "Are there charges if I foreclose my loan early?"
+- "How do I make a part payment?"
 
----
+## Relevant Information
+RBI mandates that floating-rate home loans for individual borrowers carry NO prepayment or foreclosure penalties.
 
-## Step-by-Step Process
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Response Path
+Confirm that floating-rate home loans can be prepaid without penalty. Advise the customer that part-payments can be made via Internet Banking, which will reduce their outstanding principal.
 
-### Step 1
-<!-- TODO -->
+## Immediate Action
+None.
 
-### Step 2
-<!-- TODO -->
+## Next Steps
+Customer transfers funds to the loan account via the portal.
 
-### Step 3
-<!-- TODO -->
+## Exceptions
+- **Fixed Rate Loans**: May attract a foreclosure penalty.
+- **Non-Individual Borrowers**: Corporate/Business loans attract penalties.
 
----
+## When to Escalate
+None.
 
-## Expected Timelines
-<!-- TODO: Content Required | Phase: 5 -->
+## Dynamic Information Required
+- Foreclosure charges for other loan types.
 
----
+## Live Banking Data Required
+- Outstanding loan principal balance.
 
-## What to Do If Something Goes Wrong
-<!-- TODO: Content Required | Phase: 5 -->
+## Security Considerations
+None.
 
----
+## Compliance Considerations
+RBI guidelines on zero prepayment penalty for floating rate individual housing loans.
+
+## Related FAQs
+- [Loans FAQ](../faqs/loans-faq.md)
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
-
----
-
-*Last updated: 2026-08-03*
+- [Loan Charges](../docs/charges/loan-charges.md)

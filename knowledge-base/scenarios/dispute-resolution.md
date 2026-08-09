@@ -1,4 +1,4 @@
-﻿---
+---
 id: "SCEN-DISP-001"
 title: "Dispute Resolution"
 slug: "dispute-resolution"
@@ -6,65 +6,69 @@ domain: "cross-cutting"
 category: "scenarios"
 sub_category: "dispute-resolution"
 document_type: "scenario"
-applicable_to: "individual"
+applicable_to: "both"
 target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["dispute", "transaction dispute", "wrong debit", "unauthorised transaction", "chargeback"]
-tags: ["intent:report-issue", "process:dispute-resolution", "process:complaint"]
-search_aliases: ["wrong charge", "unauthorised debit", "dispute a transaction"]
+keywords: ["dispute", "complaint", "escalation", "grievance", "ombudsman"]
+search_aliases: ["file a complaint", "escalate issue", "raise a dispute"]
+tags: ["intent:complain", "process:dispute"]
 priority: "high"
-related_documents: []
+related_documents: ["CUST-COMP-001", "CUST-ESC-001"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Dispute Resolution
+# Dispute Resolution Scenario
 
-## The Situation
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Situation
+The customer is dissatisfied with a bank charge, service failure, or previous complaint outcome, and wishes to raise a formal dispute.
 
----
+## Customer Intent
+`file_complaint`
 
-## What You Will Need
-<!-- TODO: Content Required | Phase: 5 -->
+## What the Customer May Say
+- "I want to file a complaint against the branch."
+- "You charged me a fee unfairly, I want a refund."
+- "My issue wasn't resolved, who can I escalate to?"
 
----
+## Relevant Information
+The bank has a multi-tiered grievance redressal mechanism mandated by RBI.
 
-## Step-by-Step Process
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Response Path
+Acknowledge the frustration. Provide the link to log a formal grievance via the grievance portal or provide the Customer Care email. If they have an existing ticket, provide the escalation path.
 
-### Step 1
-<!-- TODO -->
+## Immediate Action
+None.
 
-### Step 2
-<!-- TODO -->
+## Next Steps
+Customer must log a formal ticket to receive a reference number.
 
-### Step 3
-<!-- TODO -->
+## Exceptions
+- **Fraud Dispute**: Belongs in the Fraud Reporting scenario, not general dispute.
 
----
+## When to Escalate
+If the customer has already passed Level 1 (Branch/Customer Care), escalate to the Principal Nodal Officer (PNO).
 
-## Expected Timelines
-<!-- TODO: Content Required | Phase: 5 -->
+## Dynamic Information Required
+None.
 
----
+## Live Banking Data Required
+- Current status of the complaint ticket.
 
-## What to Do If Something Goes Wrong
-<!-- TODO: Content Required | Phase: 5 -->
+## Security Considerations
+None.
 
----
+## Compliance Considerations
+Complaints must be acknowledged and resolved within the RBI-stipulated timeframe (typically 30 days before Ombudsman escalation).
+
+## Related FAQs
+- [General FAQ](../faqs/general-faq.md)
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
-
----
-
-*Last updated: 2026-08-03*
+- [Complaint Process](../docs/customer-support/complaint-process.md)
+- [Escalation Matrix](../docs/customer-support/escalation-matrix.md)

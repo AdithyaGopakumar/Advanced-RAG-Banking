@@ -1,4 +1,4 @@
-﻿---
+---
 id: "SCEN-DEC-001"
 title: "Deceased Account Handling"
 slug: "deceased-account-handling"
@@ -6,65 +6,70 @@ domain: "cross-cutting"
 category: "scenarios"
 sub_category: "deceased-account-handling"
 document_type: "scenario"
-applicable_to: "individual"
+applicable_to: "both"
 target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["deceased account", "death claim", "nominee claim", "account holder death"]
-tags: ["process:nomination", "segment:retail"]
-search_aliases: ["claim after death", "death of account holder", "nominee withdrawal"]
+keywords: ["deceased account", "death claim", "nominee claim", "legal heir", "settlement"]
+search_aliases: ["claim deceased funds", "report account holder death", "nomination claim"]
+tags: ["intent:claim", "process:deceased-claim"]
 priority: "high"
-related_documents: []
+related_documents: ["FORM-SR-001"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Deceased Account Handling
+# Deceased Account Handling Scenario
 
-## The Situation
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Situation
+A relative or legal heir contacts the bank to report the death of an account holder and wishes to claim the funds or close the account.
 
----
+## Customer Intent
+`deceased_claim`
 
-## What You Will Need
-<!-- TODO: Content Required | Phase: 5 -->
+## What the Customer May Say
+- "My father passed away, how do I access his account?"
+- "How do I file a death claim?"
+- "The account holder is deceased, what is the procedure?"
 
----
+## Relevant Information
+Settlement depends heavily on whether a nominee was registered, or if it was a joint account with "Survivor" clause.
 
-## Step-by-Step Process
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Response Path
+Offer condolences. Explain that the claimant needs to submit a Death Certificate along with the Deceased Claim Form at the home branch.
 
-### Step 1
-<!-- TODO -->
+## Immediate Action
+Mark the account to prevent unauthorized debit transactions (if authorized to do so).
 
-### Step 2
-<!-- TODO -->
+## Next Steps
+Claimant must visit the home branch with the original death certificate and claimant's KYC.
 
-### Step 3
-<!-- TODO -->
+## Exceptions
+- **Nominee Exists**: Simple settlement process directly to the registered nominee.
+- **No Nominee**: Requires a Legal Heir Certificate or Succession Certificate, which takes longer.
+- **Joint Account**: Surviving holder can continue operating or claim the funds easily.
 
----
+## When to Escalate
+If there is a dispute among legal heirs, escalate to the Legal/Nodal Officer immediately.
 
-## Expected Timelines
-<!-- TODO: Content Required | Phase: 5 -->
+## Dynamic Information Required
+None.
 
----
+## Live Banking Data Required
+- Verification of registered nominee.
 
-## What to Do If Something Goes Wrong
-<!-- TODO: Content Required | Phase: 5 -->
+## Security Considerations
+Preventing unauthorized access post-demise is critical.
 
----
+## Compliance Considerations
+Strict adherence to RBI guidelines on timely settlement of deceased claims.
+
+## Related FAQs
+- [General FAQ](../faqs/general-faq.md)
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
-
----
-
-*Last updated: 2026-08-03*
+- [Service Request Forms](../docs/forms/service-request-forms.md)

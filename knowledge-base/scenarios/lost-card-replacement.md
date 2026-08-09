@@ -1,6 +1,6 @@
 ---
 id: "SCEN-CARD-001"
-title: "Lost Card Replacement"
+title: "Lost Card & Replacement"
 slug: "lost-card-replacement"
 domain: "cross-cutting"
 category: "scenarios"
@@ -10,70 +10,66 @@ applicable_to: "individual"
 target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["lost card", "card stolen", "block card", "replace card", "card replacement"]
-tags: ["intent:report-issue", "intent:block", "process:card-replacement"]
-search_aliases: ["card lost what to do", "stolen card", "block my card"]
+keywords: ["lost card", "stolen card", "replace card", "block card", "new debit card"]
+search_aliases: ["lost my debit card", "credit card stolen", "get a replacement card"]
+tags: ["intent:block_card", "security:high"]
 priority: "high"
-related_documents: []
+related_documents: ["SEC-CARD-001", "CHG-CARD-001"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# Lost Card Replacement
+# Lost Card & Replacement Scenario
 
-## The Situation
-You have misplaced your Credit, Debit, or Prepaid card, or you suspect it has been stolen. In either case, your immediate priority is to block the card to prevent unauthorized physical (ATM/POS) or online transactions, and then request a replacement.
+## Situation
+The customer has physically lost their debit or credit card, or it has been stolen, and they need to secure their account and get a new card.
 
----
+## Customer Intent
+`block_card` / `replace_card`
 
-## What You Will Need
-- Your registered mobile phone (to send an SMS or use the Mobile App).
-- Your Account Number or Customer ID (if calling customer care).
-- *Note: You do NOT need the full 16-digit card number to block it.*
+## What the Customer May Say
+- "I dropped my wallet and lost my debit card."
+- "My credit card was stolen."
+- "I can't find my card, please block it and send a new one."
 
----
+## Relevant Information
+A blocked card cannot be unblocked. Replacement cards are mailed to the registered address and usually incur a replacement fee.
 
-## Step-by-Step Process
+## Recommended Response Path
+Treat as high priority. Guide the customer to permanently block the card immediately via the Mobile App 'Manage Cards' section or the emergency toll-free number. Explain that they can request a replacement card simultaneously during the block process.
 
-### Step 1: Block the Card Immediately
-You have three secure options to block your card:
-- **Via Mobile App (Fastest):** Log in, go to the "Cards" section, select the lost card, and tap "Hotlist / Block Card".
-- **Via SMS:** Send an SMS `BLOCK <Last 4 digits of card>` (if you know them) or `BLOCK <Account Number>` to `<!-- BANK-SPECIFIC: 56767XX -->` from your registered mobile number.
-- **Via Call Center:** Dial the 24x7 toll-free number `<!-- BANK-SPECIFIC: 1800-XXX-XXXX -->` and follow the IVR prompts to report a lost card.
+## Immediate Action
+Route to LIVE API to block card if channel supports it.
 
-### Step 2: Request a Replacement Card
-Once the card is blocked, the mobile app or customer service agent will prompt you to request a replacement card. 
-- Confirm your current mailing address.
-- A card replacement fee of `<!-- BANK-SPECIFIC: ₹150 + GST -->` will be automatically debited from your linked account.
+## Next Steps
+Customer blocks card and verifies mailing address for replacement.
 
-### Step 3: Destroy the Old Card (If Found Later)
-If you find the lost card after it has been hotlisted, **do not attempt to use it**. Hotlisting is permanent and irreversible. Cut the old card across the magnetic stripe and the EMV chip before disposing of it.
+## Exceptions
+- **Unauthorized Transactions**: If the card was used after being lost, pivot to the `fraud-reporting` scenario immediately.
+- **Card Temporarily Misplaced**: Customer can choose to 'Temporarily Lock' the card instead of a permanent block if they think they might find it.
 
----
+## When to Escalate
+If the customer is unable to authenticate to block the card, route immediately to human support.
 
-## Expected Timelines
-- **Card Blocking:** Instantaneous upon request.
-- **Replacement Card Delivery:** Your new card will be dispatched and delivered to your registered communication address within `<!-- BANK-SPECIFIC: 5-7 working days -->`.
+## Dynamic Information Required
+- Card replacement fees.
 
----
+## Live Banking Data Required
+- Customer's active cards list.
 
-## What to Do If Something Goes Wrong
-- **Unauthorized Transactions:** If you notice transactions on the card *after* you lost it, immediately file a dispute following the [Fraud Reporting](fraud-reporting.md) process. Do not delay, as your liability depends on how quickly you report the loss.
+## Security Considerations
+**HIGH**. Ensure the card is blocked immediately.
 
----
+## Compliance Considerations
+None.
+
+## Related FAQs
+- [Cards FAQ](../faqs/cards-faq.md)
 
 ## Related Documents
-- [Fraud Reporting](fraud-reporting.md)
-- [Card Security](../docs/security/card-security.md)
-- [Customer Liability Policy](../docs/policies/customer-liability-policy.md)
-
----
-
-*Last updated: 2026-08-08*
+- [Card Security Guidelines](../docs/security/card-security.md)
+- [Card Charges](../docs/charges/card-charges.md)

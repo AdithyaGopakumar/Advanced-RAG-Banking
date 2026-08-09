@@ -1,6 +1,6 @@
-﻿---
+---
 id: "SCEN-DIGI-001"
-title: "First-Time Internet Banking Setup"
+title: "First Time Internet Banking Registration"
 slug: "first-time-internet-banking"
 domain: "cross-cutting"
 category: "scenarios"
@@ -10,61 +10,65 @@ applicable_to: "individual"
 target_audience: "customer"
 language: "en"
 region: "IN"
-keywords: ["first time login", "register internet banking", "activate net banking", "new to online banking"]
-tags: ["intent:open", "channel:internet-banking", "topic:getting-started"]
-search_aliases: ["set up net banking", "start online banking", "activate internet banking"]
+keywords: ["internet banking registration", "net banking signup", "first time login", "generate password"]
+search_aliases: ["register for net banking", "how to login online", "get online access"]
+tags: ["intent:register", "channel:internet-banking"]
 priority: "high"
-related_documents: []
+related_documents: ["DIGI-IB-001"]
 version: "1.0"
-status: "draft"
-created_date: "2026-08-03"
-last_updated: "2026-08-03"
-last_reviewed: "2026-08-03"
+status: "current"
 owner: "Technical Writing Lead"
 compliance_classification: "informational"
 confidentiality: "public"
-dynamic_content: false
+dynamic_content: true
 ---
 
-# First-Time Internet Banking Setup
+# First Time Internet Banking Registration Scenario
 
-## The Situation
-<!-- TODO: Content Required | Owner: Technical Writing Lead | Priority: High | Phase: 5 -->
+## Situation
+A new or existing customer wants to access their bank account online for the first time via a web browser.
 
----
+## Customer Intent
+`register_digital_banking`
 
-## What You Will Need
-<!-- TODO: Content Required | Phase: 5 -->
+## What the Customer May Say
+- "How do I register for internet banking?"
+- "I want to check my account online."
+- "How do I get my login password?"
 
----
+## Relevant Information
+Registration requires the customer's Customer ID (CIF), registered mobile number, and active Debit Card details for self-registration.
 
-## Step-by-Step Process
-<!-- TODO: Content Required | Phase: 5 -->
+## Recommended Response Path
+Guide the customer to the bank's website, click on 'New User Registration', and keep their Debit Card and mobile phone handy for OTP validation.
 
-### Step 1
-<!-- TODO -->
+## Immediate Action
+None.
 
-### Step 2
-<!-- TODO -->
+## Next Steps
+Customer completes the online flow to generate their login and profile passwords.
 
-### Step 3
-<!-- TODO -->
+## Exceptions
+- **No Debit Card**: Customer must visit the branch to request physical PIN mailers.
+- **Corporate Account**: Self-registration is usually disabled; requires branch submission.
 
----
+## When to Escalate
+Escalate to technical support if the portal throws an unexpected error despite correct details.
 
-## Expected Timelines
-<!-- TODO: Content Required | Phase: 5 -->
+## Dynamic Information Required
+None.
 
----
+## Live Banking Data Required
+None.
 
-## What to Do If Something Goes Wrong
-<!-- TODO: Content Required | Phase: 5 -->
+## Security Considerations
+Ensure the customer is on the official bank URL. Warn them not to share the registration OTPs with anyone.
 
----
+## Compliance Considerations
+None.
+
+## Related FAQs
+- [Digital Banking FAQ](../faqs/digital-banking-faq.md)
 
 ## Related Documents
-<!-- TODO: Populate cross-references | Phase: 5 -->
-
----
-
-*Last updated: 2026-08-03*
+- [Internet Banking Troubleshooting](../docs/digital-banking/internet-banking-troubleshooting.md)
