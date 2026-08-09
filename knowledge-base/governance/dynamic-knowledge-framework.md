@@ -101,7 +101,7 @@ The RAG system must recognize when to stop searching static/dynamic text and rou
 | Customer Query / Data | Required System | Fallback (if unavailable) |
 |---|---|---|
 | Account Balance | Core Banking System API | "I cannot access your live balance right now. Please check the Mobile Banking App." |
-| Transaction Status | Payment Gateway / UPI Switch API | "To check transaction status, please navigate to 'Recent Transactions' in Net Banking." |
+| Transaction Status | Payment Gateway / UPI Switch API | "To check transaction status, please navigate to 'Recent Transactions' in Internet Banking." |
 | Card Status (Active/Blocked) | Card Management System API | "Please verify your card status in the 'Manage Cards' section of the Mobile App." |
 | Loan Outstanding Amount | Loan Management System API | "You can view your exact outstanding principal in the 'Loans' tab online." |
 | Current Live FX Rate | Treasury API | "Live FX rates fluctuate. Please check the live rate calculator on the banking portal." |

@@ -113,7 +113,7 @@ Customers often use different terms than banking professionals. Content should b
 | Foreclosure | Paying off the loan early | Define and use both |
 | Beneficiary | Person receiving money | Define and use both |
 | Debit Card | ATM card | Note the common confusion |
-| Net Banking | Internet Banking, Online Banking | Use the approved term, add aliases |
+| Internet Banking | Internet Banking, Online Banking | Use the approved term, add aliases |
 | CIBIL Score | Credit score | Use both in the content |
 | Account statement | Bank statement | Use the approved term, add alias |
 

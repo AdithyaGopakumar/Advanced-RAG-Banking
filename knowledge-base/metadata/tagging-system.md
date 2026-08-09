@@ -80,7 +80,7 @@ Identify which banking channels are relevant.
 | Tag | Description |
 |---|---|
 | `channel:branch` | In-branch services |
-| `channel:internet-banking` | Internet Banking (Net Banking) |
+| `channel:internet-banking` | Internet Banking (Internet Banking) |
 | `channel:mobile-banking` | Mobile Banking app |
 | `channel:atm` | ATM services |
 | `channel:phone-banking` | Phone banking / IVR |
