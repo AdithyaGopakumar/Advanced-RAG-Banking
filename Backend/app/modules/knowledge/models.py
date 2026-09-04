@@ -241,6 +241,16 @@ class ChunkProvenance(BaseModel):
     source_location: str  # file path within the knowledge-base
 
 
+class ChunkContext(BaseModel):
+    """Contextual breadcrumbs for the chunk.
+    
+    Preserves structural context separately from the canonical chunk text,
+    allowing downstream embeddings to reconstruct the full context hierarchy.
+    """
+    document_title: str
+    heading_path: list[str] = Field(default_factory=list)
+
+
 class KnowledgeRelationship(BaseModel):
     """A typed, directed relationship between knowledge entities.
 
@@ -354,4 +364,5 @@ class KnowledgeChunk(BaseModel):
     # Structurally separate concerns
     metadata: ChunkMetadata
     provenance: ChunkProvenance
+    context: ChunkContext
     relationships: list[KnowledgeRelationship] = Field(default_factory=list)

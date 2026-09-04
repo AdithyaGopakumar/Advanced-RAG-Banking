@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     # ─── Application ───
     APP_NAME: str = "RAG Bank"
     KNOWLEDGE_ROOT: str = "../knowledge-base"
+    CHUNK_MAX_SIZE: int = 2000
     APP_VERSION: str = "0.1.0"
     ENVIRONMENT: str = "development"
     DEBUG: bool = True

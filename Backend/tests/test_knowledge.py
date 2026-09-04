@@ -14,6 +14,7 @@ from app.modules.knowledge.identity import (
 )
 from app.modules.knowledge.models import (
     Category,
+    ChunkContext,
     ChunkMetadata,
     ChunkProvenance,
     ChunkType,
@@ -82,6 +83,7 @@ def sample_chunk(sample_metadata, sample_provenance) -> KnowledgeChunk:
         content_hash=content_hash(text),
         metadata=sample_metadata,
         provenance=sample_provenance,
+        context=ChunkContext(document_title="Savings Account", heading_path=["Eligibility"]),
         relationships=[
             KnowledgeRelationship(
                 relationship_type=RelationshipType.GOVERNED_BY,
@@ -391,6 +393,7 @@ class TestRelationships:
             content_hash=content_hash("Overview text."),
             metadata=sample_metadata,
             provenance=sample_provenance,
+            context=ChunkContext(document_title="Savings Account", heading_path=["Overview"]),
             relationships=[],
         )
         assert chunk.relationships == []
