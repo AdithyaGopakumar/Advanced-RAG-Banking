@@ -148,6 +148,48 @@ class Confidentiality(str, Enum):
 # Nested value objects
 # ──────────────────────────────────────────────
 
+class DocumentMetadata(BaseModel):
+    """Metadata attached to a governed knowledge document."""
+
+    domain: Domain
+    category: Category
+    sub_category: str
+    document_type: DocumentType
+
+    # Optional filtering dimensions
+    product: Optional[str] = None
+    customer_segment: Optional[str] = None
+    channel: Optional[str] = None
+
+    region: str = "IN"
+    language: str = "en"
+
+    # Retrieval fields
+    keywords: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+    search_aliases: list[str] = Field(default_factory=list)
+
+    # Ranking / governance
+    priority: Priority = Priority.MEDIUM
+    owner: str = Field(..., description="Document owner")
+    authority: Optional[str] = None
+    status: DocumentStatus = DocumentStatus.DRAFT
+    compliance_classification: Optional[str] = None
+    confidentiality: Confidentiality = Confidentiality.PUBLIC
+    dynamic_content: bool = False
+
+    # Temporal validity
+    effective_from: Optional[date] = None
+    effective_until: Optional[date] = None
+
+
+class DocumentProvenance(BaseModel):
+    """Provenance for a governed knowledge document."""
+
+    source: Optional[str] = None
+    source_location: str  # file path within the knowledge-base
+    version: str
+
 
 class ChunkMetadata(BaseModel):
     """Metadata attached to a retrieval chunk.
@@ -232,20 +274,20 @@ class KnowledgeDocument(BaseModel):
     title: str
     slug: str
 
-    domain: Domain
-    category: Category
-    sub_category: str
-    document_type: DocumentType
+    metadata: DocumentMetadata
+    provenance: DocumentProvenance
 
-    version: str
-    status: DocumentStatus
+    content: str = Field(
+        ...,
+        description="Raw markdown content of the document (excluding front matter)",
+    )
 
-    language: str = "en"
-    region: str = "IN"
+    sections: list[KnowledgeSection] = Field(default_factory=list)
 
     # Flat related-document list from knowledge-base frontmatter.
     # Typed relationships exist on KnowledgeChunk for the retrieval layer.
     related_documents: list[str] = Field(default_factory=list)
+    relationships: list[KnowledgeRelationship] = Field(default_factory=list)
 
 
 class KnowledgeSection(BaseModel):
@@ -261,8 +303,16 @@ class KnowledgeSection(BaseModel):
     )
     document_id: str
     heading: str
-    level: int = Field(..., ge=2, le=4, description="Heading level (2–4)")
+    level: int = Field(..., description="Heading level (1 for root, 2+ for subsections)")
     position: int = Field(..., ge=0, description="Ordinal position within document")
+    content: str = Field(
+        ...,
+        description="Raw Markdown content preserving structure (paragraphs, lists, etc.)",
+    )
+    parent_section_id: Optional[str] = Field(
+        default=None,
+        description="ID of the parent section (e.g. H2 ID for an H3 section)",
+    )
 
 
 class KnowledgeChunk(BaseModel):

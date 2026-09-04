@@ -17,6 +17,8 @@ from app.modules.knowledge.models import (
     ChunkMetadata,
     ChunkProvenance,
     ChunkType,
+    DocumentMetadata,
+    DocumentProvenance,
     DocumentStatus,
     DocumentType,
     Domain,
@@ -226,21 +228,29 @@ class TestKnowledgeDocument:
             document_id="ACCT-SA-001",
             title="Savings Account",
             slug="savings-account",
-            domain=Domain.PRODUCTS,
-            category=Category.ACCOUNTS,
-            sub_category="savings-account",
-            document_type=DocumentType.PRODUCT,
-            version="1.0",
-            status=DocumentStatus.PUBLISHED,
+            metadata=DocumentMetadata(
+                domain=Domain.PRODUCTS,
+                category=Category.ACCOUNTS,
+                sub_category="savings-account",
+                document_type=DocumentType.PRODUCT,
+                owner="Banking Operations",
+                status=DocumentStatus.PUBLISHED,
+            ),
+            provenance=DocumentProvenance(
+                source="Internal Banking Policy",
+                source_location="docs/accounts/savings-account.md",
+                version="1.0"
+            ),
+            content="# Savings Account\n\nContent here."
         )
         assert doc.document_id == "ACCT-SA-001"
-        assert doc.domain == Domain.PRODUCTS
+        assert doc.metadata.domain == Domain.PRODUCTS
 
     def test_missing_required_field(self):
         with pytest.raises(Exception):  # ValidationError
             KnowledgeDocument(
                 document_id="ACCT-SA-001",
-                # missing title, slug, domain, etc.
+                # missing title, slug, metadata, provenance, content
             )
 
     def test_invalid_domain_rejected(self):
@@ -249,12 +259,18 @@ class TestKnowledgeDocument:
                 document_id="ACCT-SA-001",
                 title="Test",
                 slug="test",
-                domain="not-a-domain",
-                category=Category.ACCOUNTS,
-                sub_category="test",
-                document_type=DocumentType.PRODUCT,
-                version="1.0",
-                status=DocumentStatus.DRAFT,
+                metadata=DocumentMetadata(
+                    domain="not-a-domain",
+                    category=Category.ACCOUNTS,
+                    sub_category="test",
+                    document_type=DocumentType.PRODUCT,
+                    owner="Test",
+                ),
+                provenance=DocumentProvenance(
+                    source_location="test.md",
+                    version="1.0"
+                ),
+                content="test"
             )
 
     def test_related_documents_default_empty(self):
@@ -262,12 +278,18 @@ class TestKnowledgeDocument:
             document_id="ACCT-SA-001",
             title="Test",
             slug="test",
-            domain=Domain.PRODUCTS,
-            category=Category.ACCOUNTS,
-            sub_category="test",
-            document_type=DocumentType.PRODUCT,
-            version="1.0",
-            status=DocumentStatus.DRAFT,
+            metadata=DocumentMetadata(
+                domain=Domain.PRODUCTS,
+                category=Category.ACCOUNTS,
+                sub_category="test",
+                document_type=DocumentType.PRODUCT,
+                owner="Test",
+            ),
+            provenance=DocumentProvenance(
+                source_location="test.md",
+                version="1.0"
+            ),
+            content="test"
         )
         assert doc.related_documents == []
 
@@ -280,18 +302,9 @@ class TestKnowledgeSection:
             heading="Eligibility for Savings Account",
             level=2,
             position=1,
+            content="Some text here."
         )
         assert section.level == 2
-
-    def test_invalid_heading_level_rejected(self):
-        with pytest.raises(Exception):  # ValidationError
-            KnowledgeSection(
-                section_id="ACCT-SA-001::test",
-                document_id="ACCT-SA-001",
-                heading="Test",
-                level=1,  # H1 is not allowed (min=2)
-                position=0,
-            )
 
     def test_negative_position_rejected(self):
         with pytest.raises(Exception):  # ValidationError
@@ -301,6 +314,7 @@ class TestKnowledgeSection:
                 heading="Test",
                 level=2,
                 position=-1,
+                content="test",
             )
 
 
