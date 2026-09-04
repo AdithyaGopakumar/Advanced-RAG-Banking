@@ -21,8 +21,10 @@ Backend/
 │   │   ├── lifecycle.py            # FastAPI lifespan (startup/shutdown hooks)
 │   │   └── middleware/
 │   │       ├── auth.py             # Auth dependencies (require_auth, require_admin)
-│   │       ├── request_logger.py   # Logs method, path, status, duration per request
-│   │       └── rate_limiter.py     # slowapi limiter + custom 429 handler
+│   │       ├── rate_limiter.py     # slowapi limiter + custom 429 handler
+│   │       ├── request_id.py       # Generate / propagate X-Request-ID
+│   │       ├── request_logger.py   # Log method, path, status, duration per request
+│   │       └── security_headers.py # HSTS, X-Content-Type-Options, etc.
 │   │
 │   ├── api/                        # API layer — thin route aggregation
 │   │   └── v1/
@@ -32,25 +34,105 @@ Backend/
 │   │   ├── system/                 # System module (health check)
 │   │   │   ├── router.py           # Route definitions
 │   │   │   └── service.py          # Business logic
+│   │   │
+│   │   └── knowledge/              # Knowledge domain module
+│   │       ├── models.py           # KnowledgeDocument, KnowledgeSection, KnowledgeChunk
+│   │       └── identity.py         # Deterministic chunk IDs & content hashing
 │   │
-│   ├── ai/                         # AI agent orchestration (placeholder structure)
-│   │   ├── agents/                 # Agent implementations
-│   │   ├── graphs/                 # Workflow graph definitions
-│   │   ├── prompts/                # Prompt templates
-│   │   ├── tools/                  # Agent tools
-│   │   ├── providers/              # LLM provider adapters
+│   ├── ingestion/                  # Knowledge → retrieval artifact transformation
+│   │                               # (CLI/job-driven, NOT HTTP-dependent)
+│   │
+│   ├── ai/                         # AI infrastructure (scaffold)
 │   │   ├── embeddings/             # Embedding utilities
-│   │   ├── rag/                    # RAG pipeline
-│   │   └── modules/                # AI services (orchestrator, registry)
+│   │   ├── prompts/                # Prompt templates
+│   │   ├── providers/              # LLM provider adapters
+│   │   └── rag/                    # RAG pipeline
 │   │
 │   ├── shared/                     # Shared utilities (utc_now, helpers)
 │   ├── db/                         # Database layer (placeholder)
 │   └── models/                     # Data models (placeholder)
 │
-├── workers/                        # Background workers (placeholder)
-├── tests/                          # Test suite (placeholder)
+├── tests/                          # Test suite
 └── docs/                           # Documentation (you are here)
 ```
+
+## Domain Boundaries
+
+The architecture separates three distinct concerns:
+
+```
+app/modules/knowledge/     Domain knowledge concepts (models, identity)
+app/ai/                    AI infrastructure (embeddings, providers, prompts)
+app/ingestion/             Knowledge → retrieval artifact transformation
+```
+
+**Why separate?**
+- Knowledge models are domain concepts — they exist independently of AI.
+- AI infrastructure may change (swap embedding providers, LLM providers) without touching domain models.
+- Ingestion is a batch/CLI process, not an HTTP request handler.
+
+## Retrieval Artifact Hierarchy
+
+The retrieval representation follows a three-level hierarchy:
+
+```
+KnowledgeDocument          Governed knowledge unit (product, policy, FAQ, etc.)
+       ↓
+KnowledgeSection           Structural context inside a document (H2/H3 headings)
+       ↓
+KnowledgeChunk             Primary retrieval unit for the RAG pipeline
+```
+
+Each level has a distinct role:
+
+| Level | Role | Example |
+|-------|------|---------|
+| KnowledgeDocument | Governance context — version, status, ownership | ACCT-SA-001 (Savings Account) |
+| KnowledgeSection | Structural context — heading, position | ACCT-SA-001::eligibility |
+| KnowledgeChunk | Retrieval unit — text + metadata + provenance | ACCT-SA-001::eligibility::001 |
+
+**These concepts are NOT collapsed into a single `Document` model.**
+
+### Deterministic Chunk Identity
+
+Chunk IDs are deterministic — the same inputs always produce the same ID:
+
+```
+DOCUMENT_ID::section-slug::NNN
+```
+
+Examples:
+```
+ACCT-SA-001::eligibility::000
+LOAN-HL-001::interest-rates::003
+FAQ-ACCT-001::q-what-is-the-minimum-balance::000
+```
+
+This enables:
+- **Idempotent ingestion** — re-processing produces the same IDs
+- **Change detection** — content hash changes when text changes
+- **Reproducible indexing** — same source → same artifacts
+- **Debugging** — chunk ID traces directly to source document and section
+
+### Content Hashing
+
+Each chunk carries a SHA-256 content hash of its text. If the source text changes, the hash changes, signalling that derived artifacts (embeddings, vector indexes) need regeneration.
+
+### Metadata, Provenance, and Relationships
+
+These are **structurally separate** on each chunk:
+
+| Concern | Model | Purpose |
+|---------|-------|---------|
+| **Metadata** | `ChunkMetadata` | Filtering, faceted search, retrieval ranking |
+| **Provenance** | `ChunkProvenance` | Traces chunk → section → document → source → version |
+| **Relationships** | `KnowledgeRelationship` | Typed links (governed_by, requires, etc.) |
+
+**Metadata is first-class** — it is not concatenated into chunk text.
+
+**Provenance is mandatory** — every retrieval artifact is traceable back to governed knowledge.
+
+**Relationships are typed** — not arbitrary text references. Types include: `governed_by`, `requires`, `explained_by`, `applies_to`, `references`, `complements`, `alternative_to`, `parent_of`, `supersedes`, `summarises`, `compares`.
 
 ## Request Flow
 
@@ -125,3 +207,21 @@ Key settings:
 |------|---------|
 | `run.py` | Process-level: signal handlers, uncaught exception hook, `atexit`, launches uvicorn |
 | `main.py` | App-level: `create_app()` factory, wires middleware/routes/handlers |
+
+## Intentionally Deferred
+
+The following are NOT implemented and are left for later phases:
+
+| Component | Phase |
+|-----------|-------|
+| Database (PostgreSQL, SQLAlchemy, migrations) | When persistence is needed |
+| Vector database (Qdrant, pgvector) | Phase 1B — indexing |
+| Embedding providers (OpenAI, etc.) | Phase 1B — indexing |
+| Hybrid retrieval (BM25 + Dense + RRF) | Phase 1B — retrieval |
+| Reranker | Phase 1B — retrieval |
+| LLM generation pipeline | Phase 2 — generation |
+| Query router / intent detection | Phase 2 — query understanding |
+| Live banking APIs | Future |
+| Production authentication (JWT/OAuth2) | Production readiness |
+| Redis / message queues | When async processing is needed |
+| Agent frameworks | Future |

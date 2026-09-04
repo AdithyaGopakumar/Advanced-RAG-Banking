@@ -1,6 +1,6 @@
-# FastAPI Modular Monolith Boilerplate
+# RAG Bank — Backend
 
-A production-ready FastAPI starter built around the **modular monolith** pattern. Code is organized by domain, not by technical layer — every module is self-contained and can be extracted into a microservice with minimal refactoring.
+Production-oriented FastAPI backend for the RAG Bank advanced banking assistant. Built around the **modular monolith** pattern — code is organized by domain, not by technical layer.
 
 ## Highlights
 
@@ -12,7 +12,8 @@ A production-ready FastAPI starter built around the **modular monolith** pattern
 - **Consistent error responses** — structured JSON envelope for all errors (401, 403, 404, 422, 429, 500)
 - **Structured logging** — human-readable in development, JSON in production
 - **Docker-ready** — multi-stage `Dockerfile` + `docker-compose.yml` for development
-- **AI agent scaffold** — placeholder structure for agents, graphs, prompts, RAG, embeddings, and tools
+- **Knowledge domain models** — retrieval artifact hierarchy (Document → Section → Chunk) with deterministic identity, content hashing, typed relationships, and structured provenance
+- **AI infrastructure scaffold** — placeholder structure for embeddings, providers, prompts, and RAG pipeline
 
 ---
 
@@ -45,22 +46,17 @@ A production-ready FastAPI starter built around the **modular monolith** pattern
 │   │
 │   ├── modules/                    # Domain modules — each is self-contained
 │   │   ├── system/                 # Health check (implemented)
-│   │   ├── auth/                   # (placeholder)
-│   │   ├── candidates/             # (placeholder)
-│   │   ├── recruitment/            # (placeholder)
-│   │   ├── interviews/             # (placeholder)
-│   │   ├── communication/          # (placeholder)
-│   │   └── reporting/              # (placeholder)
+│   │   └── knowledge/              # Knowledge domain models & identity
+│   │       ├── models.py           # KnowledgeDocument, KnowledgeSection, KnowledgeChunk
+│   │       └── identity.py         # Deterministic chunk IDs & content hashing
 │   │
-│   ├── ai/                         # AI agent orchestration (scaffold)
-│   │   ├── agents/                 # Agent implementations
-│   │   ├── graphs/                 # Workflow graph definitions
-│   │   ├── prompts/                # Prompt templates
-│   │   ├── tools/                  # Agent tools
-│   │   ├── providers/              # LLM provider adapters
+│   ├── ingestion/                  # Knowledge → retrieval artifact pipeline (CLI/job-driven)
+│   │
+│   ├── ai/                         # AI infrastructure (scaffold)
 │   │   ├── embeddings/             # Embedding utilities
-│   │   ├── rag/                    # RAG pipeline
-│   │   └── modules/                # AI services (orchestrator, registry)
+│   │   ├── prompts/                # Prompt templates
+│   │   ├── providers/              # LLM provider adapters
+│   │   └── rag/                    # RAG pipeline
 │   │
 │   ├── shared/                     # Shared utilities (utc_now, helpers)
 │   ├── db/                         # Database layer (placeholder)
@@ -216,7 +212,7 @@ Each domain module is self-contained under `app/modules/`.
 ### 1. Create the module
 
 ```
-app/modules/candidates/
+app/modules/documents/
 ├── __init__.py
 ├── router.py      # Route definitions
 ├── service.py     # Business logic
@@ -231,34 +227,34 @@ from fastapi import APIRouter, Depends, Request
 from app.core.middleware.auth import require_auth
 from app.core.middleware.rate_limiter import limiter
 from app.core.responses import success_response
-from app.modules.candidates.service import list_candidates
+from app.modules.documents.service import list_documents
 
-router = APIRouter(prefix="/candidates", tags=["Candidates"])
+router = APIRouter(prefix="/documents", tags=["Documents"])
 
 
 @router.get("/", dependencies=[Depends(require_auth)])
 @limiter.limit("60/minute")
-async def get_candidates(request: Request):
-    data = list_candidates()
+async def get_documents(request: Request):
+    data = list_documents()
     return success_response(data=data)
 ```
 
 ### 3. Implement logic — `service.py`
 
 ```python
-def list_candidates() -> list[dict]:
+def list_documents() -> list[dict]:
     return []
 ```
 
 ### 4. Register in the v1 router — `app/api/v1/router.py`
 
 ```python
-from app.modules.candidates.router import router as candidates_router
+from app.modules.documents.router import router as documents_router
 
-v1_router.include_router(candidates_router)
+v1_router.include_router(documents_router)
 ```
 
-The endpoint is now live at `GET /api/v1/candidates/`.
+The endpoint is now live at `GET /api/v1/documents/`.
 
 ---
 

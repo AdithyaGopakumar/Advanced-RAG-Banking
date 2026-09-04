@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: recruitment-api
+    container_name: ragbank-api
     ports:
       - "${PORT:-8000}:8000"
     env_file:
