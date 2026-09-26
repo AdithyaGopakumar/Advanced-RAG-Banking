@@ -503,13 +503,18 @@ The system should not silently resolve this. Governance must determine whether o
 flowchart LR
     Create["Create / Receive Source"] --> Review["Review"]
     Review --> Validate["Validate"]
+
     Validate -->|Pass| Approve["Approve"]
     Validate -->|Fail| Review
+
     Approve --> Publish["Publish"]
     Publish --> Monitor["Monitor"]
+
     Monitor --> Update["Update"]
     Update --> Review
+
     Monitor --> Retire["Retire"]
+    Retire --> Archive["Archive"]
 ```
 
 ## 27. Retrieval Representation
