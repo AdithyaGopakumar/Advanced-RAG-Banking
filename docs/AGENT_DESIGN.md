@@ -942,7 +942,7 @@ A trace should identify the versions used for a given response.
 - Implement chat service
 - Implement basic chat API
 - Add provider abstraction
-- Integrate GPT-4o-mini
+- Integrate LLM (using GPT-4o-mini)
 
 ## Phase B — RAG Integration
 - Connect the RAG pipeline
@@ -1064,7 +1064,7 @@ flowchart TB
     end
 
     KB["Governed Banking Knowledge Base"]
-    LLM["OpenAI GPT-4o-mini"]
+    LLM["LLM"]
     Memory["Conversation Store"]
     Eval["Ragas + Custom Evaluators + JEV"]
     Trace["LangSmith"]
