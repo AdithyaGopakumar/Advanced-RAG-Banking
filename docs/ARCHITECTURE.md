@@ -734,7 +734,7 @@ flowchart TB
     SemanticInput --> Agent["Agent / RAG Workflow"]
 
     Agent --> RetrievalGuard["Retrieval Guardrails"]
-    RetrievalGuard --> LLM["OpenAI's GPT-4o-mini"]
+    RetrievalGuard --> LLM["LLM"]
     LLM --> OutputGuard["Output Guardrails"]
     OutputGuard --> Final["Final Response"]
 ```
@@ -1048,7 +1048,7 @@ flowchart LR
     Fusion --> Rerank["Reranker"]
     Rerank --> Context["Validated Context"]
 
-    Context --> LLM["GPT-4o-mini"]
+    Context --> LLM["LLM"]
     LLM --> Output["Guarded Response"]
     Output --> User
 ```
@@ -1154,22 +1154,22 @@ production knowledge configuration.
 
 ## 41. Module Responsibilities
 
-  Module                Responsibility
-  --------------------- ----------------------------------------------------
-  `core`                Configuration, exceptions, middleware, lifecycle
-  `api`                 API aggregation and versioning
-  `modules/chat`        Chat API and conversation-facing application logic
-  `modules/knowledge`   Knowledge management/application integration
-  `ai/embeddings`       Embedding abstraction and generation
-  `ai/providers`        LLM/provider adapters
-  `ai/prompts`          Prompt templates
-  `ai/rag`              Retrieval, fusion, reranking, context processing
-  `ai/agents`           Agent state and agent-facing logic
-  `ai/graphs`           LangGraph workflows
-  `ai/guardrails`       Input, retrieval, and output guardrails
-  `db`                  Persistence infrastructure
-  `models`              Shared persistence/data models
-  `shared`              Reusable utilities
+| Module | Responsibility |
+|---|---|
+| `core` | Configuration, exceptions, middleware, and application lifecycle |
+| `api` | API aggregation and versioning |
+| `modules/chat` | Chat API and conversation-facing application logic |
+| `modules/knowledge` | Knowledge management and application integration |
+| `ai/embeddings` | Embedding abstraction and generation |
+| `ai/providers` | LLM and external AI provider adapters |
+| `ai/prompts` | Prompt templates and prompt management |
+| `ai/rag` | Query processing, retrieval, hybrid search, MQE, RRF, reranking, and context processing |
+| `ai/agents` | Agent state, state management, and agent-facing logic |
+| `ai/graphs` | LangGraph workflow definitions and orchestration |
+| `ai/guardrails` | Input, retrieval, grounding, and output guardrails |
+| `db` | Database connections, persistence infrastructure, and data-access configuration |
+| `models` | Shared persistence and domain data models |
+| `shared` | Reusable utilities and cross-module helpers |
 
 ------------------------------------------------------------------------
 
