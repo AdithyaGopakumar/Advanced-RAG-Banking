@@ -37,7 +37,7 @@ flowchart TB
     RRF --> Reranker["Semantic Reranker"]
     Reranker --> Context["Context Validation"]
 
-    Context --> LLM["OpenAI GPT-4o-mini"]
+    Context --> LLM["LLM"]
     LLM --> OutputGuard["Output Guardrails"]
     OutputGuard --> Response["Grounded Response"]
     Response --> User
@@ -86,10 +86,17 @@ authoritative banking source.
 flowchart LR
     User["User Question"] --> RAG["RAG Pipeline"]
     KB["Governed Knowledge Base"] --> RAG
-    LLM["LLM"] --> RAG
-    RAG --> Decision{"Supported?"}
-    Decision -->|Yes| Answer["Answer"]
-    Decision -->|No| Safe["Unavailable / Clarification / Partial Answer"]
+
+    RAG --> Evidence["Retrieved Evidence"]
+    Evidence --> Decision{"Evidence Support?"}
+
+    Decision -->|Fully Supported| LLM["LLM"]
+    Decision -->|Partially Supported| LLM
+    Decision -->|Insufficient / Unsupported| LLM
+
+    LLM -->|Generate supported response| Answer["Answer"]
+    LLM -->|Restrict to supported claims| Partial["Partial Answer"]
+    LLM -->|Request clarification or state unavailable| Safe["Clarification / Unavailable"]
 ```
 
 ### 3.2 Deterministic-First
@@ -160,7 +167,7 @@ flowchart TB
     end
 
     subgraph Models["Models"]
-        LLM["OpenAI GPT-4o-mini"]
+        LLM["LLM"]
         Embed["Embedding Model"]
         Judge["JEV / System One"]
     end
