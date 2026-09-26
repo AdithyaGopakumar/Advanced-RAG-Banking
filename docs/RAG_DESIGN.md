@@ -443,7 +443,7 @@ flowchart LR
     Retrieval --> Evidence["Grounded Evidence"]
     Evidence --> Prompt["Controlled Prompt"]
     Query --> Prompt
-    Prompt --> LLM["GPT-4o-mini"]
+    Prompt --> LLM["LLM"]
     LLM --> Response["Draft Response"]
 ```
 
@@ -805,7 +805,7 @@ flowchart TD
     Evidence --> Grounding["Grounding Guardrails"]
     Grounding --> Prompt["Generation Context"]
 
-    Prompt --> LLM["GPT-4o-mini"]
+    Prompt --> LLM["LLM"]
     LLM --> OutputGuard["Output Guardrails"]
     OutputGuard --> API
     API --> User
@@ -965,7 +965,7 @@ This separation reduces unnecessary model dependence.
 - [ ] Grounding decisions are represented explicitly.
 - [ ] Partial-support behavior is supported.
 - [ ] Clarification behavior is supported.
-- [ ] GPT-4o-mini generation is integrated.
+- [ ] LLM generation is integrated.
 - [ ] Provider abstractions are in place.
 - [ ] LangGraph orchestration is implemented.
 - [ ] LangSmith tracing is integrated.
@@ -1008,7 +1008,7 @@ This separation reduces unnecessary model dependence.
 ### Phase 2D — Grounded Generation
 
 - Grounding evaluation.
-- GPT-4o-mini provider.
+- LLM provider(using GPT-4o-mini).
 - Prompt architecture.
 - Partial-support behavior.
 - Clarification behavior.
@@ -1057,7 +1057,7 @@ flowchart TD
     Grounding["Grounding Guardrails"]
     Context["Context Builder"]
 
-    LLM["GPT-4o-mini"]
+    LLM["LLM"]
     Output["Output Guardrails"]
     Response["Final Response"]
 
