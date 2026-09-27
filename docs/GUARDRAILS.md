@@ -198,21 +198,12 @@ flowchart TD
 
 Each layer has a different responsibility.
 
-  -----------------------------------------------------------------------
-  Layer                               Primary Responsibility
-  ----------------------------------- -----------------------------------
-  Input Guardrails                    Protect and classify the incoming
-                                      request
-
-  Retrieval Guardrails                Validate retrieved material and
-                                      prevent unsafe context propagation
-
-  Evidence / Grounding Guardrails     Determine whether evidence supports
-                                      the requested claims
-
-  Output Guardrails                   Ensure the generated response
-                                      complies with system policies
-  -----------------------------------------------------------------------
+| Layer | Primary Responsibility |
+|---|---|
+| **Input Guardrails** | Protect and classify the incoming request |
+| **Retrieval Guardrails** | Validate retrieved material and prevent unsafe context propagation |
+| **Evidence / Grounding Guardrails** | Determine whether evidence supports the requested claims |
+| **Output Guardrails** | Ensure the generated response complies with system policies |
 
 ------------------------------------------------------------------------
 
