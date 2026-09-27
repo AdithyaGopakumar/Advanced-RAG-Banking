@@ -1,7 +1,8 @@
 """Retrieval-document models for the knowledge foundation.
 
-These models represent a parsed source document and its sections.
-Chunking, hashing, and index records belong to later phases.
+These models represent a parsed source document, its sections, and the
+chunks produced for later indexing. Content hashing and index records
+belong to later phases.
 """
 
 from typing import Literal
@@ -74,6 +75,39 @@ class KnowledgeSection(BaseModel):
     heading_path: list[str]
     content: str
     source_location: str
+
+
+class KnowledgeChunk(BaseModel):
+    """One retrieval unit derived from a knowledge document.
+
+    ``content`` is the original Markdown fragment. ``text`` is that fragment
+    with heading breadcrumbs prepended for retrieval.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    chunk_id: str
+    document_id: str
+    document_version: str
+    document_type: str
+    document_title: str
+    section_id: str | None = None
+    heading_path: list[str]
+    chunk_index: int
+    chunk_type: Literal["section", "scenario", "decision_guide", "procedure", "table"]
+    status: str
+    effective_from: str | None = None
+    effective_until: str | None = None
+    product: str | None = None
+    jurisdiction: str | None = None
+    audience: str | None = None
+    source_location: str
+    source_path: str
+    content: str
+    text: str
+    oversized: bool = False
+    procedure_step_start: int | None = None
+    procedure_step_end: int | None = None
 
 
 class KnowledgeDocument(BaseModel):
