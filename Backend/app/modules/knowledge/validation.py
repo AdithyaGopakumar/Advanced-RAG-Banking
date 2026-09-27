@@ -1,9 +1,9 @@
-"""Structural validation for Phase 1A documents.
+"""Structural validation for parsed documents.
 
 Blocking checks are limited to parseability and document identity.
-Schema enums, uniqueness, and retrieval eligibility are later phases.
-Title and slug mismatches are warnings so a structurally sound document
-is still returned for inspection.
+Status eligibility, versions, dates, and corpus governance live in the
+governance build. Title and slug mismatches are warnings so a structurally
+sound document is still returned for inspection.
 """
 
 from pathlib import Path

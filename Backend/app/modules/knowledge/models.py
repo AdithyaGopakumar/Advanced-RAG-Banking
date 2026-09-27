@@ -108,6 +108,8 @@ class KnowledgeChunk(BaseModel):
     oversized: bool = False
     procedure_step_start: int | None = None
     procedure_step_end: int | None = None
+    content_hash: str | None = None
+    eligible: bool = False
 
 
 class KnowledgeDocument(BaseModel):
@@ -142,6 +144,67 @@ class DocumentInspection(BaseModel):
         return self.document is not None and not any(
             issue.severity == "error" for issue in self.issues
         )
+
+
+class DocumentRecord(BaseModel):
+    """Governance record for one accepted source document."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    document_id: str
+    version: str
+    status: str
+    source_path: str
+    content_hash: str
+    eligible: bool
+    chunk_ids: list[str] = Field(default_factory=list)
+    issues: list[ValidationIssue] = Field(default_factory=list)
+
+
+class DuplicateFinding(BaseModel):
+    """Identical identities or content that governance must review.
+
+    Findings are reported and left in place. Historical copies are not dropped.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    code: Literal["DUPLICATE_DOCUMENT_ID", "DUPLICATE_CONTENT"]
+    message: str
+    document_ids: list[str]
+    source_paths: list[str]
+    content_hash: str | None = None
+
+
+class ContradictionFinding(BaseModel):
+    """A conflict the build will not resolve by picking a winner."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    code: str
+    message: str
+    document_ids: list[str]
+    heading: str | None = None
+    amounts: list[str] = Field(default_factory=list)
+
+
+class KnowledgeBuild(BaseModel):
+    """Reproducible governance build for a knowledge directory."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    manifest_hash: str
+    chunk_max_size: int
+    as_of: str
+    documents: list[DocumentRecord] = Field(default_factory=list)
+    chunks: list[KnowledgeChunk] = Field(default_factory=list)
+    duplicates: list[DuplicateFinding] = Field(default_factory=list)
+    contradictions: list[ContradictionFinding] = Field(default_factory=list)
+    rejected: list[DocumentInspection] = Field(default_factory=list)
+
+    @property
+    def eligible_chunks(self) -> list[KnowledgeChunk]:
+        return [chunk for chunk in self.chunks if chunk.eligible]
 
 
 class CorpusLoadResult(BaseModel):
