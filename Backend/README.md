@@ -99,6 +99,49 @@ python run.py
 
 The server starts at **http://localhost:8000** with hot-reload enabled in development.
 
+### Knowledge ingestion
+
+Run this from the `Backend` directory after the virtual environment is active and dependencies are installed. The first run with the default embedding model downloads `paraphrase-MiniLM-L6-v2`, so the machine needs network access.
+
+```powershell
+# Windows, from Backend/
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python ingest.py
+```
+
+```bash
+# macOS / Linux, from Backend/
+source .venv/bin/activate
+pip install -r requirements.txt
+python ingest.py
+```
+
+Optional arguments:
+
+```bash
+python ingest.py --as-of 2026-09-27
+python ingest.py --knowledge-root ../knowledge-base
+```
+
+The command loads `KNOWLEDGE_ROOT` (default `../knowledge-base`, resolved from the Backend directory), keeps documents whose status is `approved` or `current` and whose effective dates include `--as-of` (today when omitted), embeds eligible chunks, and builds the BM25 index. README files without front matter are rejected and listed in the summary counts.
+
+Dense vectors are stored in Pinecone only when both `PINECONE_API_KEY` and `PINECONE_INDEX_NAME` are set. Create that index first with **384 dimensions** and the **cosine** metric. The command does not create it. A successful Pinecone run writes `INDEX_MANIFEST_PATH` (default `.index/manifest.json`) so the next run upserts changed chunks and deletes removed ids. With Pinecone unset, vectors stay in memory for that process and the manifest is not written. BM25 is rebuilt in memory on every run.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `KNOWLEDGE_ROOT` | `../knowledge-base` | Governed Markdown corpus |
+| `CHUNK_MAX_SIZE` | `2000` | Character budget for a chunk, including heading breadcrumbs |
+| `EMBEDDING_PROVIDER` | `sentence-transformers` | Embedding adapter |
+| `EMBEDDING_MODEL` | `paraphrase-MiniLM-L6-v2` | Local embedding model |
+| `EMBEDDING_DIMENSIONS` | `384` | Vector width expected from that model |
+| `PINECONE_API_KEY` | empty | Pinecone credential; empty selects the in-memory vector index |
+| `PINECONE_INDEX_NAME` | empty | Existing Pinecone index name |
+| `PINECONE_NAMESPACE` | `knowledge` | Pinecone namespace |
+| `INDEX_MANIFEST_PATH` | `.index/manifest.json` | Saved after a Pinecone run; relative paths start at `Backend/` |
+
+Copy `.env.example` to `.env` and edit those values there. `.env` is loaded from the current directory, so run `python ingest.py` from `Backend`.
+
 ### Docker
 
 ```bash
@@ -132,6 +175,7 @@ Interactive docs (development only):
 | File       | Role                                                                 |
 |------------|----------------------------------------------------------------------|
 | `run.py`   | Process-level — uncaught exception hook, `atexit` cleanup, launches uvicorn |
+| `ingest.py`| Knowledge ingestion — validate, chunk, and index eligible documents          |
 | `main.py`  | App-level — `create_app()` factory, wires middleware / routes / handlers    |
 
 **Running directly with uvicorn** is also supported:

@@ -1,8 +1,7 @@
 """Retrieval-document models for the knowledge foundation.
 
 These models represent a parsed source document, its sections, and the
-chunks produced for later indexing. Content hashing and index records
-belong to later phases.
+chunks produced for indexing.
 """
 
 from typing import Literal

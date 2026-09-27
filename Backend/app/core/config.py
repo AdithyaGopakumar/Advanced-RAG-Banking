@@ -54,6 +54,20 @@ class Settings(BaseSettings):
     DEFAULT_AGENT_TIMEOUT: float = 30.0
     DEFAULT_AGENT_RETRIES: int = 0
 
+    # ─── Embeddings ───
+    # Current development model. Replace after a retrieval benchmark if a better model wins.
+    EMBEDDING_PROVIDER: str = "sentence-transformers"
+    EMBEDDING_MODEL: str = "paraphrase-MiniLM-L6-v2"
+    EMBEDDING_DIMENSIONS: int | None = 384
+
+    # ─── Pinecone ───
+    # Used when both the API key and index name are set. Otherwise the vector index stays in memory.
+    PINECONE_API_KEY: str = ""
+    PINECONE_INDEX_NAME: str = ""
+    PINECONE_NAMESPACE: str = "knowledge"
+    # Saved only when Pinecone is used, so the next run can skip unchanged vectors.
+    INDEX_MANIFEST_PATH: str = ".index/manifest.json"
+
     @property
     def is_production(self) -> bool:
         return self.ENVIRONMENT == "production"

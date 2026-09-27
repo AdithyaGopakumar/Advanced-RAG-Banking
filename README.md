@@ -8,6 +8,7 @@ This repository is a monorepo containing both the production-grade banking custo
 
 ```
 ├── knowledge-base/       ← AI-friendly banking documentation, standards, taxonomy, and templates
+├── Backend/              ← FastAPI service and knowledge ingestion
 ├── .gitignore            ← Repository-wide Git exclusions
 ├── LICENSE               ← Proprietary licence
 └── README.md             ← Root repository overview
@@ -20,8 +21,17 @@ The documentation repository serving as the single source of truth for the RAG s
 - **[Metadata & Taxonomy](knowledge-base/metadata/README.md)**
 - **[Document Templates](knowledge-base/templates/README.md)**
 
-### 2. Backend & RAG Software (Future)
-Future phases will integrate vector databases, embeddings, data pipelines, and API services alongside the knowledge base in this repository.
+### 2. Backend (`Backend/`)
+FastAPI service and the knowledge ingestion pipeline. Setup, configuration, and the terminal ingest command are in [Backend/README.md](Backend/README.md).
+
+From `Backend`, with the virtual environment active:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python ingest.py
+```
+
+`ingest.py` validates the knowledge base and indexes eligible chunks. With Pinecone unset, the dense index stays in memory for that process. Set `PINECONE_API_KEY` and `PINECONE_INDEX_NAME` to write vectors to an existing 384-dimension cosine index.
 
 ---
 
