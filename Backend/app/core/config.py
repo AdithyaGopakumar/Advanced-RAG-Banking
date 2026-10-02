@@ -54,6 +54,15 @@ class Settings(BaseSettings):
     DEFAULT_AGENT_TIMEOUT: float = 30.0
     DEFAULT_AGENT_RETRIES: int = 0
 
+    # ─── Retrieval ───
+    # Hybrid search. MQE calls the chat model only when OPENAI_API_KEY is set.
+    OPENAI_API_KEY: str = ""
+    LLM_MODEL: str = "gpt-4o-mini"
+    MQE_MAX_QUERIES: int = 4
+    RETRIEVAL_TOP_K: int = 8
+    RETRIEVAL_CANDIDATES_PER_QUERY: int = 20
+    RETRIEVAL_RRF_K: int = 60
+
     # ─── Embeddings ───
     # Current development model. Replace after a retrieval benchmark if a better model wins.
     EMBEDDING_PROVIDER: str = "sentence-transformers"

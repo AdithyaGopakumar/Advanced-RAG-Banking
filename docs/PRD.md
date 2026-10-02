@@ -1155,10 +1155,10 @@ The project is considered complete when:
 
 ## Retrieval
 
--   [ ] MQE is implemented.
+-   [x] MQE is implemented.
 -   [x] Pinecone dense retrieval works.
 -   [x] Elasticsearch BM25 lexical retrieval works.
--   [ ] RRF is implemented.
+-   [x] RRF is implemented.
 -   [ ] Semantic reranking is implemented.
 -   [ ] Retrieval quality is measured.
 -   [ ] Retrieval regressions are detectable.
