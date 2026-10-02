@@ -11,9 +11,6 @@ services:
     environment:
       - ENVIRONMENT=development
       - DEBUG=true
-      # Inside Compose, Elasticsearch is the service name, not localhost.
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_INDEX=${ELASTICSEARCH_INDEX:-knowledge-chunks}
     volumes:
       # Mount source for hot-reload in development. Dependencies stay in the image venv.
       - .:/app
@@ -22,8 +19,6 @@ services:
       --host 0.0.0.0
       --port 8000
       --reload
-    depends_on:
-      - elasticsearch
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/system/health')"]
@@ -33,6 +28,7 @@ services:
       start_period: 10s
 
   elasticsearch:
+    profiles: ["local"]
     image: docker.elastic.co/elasticsearch/elasticsearch:8.19.3
     container_name: ragbank-elasticsearch
     environment:
@@ -44,6 +40,7 @@ services:
     restart: unless-stopped
 
   kibana:
+    profiles: ["local"]
     image: docker.elastic.co/kibana/kibana:8.19.3
     container_name: ragbank-kibana
     environment:

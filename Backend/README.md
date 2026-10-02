@@ -126,7 +126,7 @@ python ingest.py --knowledge-root ../knowledge-base
 
 The command loads `KNOWLEDGE_ROOT` (default `../knowledge-base`, resolved from the Backend directory), keeps documents whose status is `approved` or `current` and whose effective dates include `--as-of` (today when omitted), embeds eligible chunks, and writes `chunk.text` to the Elasticsearch BM25 index. README files without front matter are rejected and listed in the summary counts.
 
-Dense vectors are stored in Pinecone only when both `PINECONE_API_KEY` and `PINECONE_INDEX_NAME` are set. Create that index first with **384 dimensions** and the **cosine** metric. The command does not create it. A successful Pinecone run writes `INDEX_MANIFEST_PATH` (default `.index/manifest.json`) so the next run upserts changed chunks and deletes removed ids. With Pinecone unset, vectors stay in memory for that process and the manifest is not written. The lexical index stays in Elasticsearch. Start it with `docker compose up elasticsearch kibana` before ingesting. Kibana is at `http://localhost:5601`.
+Dense vectors are stored in Pinecone only when both `PINECONE_API_KEY` and `PINECONE_INDEX_NAME` are set. Create that index first with **384 dimensions** and the **cosine** metric. The command does not create it. A successful Pinecone run writes `INDEX_MANIFEST_PATH` (default `.index/manifest.json`) so the next run upserts changed chunks and deletes removed ids. With Pinecone unset, vectors stay in memory for that process and the manifest is not written. The lexical index stays in Elasticsearch. Set `ELASTICSEARCH_URL` and either `ELASTICSEARCH_API_KEY` or `ELASTICSEARCH_USERNAME` and `ELASTICSEARCH_PASSWORD` in `.env`.
 
 | Variable | Default | Purpose |
 |---|---|---|
@@ -139,20 +139,29 @@ Dense vectors are stored in Pinecone only when both `PINECONE_API_KEY` and `PINE
 | `PINECONE_INDEX_NAME` | empty | Existing Pinecone index name |
 | `PINECONE_NAMESPACE` | `knowledge` | Pinecone namespace |
 | `INDEX_MANIFEST_PATH` | `.index/manifest.json` | Saved after a Pinecone run; relative paths start at `Backend/` |
-| `ELASTICSEARCH_URL` | `http://localhost:9200` | Elasticsearch cluster for the BM25 index |
+| `ELASTICSEARCH_URL` | `http://localhost:9200` | Elasticsearch endpoint. Set this to the Elastic Cloud URL |
 | `ELASTICSEARCH_INDEX` | `knowledge-chunks` | Lexical index name |
+| `ELASTICSEARCH_API_KEY` | empty | Elastic Cloud API key |
+| `ELASTICSEARCH_USERNAME` | empty | Basic-auth user, used when no API key is set |
+| `ELASTICSEARCH_PASSWORD` | empty | Basic-auth password, used when no API key is set |
 
 Copy `.env.example` to `.env` and edit those values there. `.env` is loaded from the current directory, so run `python ingest.py` from `Backend`.
 
 ### Docker
 
-From `Backend`, with Docker running. This builds the API image, installs the backend requirements (including the CPU build of PyTorch), and starts Elasticsearch and Kibana with it.
+From `Backend`, with Docker running. This builds the API image and installs the backend requirements. Elasticsearch credentials in `.env` are the cloud cluster.
 
 ```bash
 docker compose up --build
 ```
 
-The API is at `http://localhost:8000`. Inside Compose it reaches Elasticsearch at `http://elasticsearch:9200`. Kibana is at `http://localhost:5601`.
+The API is at `http://localhost:8000`.
+
+To run the local Elasticsearch and Kibana deployment later, start the `local` profile. That file points the API at the Compose cluster and ignores the cloud credentials for that run. Kibana is at `http://localhost:5601`.
+
+```bash
+docker compose --profile local -f docker-compose.yml -f docker-compose.local.yml up --build
+```
 
 ```bash
 # Image only

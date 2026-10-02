@@ -123,7 +123,23 @@ def create_lexical_index(settings: Settings | None = None) -> ElasticsearchLexic
         from elasticsearch import Elasticsearch
     except ImportError as exc:
         raise LexicalIndexError("elasticsearch is not installed") from exc
-    return ElasticsearchLexicalIndex(Elasticsearch(url), index_name=index_name)
+    return ElasticsearchLexicalIndex(Elasticsearch(url, **_client_options(current)), index_name=index_name)
+
+
+def _client_options(settings: Settings) -> dict[str, object]:
+    """Cloud credentials from settings. An API key takes precedence over basic auth."""
+    api_key = settings.ELASTICSEARCH_API_KEY.strip()
+    username = settings.ELASTICSEARCH_USERNAME.strip()
+    password = settings.ELASTICSEARCH_PASSWORD
+    if api_key:
+        return {"api_key": api_key}
+    if username or password:
+        if not username or not password:
+            raise LexicalIndexError(
+                "Set both ELASTICSEARCH_USERNAME and ELASTICSEARCH_PASSWORD, or set ELASTICSEARCH_API_KEY."
+            )
+        return {"basic_auth": (username, password)}
+    return {}
 
 
 def _index_settings() -> dict[str, object]:

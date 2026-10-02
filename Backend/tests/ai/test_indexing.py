@@ -206,6 +206,62 @@ def test_unconfigured_elasticsearch_fails():
         create_lexical_index(Settings(ELASTICSEARCH_URL="", ELASTICSEARCH_INDEX=""))
 
 
+def test_cloud_api_key_is_read_from_settings(monkeypatch: pytest.MonkeyPatch):
+    import sys
+    import types
+
+    captured: dict[str, object] = {}
+
+    class FakeElasticsearch:
+        def __init__(self, url: str, **kwargs: object) -> None:
+            captured["url"] = url
+            captured.update(kwargs)
+
+    module = types.ModuleType("elasticsearch")
+    module.Elasticsearch = FakeElasticsearch  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "elasticsearch", module)
+
+    create_lexical_index(
+        Settings(
+            ELASTICSEARCH_URL="https://example.es.cloud.es.io:443",
+            ELASTICSEARCH_INDEX="knowledge-chunks",
+            ELASTICSEARCH_API_KEY="encoded-key",
+            ELASTICSEARCH_USERNAME="elastic",
+            ELASTICSEARCH_PASSWORD="secret",
+        )
+    )
+
+    assert captured == {"url": "https://example.es.cloud.es.io:443", "api_key": "encoded-key"}
+
+
+def test_basic_auth_is_used_when_no_api_key_is_set(monkeypatch: pytest.MonkeyPatch):
+    import sys
+    import types
+
+    captured: dict[str, object] = {}
+
+    class FakeElasticsearch:
+        def __init__(self, url: str, **kwargs: object) -> None:
+            captured["url"] = url
+            captured.update(kwargs)
+
+    module = types.ModuleType("elasticsearch")
+    module.Elasticsearch = FakeElasticsearch  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "elasticsearch", module)
+
+    create_lexical_index(
+        Settings(
+            ELASTICSEARCH_URL="https://example.es.cloud.es.io:443",
+            ELASTICSEARCH_INDEX="knowledge-chunks",
+            ELASTICSEARCH_API_KEY="",
+            ELASTICSEARCH_USERNAME="elastic",
+            ELASTICSEARCH_PASSWORD="secret",
+        )
+    )
+
+    assert captured["basic_auth"] == ("elastic", "secret")
+
+
 def test_effective_window_keeps_open_ended_documents_and_drops_expired_ones():
     current = _metadata()
     expired = _metadata(chunk_id="OLD#c0001", effective_until="2026-01-31")
