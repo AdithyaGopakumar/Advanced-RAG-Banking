@@ -859,25 +859,25 @@ Authorization remains a runtime concern, but knowledge engineering must preserve
 
 The knowledge engineering foundation is complete when:
 
-- [ ] Approved source documents can be ingested.
-- [ ] Front matter is parsed reliably.
-- [ ] Markdown structure is preserved.
-- [ ] Heading hierarchy is represented.
-- [ ] `KnowledgeDocument` and `KnowledgeSection` are implemented.
-- [ ] Semantic chunks are generated deterministically.
-- [ ] Context breadcrumbs are included.
-- [ ] Tables and procedures retain semantic integrity.
-- [ ] Scenario documents follow the cohesion policy.
-- [ ] Chunk metadata is complete.
-- [ ] Provenance is available for every chunk.
-- [ ] Version and effective-date metadata are supported.
-- [ ] Content hashes are generated.
-- [ ] Validation blocks invalid knowledge.
-- [ ] Knowledge builds are reproducible.
-- [ ] Retrieval indexes can be generated from validated artifacts.
+- [x] Approved source documents can be ingested.
+- [x] Front matter is parsed reliably.
+- [x] Markdown structure is preserved.
+- [x] Heading hierarchy is represented.
+- [x] `KnowledgeDocument` and `KnowledgeSection` are implemented.
+- [x] Semantic chunks are generated deterministically.
+- [x] Context breadcrumbs are included.
+- [x] Tables and procedures retain semantic integrity.
+- [x] Scenario documents follow the cohesion policy.
+- [x] Chunk metadata is complete.
+- [x] Provenance is available for every chunk.
+- [x] Version and effective-date metadata are supported.
+- [x] Content hashes are generated.
+- [x] Validation blocks invalid knowledge.
+- [x] Knowledge builds are reproducible.
+- [x] Retrieval indexes can be generated from validated artifacts.
 - [ ] Retrieval evaluation data exists.
 - [ ] Retrieval performance is measurable.
-- [ ] The knowledge base can be audited from retrieved chunk back to source.
+- [x] The knowledge base can be audited from retrieved chunk back to source.
 
 ## 46. Relationship to Runtime RAG
 

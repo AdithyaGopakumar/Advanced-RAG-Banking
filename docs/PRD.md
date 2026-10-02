@@ -1146,18 +1146,18 @@ The project is considered complete when:
 
 ## Knowledge
 
--   [ ] Knowledge documents are parsed and structured.
--   [ ] Chunks preserve required context.
--   [ ] Metadata is attached and validated.
--   [ ] Knowledge versions are tracked.
--   [ ] Superseded content can be identified.
--   [ ] Knowledge validation is automated.
+-   [x] Knowledge documents are parsed and structured.
+-   [x] Chunks preserve required context.
+-   [x] Metadata is attached and validated.
+-   [x] Knowledge versions are tracked.
+-   [x] Superseded content can be identified.
+-   [x] Knowledge validation is automated.
 
 ## Retrieval
 
 -   [ ] MQE is implemented.
--   [ ] Pinecone dense retrieval works.
--   [ ] Elasticsearch BM25 lexical retrieval works.
+-   [x] Pinecone dense retrieval works.
+-   [x] Elasticsearch BM25 lexical retrieval works.
 -   [ ] RRF is implemented.
 -   [ ] Semantic reranking is implemented.
 -   [ ] Retrieval quality is measured.

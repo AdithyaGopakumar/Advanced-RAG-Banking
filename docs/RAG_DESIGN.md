@@ -953,15 +953,15 @@ This separation reduces unnecessary model dependence.
 
 - [ ] Query processing is implemented.
 - [ ] MQE is implemented behind an abstraction.
-- [ ] Dense retrieval is implemented.
-- [ ] Pinecone integration is implemented.
-- [ ] Elasticsearch BM25 retrieval is implemented.
+- [x] Dense retrieval is implemented.
+- [x] Pinecone integration is implemented.
+- [x] Elasticsearch BM25 retrieval is implemented.
 - [ ] RRF fusion is implemented.
-- [ ] Metadata filtering is implemented.
-- [ ] Temporal applicability is supported.
+- [x] Metadata filtering is implemented.
+- [x] Temporal applicability is supported.
 - [ ] Semantic reranking is implemented.
 - [ ] Context assembly is implemented.
-- [ ] Evidence provenance is preserved.
+- [x] Evidence provenance is preserved.
 - [ ] Grounding decisions are represented explicitly.
 - [ ] Partial-support behavior is supported.
 - [ ] Clarification behavior is supported.
