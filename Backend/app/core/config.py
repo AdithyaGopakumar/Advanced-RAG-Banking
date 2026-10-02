@@ -65,6 +65,11 @@ class Settings(BaseSettings):
     PINECONE_API_KEY: str = ""
     PINECONE_INDEX_NAME: str = ""
     PINECONE_NAMESPACE: str = "knowledge"
+
+    # ─── Elasticsearch ───
+    # Lexical BM25 index. Start the local cluster with docker compose before ingesting.
+    ELASTICSEARCH_URL: str = "http://localhost:9200"
+    ELASTICSEARCH_INDEX: str = "knowledge-chunks"
     # Saved only when Pinecone is used, so the next run can skip unchanged vectors.
     INDEX_MANIFEST_PATH: str = ".index/manifest.json"
 

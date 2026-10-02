@@ -19,3 +19,4 @@ pyyaml==6.0.2
 # ─── Retrieval ───
 sentence-transformers==5.1.1
 pinecone==7.3.0
+elasticsearch==8.19.3

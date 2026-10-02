@@ -31,7 +31,7 @@ From `Backend`, with the virtual environment active:
 python ingest.py
 ```
 
-`ingest.py` validates the knowledge base and indexes eligible chunks. With Pinecone unset, the dense index stays in memory for that process. Set `PINECONE_API_KEY` and `PINECONE_INDEX_NAME` to write vectors to an existing 384-dimension cosine index.
+`ingest.py` validates the knowledge base and indexes eligible chunks. Lexical search is stored in Elasticsearch (`ELASTICSEARCH_URL`, default `http://localhost:9200`). Start that cluster with `docker compose up elasticsearch kibana` from `Backend`; Kibana is at `http://localhost:5601`. With Pinecone unset, the dense index stays in memory for that process. Set `PINECONE_API_KEY` and `PINECONE_INDEX_NAME` to write vectors to an existing 384-dimension cosine index.
 
 ---
 

@@ -1,7 +1,15 @@
 """Tests for dense indexing, BM25, and metadata filters."""
 
+import pytest
+
 from app.ai.embeddings.deterministic import DeterministicEmbeddingProvider
-from app.ai.rag.indexing.bm25 import BM25Index, tokenize
+from app.ai.rag.indexing.lexical import (
+    ElasticsearchLexicalIndex,
+    LexicalIndexError,
+    _index_mappings,
+    _index_settings,
+    create_lexical_index,
+)
 from app.ai.rag.indexing.filters import ChunkMetadata, MetadataFilter, matches_filter, to_pinecone_filter
 from app.ai.rag.indexing.indexer import index_knowledge
 from app.ai.rag.indexing.vector_store import (
@@ -68,37 +76,134 @@ def _metadata(**overrides: object) -> ChunkMetadata:
     return ChunkMetadata(**values)  # type: ignore[arg-type]
 
 
-def test_tokenizer_keeps_product_codes_and_amounts():
-    assert tokenize("BSBDA minimum balance is Rs 500") == ["bsbda", "minimum", "balance", "is", "rs", "500"]
+class _Indices:
+    def __init__(self) -> None:
+        self.created: list[dict[str, object]] = []
+        self._exists = False
+
+    def exists(self, *, index: str) -> bool:
+        return self._exists
+
+    def create(self, *, index: str, settings: dict[str, object], mappings: dict[str, object]) -> None:
+        self.created.append({"index": index, "settings": settings, "mappings": mappings})
+        self._exists = True
 
 
-def test_bm25_prefers_the_chunk_that_uses_the_product_name():
-    index = BM25Index()
-    index.replace(
-        [
-            ("A savings account has a minimum balance.", _metadata(chunk_id="A#c0001", product="savings")),
-            ("BSBDA accounts have no minimum balance requirement.", _metadata(chunk_id="B#c0001")),
-        ]
-    )
+class _Elasticsearch:
+    def __init__(self) -> None:
+        self.indices = _Indices()
+        self.bulks: list[list[dict[str, object]]] = []
+        self.deletes: list[dict[str, object]] = []
+        self.searches: list[dict[str, object]] = []
+        self.response: dict[str, object] = {"hits": {"hits": []}}
+
+    def bulk(self, *, operations: list[dict[str, object]], refresh: bool) -> None:
+        self.bulks.append(operations)
+
+    def delete_by_query(self, *, index: str, query: dict[str, object], refresh: bool) -> None:
+        self.deletes.append(query)
+
+    def search(self, *, index: str, **kwargs: object) -> dict[str, object]:
+        self.searches.append({"index": index, **kwargs})
+        return self.response
+
+
+def _lexical() -> tuple[ElasticsearchLexicalIndex, _Elasticsearch]:
+    client = _Elasticsearch()
+    return ElasticsearchLexicalIndex(client, index_name="knowledge-chunks"), client
+
+
+def test_lexical_index_uses_native_bm25_over_chunk_text():
+    index, client = _lexical()
+    index.sync([("BSBDA minimum balance is Rs 500", _metadata(chunk_id="B#c0001"))])
+
+    settings = client.indices.created[0]["settings"]
+    mappings = client.indices.created[0]["mappings"]
+    assert settings == _index_settings()
+    assert mappings == _index_mappings()
+    similarity = settings["similarity"]["chunk_bm25"]  # type: ignore[index]
+    assert similarity == {"type": "BM25", "k1": 1.5, "b": 0.75}
+    text_field = mappings["properties"]["text"]  # type: ignore[index]
+    assert text_field["analyzer"] == "chunk_text"
+    assert "stemmer" not in str(settings)
+    operation, source = client.bulks[0]
+    assert operation == {"index": {"_index": "knowledge-chunks", "_id": "B#c0001"}}
+    assert source["text"] == "BSBDA minimum balance is Rs 500"
+
+
+def test_search_returns_a_bm25_retrieval_hit():
+    index, client = _lexical()
+    source = {
+        "text": "BSBDA accounts have no minimum balance requirement.",
+        "chunk_id": "B#c0001",
+        "document_id": "B",
+        "document_version": "1.0",
+        "document_type": "reference",
+        "document_title": "Account",
+        "status": "approved",
+        "product": "bsbda",
+        "jurisdiction": "IN",
+        "audience": "customer",
+        "effective_from": "2026-01-01",
+        "source_path": "docs/accounts/bsbda.md",
+        "content_hash": "hash",
+        "heading_path": ["Account", "Eligibility"],
+    }
+    client.response = {"hits": {"hits": [{"_id": "B#c0001", "_score": 2.4, "_source": source}]}}
 
     hits = index.search("BSBDA minimum balance", top_k=1)
 
-    assert [hit.chunk_id for hit in hits] == ["B#c0001"]
+    assert client.searches[0]["size"] == 1
+    assert client.searches[0]["query"] == {
+        "bool": {
+            "must": [{"match": {"text": "BSBDA minimum balance"}}],
+            "filter": [{"terms": {"status": ["approved", "current"]}}],
+        }
+    }
+    assert hits[0].chunk_id == "B#c0001"
+    assert hits[0].score == 2.4
     assert hits[0].source == "bm25"
+    assert hits[0].text == source["text"]
+    assert hits[0].metadata.product == "bsbda"
 
 
 def test_metadata_filter_is_applied_before_top_k():
-    index = BM25Index()
-    index.replace(
+    index, client = _lexical()
+
+    index.search("BSBDA", top_k=1, metadata_filter=MetadataFilter(product="bsbda", as_of="2026-06-01"))
+
+    query = client.searches[0]["query"]
+    assert isinstance(query, dict)
+    filters = query["bool"]["filter"]
+    assert client.searches[0]["size"] == 1
+    assert {"term": {"product": "bsbda"}} in filters
+    assert query["bool"]["must"] == [{"match": {"text": "BSBDA"}}]
+    assert {"range": {"effective_from_date": {"lte": "2026-06-01"}}} in filters[2]["bool"]["should"]
+    assert {"range": {"effective_until_date": {"gte": "2026-06-01"}}} in filters[3]["bool"]["should"]
+
+
+def test_search_with_no_lexical_match_returns_no_hits():
+    index, _client = _lexical()
+
+    assert index.search("zzzyyy", top_k=5) == []
+
+
+def test_sync_removes_chunks_that_are_no_longer_eligible():
+    index, client = _lexical()
+    index.sync(
         [
-            ("BSBDA BSBDA BSBDA loan limit", _metadata(chunk_id="LOAN#c0001", product="loan")),
-            ("BSBDA account eligibility", _metadata(chunk_id="ACCT#c0001", product="bsbda")),
+            ("BSBDA has no minimum balance", _metadata(chunk_id="ACCT#c0001")),
+            ("RTGS cutoff is 7 pm", _metadata(chunk_id="ACCT#c0002", product="rtgs")),
         ]
     )
+    index.sync([("BSBDA has no minimum balance requirement", _metadata(chunk_id="ACCT#c0001"))])
 
-    hits = index.search("BSBDA", top_k=1, metadata_filter=MetadataFilter(product="bsbda"))
+    assert client.deletes[-1] == {"bool": {"must_not": [{"ids": {"values": ["ACCT#c0001"]}}]}}
 
-    assert [hit.chunk_id for hit in hits] == ["ACCT#c0001"]
+
+def test_unconfigured_elasticsearch_fails():
+    with pytest.raises(LexicalIndexError):
+        create_lexical_index(Settings(ELASTICSEARCH_URL="", ELASTICSEARCH_INDEX=""))
 
 
 def test_effective_window_keeps_open_ended_documents_and_drops_expired_ones():
@@ -204,7 +309,7 @@ class _CountingEmbedder(DeterministicEmbeddingProvider):
 def test_reindex_upserts_changed_hashes_and_deletes_removed_ids():
     embedder = _CountingEmbedder()
     store = InMemoryVectorStore()
-    lexical = BM25Index()
+    lexical, _client = _lexical()
     first = _chunk("ACCT#c0001", "BSBDA has no minimum balance", content_hash="aaa")
     second = _chunk("ACCT#c0002", "RTGS cutoff is 7 pm", content_hash="bbb", product="rtgs")
     draft = _chunk("CARD#c0001", "Draft credit card limit", content_hash="ccc", eligible=False, status="draft")
@@ -234,7 +339,7 @@ def test_reindex_upserts_changed_hashes_and_deletes_removed_ids():
         [changed],
         _CountingEmbedder(),
         InMemoryVectorStore(),
-        BM25Index(),
+        _lexical()[0],
         embedding_provider="deterministic",
     ).manifest_hash
     dense = store.query(embedder.embed_query("RTGS").vector, top_k=5)

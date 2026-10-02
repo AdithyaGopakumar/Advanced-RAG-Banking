@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 
 from app.ai.embeddings.deterministic import DeterministicEmbeddingProvider
-from app.ai.rag.indexing.bm25 import BM25Index
+from app.ai.rag.indexing.lexical import ElasticsearchLexicalIndex
 from app.ai.rag.indexing.models import IndexManifest
 from app.ai.rag.indexing.vector_store import InMemoryVectorStore
 from app.core.config import Settings
@@ -35,6 +35,28 @@ class _CountingEmbedder(DeterministicEmbeddingProvider):
     def embed_texts(self, texts, *, purpose):
         self.calls.append(list(texts))
         return super().embed_texts(texts, purpose=purpose)
+
+
+class _Indices:
+    def exists(self, *, index: str) -> bool:
+        return True
+
+    def create(self, *, index: str, settings: dict[str, object], mappings: dict[str, object]) -> None:
+        return None
+
+
+class _Elasticsearch:
+    indices = _Indices()
+
+    def bulk(self, *, operations: list[dict[str, object]], refresh: bool) -> None:
+        return None
+
+    def delete_by_query(self, *, index: str, query: dict[str, object], refresh: bool) -> None:
+        return None
+
+
+def _lexical() -> ElasticsearchLexicalIndex:
+    return ElasticsearchLexicalIndex(_Elasticsearch(), index_name="knowledge-chunks")
 
 
 class _PersistedStore(InMemoryVectorStore):
@@ -69,7 +91,7 @@ def test_ingestion_indexes_eligible_chunks_and_leaves_memory_unsaved(tmp_path: P
         settings=_settings(),
         embedder=embedder,
         vector_store=InMemoryVectorStore(),
-        lexical_index=BM25Index(),
+        lexical_index=_lexical(),
         manifest_path=manifest_path,
     )
 
@@ -101,6 +123,7 @@ def test_pinecone_rerun_skips_unchanged_chunks_and_saves_the_manifest(tmp_path: 
         settings=_settings(),
         embedder=embedder,
         vector_store=store,
+        lexical_index=_lexical(),
         manifest_path=manifest_path,
     )
     second = run_ingestion(
@@ -109,6 +132,7 @@ def test_pinecone_rerun_skips_unchanged_chunks_and_saves_the_manifest(tmp_path: 
         settings=_settings(),
         embedder=embedder,
         vector_store=store,
+        lexical_index=_lexical(),
         manifest_path=manifest_path,
     )
 
@@ -131,6 +155,7 @@ def test_changed_embedding_model_does_not_reuse_the_manifest(tmp_path: Path):
         settings=_settings(),
         embedder=_CountingEmbedder(),
         vector_store=_PersistedStore(),
+        lexical_index=_lexical(),
         manifest_path=manifest_path,
     )
     stored = IndexManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
@@ -146,6 +171,7 @@ def test_changed_embedding_model_does_not_reuse_the_manifest(tmp_path: Path):
         settings=_settings(),
         embedder=embedder,
         vector_store=_PersistedStore(),
+        lexical_index=_lexical(),
         manifest_path=manifest_path,
     )
 

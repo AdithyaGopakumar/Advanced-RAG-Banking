@@ -1,8 +1,8 @@
 """Build dense and lexical indexes from eligible knowledge chunks.
 
 Vector records are upserted only when the chunk hash changed. Removed chunk
-ids are deleted. The BM25 index is rebuilt from the eligible set because its
-scores depend on the whole corpus.
+ids are deleted from the vector index. Eligible chunk text is sent to
+Elasticsearch, which keeps the BM25 index.
 """
 
 import logging
@@ -10,8 +10,8 @@ from collections.abc import Sequence
 from typing import Literal
 
 from app.ai.embeddings.provider import EmbeddingProvider
-from app.ai.rag.indexing.bm25 import BM25Index
 from app.ai.rag.indexing.filters import ChunkMetadata
+from app.ai.rag.indexing.lexical import ElasticsearchLexicalIndex
 from app.ai.rag.indexing.models import IndexManifest, IndexedRecord, manifest_hash
 from app.ai.rag.indexing.vector_store import VectorRecord, VectorStore
 from app.modules.knowledge.models import KnowledgeChunk
@@ -23,7 +23,7 @@ def index_knowledge(
     chunks: Sequence[KnowledgeChunk],
     embedder: EmbeddingProvider,
     vector_store: VectorStore,
-    lexical_index: BM25Index,
+    lexical_index: ElasticsearchLexicalIndex,
     *,
     embedding_provider: str,
     previous: IndexManifest | None = None,
@@ -45,7 +45,7 @@ def index_knowledge(
         ]
         vector_store.upsert(records)
     vector_store.delete(to_delete)
-    lexical_index.replace([(chunk.text, _metadata(chunk, embedder.model_name)) for chunk in eligible])
+    lexical_index.sync([(chunk.text, _metadata(chunk, embedder.model_name)) for chunk in eligible])
     logger.info(
         "Indexed knowledge chunks",
         extra={

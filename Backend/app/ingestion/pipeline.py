@@ -1,8 +1,8 @@
 """Run governance and indexing from the terminal.
 
-The BM25 index is rebuilt in memory on every run. Dense vectors are kept
-only when Pinecone is configured. The manifest is saved in that case so the
-next run can upsert changed chunks and delete removed ids.
+Eligible chunks are written to the Elasticsearch BM25 index. Dense vectors are
+kept only when Pinecone is configured. The manifest is saved in that case so
+the next run can upsert changed chunks and delete removed ids.
 """
 
 import argparse
@@ -15,8 +15,8 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 
 from app.ai.embeddings.factory import create_embedding_provider
 from app.ai.embeddings.provider import EmbeddingProvider
-from app.ai.rag.indexing.bm25 import BM25Index
 from app.ai.rag.indexing.indexer import diff_chunks, index_knowledge
+from app.ai.rag.indexing.lexical import ElasticsearchLexicalIndex, create_lexical_index
 from app.ai.rag.indexing.models import IndexManifest
 from app.ai.rag.indexing.vector_store import VectorStore, create_vector_store
 from app.core.config import Settings, get_settings
@@ -53,17 +53,17 @@ def run_ingestion(
     settings: Settings | None = None,
     embedder: EmbeddingProvider | None = None,
     vector_store: VectorStore | None = None,
-    lexical_index: BM25Index | None = None,
+    lexical_index: ElasticsearchLexicalIndex | None = None,
     manifest_path: Path | None = None,
 ) -> IngestionResult:
     """Validate the knowledge base and index every eligible chunk."""
     current = settings if settings is not None else get_settings()
+    destination = manifest_path if manifest_path is not None else resolve_manifest_path(current.INDEX_MANIFEST_PATH)
+    build = build_knowledge(directory, as_of=as_of)
     embedder = embedder if embedder is not None else create_embedding_provider(current)
     vector_store = vector_store if vector_store is not None else create_vector_store(current)
-    lexical_index = lexical_index if lexical_index is not None else BM25Index()
-    destination = manifest_path if manifest_path is not None else resolve_manifest_path(current.INDEX_MANIFEST_PATH)
-
-    build = build_knowledge(directory, as_of=as_of)
+    if lexical_index is None:
+        lexical_index = create_lexical_index(current)
     eligible = build.eligible_chunks
     previous = _load_previous(destination, embedder, vector_store)
     previous_hashes = previous.hashes_by_id() if previous is not None else {}
