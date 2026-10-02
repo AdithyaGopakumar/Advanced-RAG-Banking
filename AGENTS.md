@@ -219,7 +219,7 @@ The documented retrieval architecture should be implemented as composable stages
 The current design includes:
 
 - Dense retrieval through Pinecone.
-- Lexical retrieval through BM25.
+- Lexical retrieval through Elasticsearch using native BM25.
 - Multi-query expansion (MQE).
 - Reciprocal Rank Fusion (RRF).
 - Semantic reranking.

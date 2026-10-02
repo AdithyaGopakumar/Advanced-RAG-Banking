@@ -218,12 +218,12 @@ Embedding generation must be hidden behind an abstraction so the model can be re
 
 ## 11. BM25 Lexical Retrieval
 
-BM25 provides lexical retrieval.
+Elasticsearch is the lexical index. It provides native BM25 scoring with `k1 = 1.5` and `b = 0.75`. The indexed content is `chunk.text`, which already includes heading breadcrumbs. Analysis lowercases letter-and-digit tokens and does not stem. Metadata filters, including the effective-date window, are applied in the Elasticsearch query. The index persists across process restarts. Kibana is used locally to inspect mappings, documents, and searches.
 
 ```mermaid
 flowchart LR
-    Query["Expanded Query"] --> Tokenize["Tokenization"]
-    Tokenize --> BM25["BM25 Index"]
+    Query["Expanded Query"] --> ES["Elasticsearch"]
+    ES --> BM25["Native BM25"]
     BM25 --> Results["Lexical Candidates"]
 ```
 
@@ -793,10 +793,10 @@ flowchart TD
     MQE --> BM25["BM25"]
 
     Dense --> Pinecone["Pinecone"]
-    BM25 --> LexicalIndex["BM25 Index"]
+    BM25 --> Elasticsearch["Elasticsearch"]
 
     Pinecone --> RRF["RRF"]
-    LexicalIndex --> RRF
+    Elasticsearch --> RRF
 
     RRF --> Filter["Metadata / Temporal Filter"]
     Filter --> Reranker["Semantic Reranker"]
@@ -820,7 +820,7 @@ flowchart TD
 | MQE | Generate useful query variants |
 | Embedding Provider | Generate query embeddings |
 | Pinecone | Dense vector retrieval |
-| BM25 | Lexical retrieval |
+| Elasticsearch | Lexical BM25 retrieval |
 | RRF | Fuse retrieval rankings |
 | Metadata Filter | Enforce applicability constraints |
 | Semantic Reranker | Re-rank candidates |
@@ -955,7 +955,7 @@ This separation reduces unnecessary model dependence.
 - [ ] MQE is implemented behind an abstraction.
 - [ ] Dense retrieval is implemented.
 - [ ] Pinecone integration is implemented.
-- [ ] BM25 retrieval is implemented.
+- [ ] Elasticsearch BM25 retrieval is implemented.
 - [ ] RRF fusion is implemented.
 - [ ] Metadata filtering is implemented.
 - [ ] Temporal applicability is supported.
@@ -1047,7 +1047,7 @@ flowchart TD
     Dense["Dense Retrieval"]
     BM25["BM25 Retrieval"]
     Pinecone["Pinecone"]
-    Lexical["BM25 Index"]
+    Lexical["Elasticsearch"]
 
     RRF["RRF"]
     Filter["Metadata / Temporal Filtering"]

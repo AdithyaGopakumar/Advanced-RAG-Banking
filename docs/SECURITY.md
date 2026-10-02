@@ -529,6 +529,7 @@ Secrets include:
 
 - OpenAI API keys
 - Pinecone credentials
+- Elasticsearch credentials, when the cluster requires them
 - LangSmith credentials
 - database credentials
 - authentication signing keys
@@ -753,6 +754,7 @@ flowchart LR
     Gateway --> API["FastAPI Application"]
 
     API --> Pinecone["Pinecone"]
+    API --> ES["Elasticsearch"]
     API --> LLM["LLM Provider"]
     API --> DB["Application Database"]
 

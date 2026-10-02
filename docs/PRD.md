@@ -6,7 +6,7 @@
 **Backend:** FastAPI modular monolith\
 **LLM:** OpenAI GPT-4o-mini for development\
 **Vector Database:** Pinecone\
-**Lexical Retrieval:** BM25\
+**Lexical Retrieval:** Elasticsearch (native BM25)\
 **Retrieval Fusion:** RRF\
 **Query Expansion:** Multi-Query Expansion (MQE)\
 **Reranking:** Semantic reranker\
@@ -436,7 +436,9 @@ against the banking corpus.
 
 ## 8.2 Lexical Retrieval
 
-BM25 will provide lexical retrieval for:
+Elasticsearch is the persistent lexical index. It scores chunks with native BM25 (`k1 = 1.5`, `b = 0.75`). The searchable field is the chunk text, including heading breadcrumbs. The application does not calculate BM25 in Python. Kibana is the local interface for inspecting the index and trying searches.
+
+BM25 retrieval is for:
 
 -   Exact banking terminology.
 -   Product names.
@@ -1021,7 +1023,7 @@ Goals:
 
 -   Implement embeddings.
 -   Integrate Pinecone.
--   Implement BM25.
+-   Implement Elasticsearch BM25.
 -   Implement MQE.
 -   Implement RRF.
 -   Integrate semantic reranking.
@@ -1155,7 +1157,7 @@ The project is considered complete when:
 
 -   [ ] MQE is implemented.
 -   [ ] Pinecone dense retrieval works.
--   [ ] BM25 lexical retrieval works.
+-   [ ] Elasticsearch BM25 lexical retrieval works.
 -   [ ] RRF is implemented.
 -   [ ] Semantic reranking is implemented.
 -   [ ] Retrieval quality is measured.
@@ -1265,7 +1267,7 @@ components to evolve independently.
 | LLM | OpenAI GPT-4o-mini for development |
 | Embeddings | To be benchmarked/finalized |
 | Vector DB | Pinecone |
-| Lexical Retrieval | BM25 |
+| Lexical Retrieval | Elasticsearch (native BM25) |
 | Query Expansion | MQE |
 | Rank Fusion | RRF |
 | Reranking | Semantic reranker |

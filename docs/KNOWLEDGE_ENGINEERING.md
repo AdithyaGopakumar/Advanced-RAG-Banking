@@ -527,7 +527,7 @@ flowchart TD
     Chunk --> Metadata["Metadata Representation"]
 
     Dense --> Pinecone["Pinecone"]
-    Lexical --> BM25["BM25 Index"]
+    Lexical --> ES["Elasticsearch"]
     Metadata --> Filters["Metadata Filters"]
 ```
 
@@ -548,7 +548,7 @@ Benchmark criteria should include:
 
 ## 29. Lexical Retrieval
 
-BM25 is the initial lexical retrieval strategy.
+Elasticsearch is the lexical index. It scores with native BM25 (`k1 = 1.5`, `b = 0.75`) over `chunk.text`. The index is persistent. Kibana is the local inspection interface.
 
 It is particularly useful for:
 
@@ -822,7 +822,7 @@ Authorization remains a runtime concern, but knowledge engineering must preserve
 
 - Embedding generation.
 - Pinecone indexing.
-- BM25 indexing.
+- Elasticsearch BM25 indexing.
 - Metadata filters.
 - Index manifests.
 - Re-indexing strategy.

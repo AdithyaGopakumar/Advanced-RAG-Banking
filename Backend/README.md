@@ -146,11 +146,19 @@ Copy `.env.example` to `.env` and edit those values there. `.env` is loaded from
 
 ### Docker
 
-```bash
-# Development (with hot-reload & source mount)
-docker compose up --build
+From `Backend`, with Docker running. This builds the API image, installs the backend requirements (including the CPU build of PyTorch), and starts Elasticsearch and Kibana with it.
 
-# Production
+```bash
+docker compose up --build
+```
+
+The API is at `http://localhost:8000`. Inside Compose it reaches Elasticsearch at `http://elasticsearch:9200`. Kibana is at `http://localhost:5601`.
+
+```bash
+# Image only
+docker compose build
+
+# Production-style run of the built image
 docker build -t fastapi-app .
 docker run -p 8000:8000 --env-file .env fastapi-app
 ```

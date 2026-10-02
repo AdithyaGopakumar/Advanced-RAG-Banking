@@ -29,10 +29,10 @@ flowchart TB
     MQE --> Lexical["BM25 Lexical Retrieval"]
 
     Dense --> Pinecone[("Pinecone")]
-    Lexical --> BM25[("BM25 Index")]
+    Lexical --> ES[("Elasticsearch")]
 
     Pinecone --> RRF["Reciprocal Rank Fusion"]
-    BM25 --> RRF
+    ES --> RRF
 
     RRF --> Reranker["Semantic Reranker"]
     Reranker --> Context["Context Validation"]
@@ -44,7 +44,7 @@ flowchart TB
 
     KB["Governed Banking Knowledge Base"] --> Indexing["Knowledge Indexing Pipeline"]
     Indexing --> Pinecone
-    Indexing --> BM25
+    Indexing --> ES
 
     Agent -.-> Memory[("Conversation Memory")]
     Agent -.-> LangSmith["LangSmith Tracing"]
@@ -174,7 +174,7 @@ flowchart TB
 
     subgraph Storage["Storage"]
         Pinecone[("Pinecone")]
-        BM25Index[("BM25 Index")]
+        Elasticsearch[("Elasticsearch")]
         Memory[("Conversation State")]
     end
 
@@ -194,9 +194,9 @@ flowchart TB
     MQE --> Dense
     MQE --> Lexical
     Dense --> Pinecone
-    Lexical --> BM25Index
+    Lexical --> Elasticsearch
     Pinecone --> Fusion
-    BM25Index --> Fusion
+    Elasticsearch --> Fusion
     Fusion --> Rerank
     Rerank --> Validation
     Validation --> Generation
@@ -207,7 +207,7 @@ flowchart TB
     Pipeline --> KB
     KB --> Versioning
     Versioning --> Pinecone
-    Versioning --> BM25Index
+    Versioning --> Elasticsearch
 
     Graph <--> Memory
     Ragas -.-> Graph
@@ -531,14 +531,13 @@ The final embedding model remains a benchmark-driven decision.
 
 ## 14. Lexical Retrieval
 
-BM25 provides lexical retrieval for exact and term-oriented matching.
+Elasticsearch provides lexical retrieval. Scoring is native BM25 (`k1 = 1.5`, `b = 0.75`) over chunk text. The application sends eligible chunks and metadata filters to Elasticsearch and reads back ranked hits. It does not keep a second in-memory BM25 index.
 
 ``` mermaid
 flowchart TD
-    KB["Knowledge Chunks"] --> Tokenize["Tokenization / Indexing"]
-    Tokenize --> BM25[("BM25 Index")]
-    Query["Query"] --> BM25
-    BM25 --> Results["Lexical Candidates"]
+    KB["Knowledge Chunks"] --> ES[("Elasticsearch")]
+    Query["Query"] --> ES
+    ES --> Results["BM25 Candidates"]
 ```
 
 ------------------------------------------------------------------------
@@ -618,7 +617,7 @@ flowchart LR
     Publish --> Index["Indexing"]
 
     Index --> Pinecone[("Pinecone")]
-    Index --> BM25[("BM25")]
+    Index --> Elasticsearch[("Elasticsearch")]
 ```
 
 ------------------------------------------------------------------------
@@ -1113,9 +1112,9 @@ flowchart TB
     API2 --> Pinecone
     APIN --> Pinecone
 
-    API1 --> BM25[("BM25 Index")]
-    API2 --> BM25
-    APIN --> BM25
+    API1 --> Elasticsearch[("Elasticsearch")]
+    API2 --> Elasticsearch
+    APIN --> Elasticsearch
 
     API1 --> LLM["OpenAI API"]
     API2 --> LLM

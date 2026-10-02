@@ -3,17 +3,24 @@ FROM python:3.10-slim AS builder
 
 WORKDIR /build
 
-# Install dependencies in a virtual env for clean copy
+# Install dependencies in a virtual env for clean copy.
+# Torch comes from the CPU index so the image does not pull a CUDA build.
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements.txt
 
 
 # ─── Runtime stage ───
 FROM python:3.10-slim AS runtime
+
+# Torch needs OpenMP at runtime.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libgomp1 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN groupadd --gid 1000 appuser && \
