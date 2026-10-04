@@ -962,11 +962,11 @@ This separation reduces unnecessary model dependence.
 - [x] Semantic reranking is implemented.
 - [x] Context assembly is implemented.
 - [x] Evidence provenance is preserved.
-- [ ] Grounding decisions are represented explicitly.
-- [ ] Partial-support behavior is supported.
-- [ ] Clarification behavior is supported.
-- [ ] LLM generation is integrated.
-- [ ] Provider abstractions are in place.
+- [x] Grounding decisions are represented explicitly.
+- [x] Partial-support behavior is supported.
+- [x] Clarification behavior is supported.
+- [x] LLM generation is integrated.
+- [x] Provider abstractions are in place.
 - [ ] LangGraph orchestration is implemented.
 - [ ] LangSmith tracing is integrated.
 - [ ] Retrieval evaluation dataset exists.

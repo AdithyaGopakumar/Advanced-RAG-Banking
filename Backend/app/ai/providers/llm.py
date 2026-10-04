@@ -1,4 +1,4 @@
-"""Text generation used by query expansion."""
+"""Chat completions used for query expansion and grounded answers."""
 
 from typing import Protocol
 
