@@ -62,6 +62,11 @@ class Settings(BaseSettings):
     RETRIEVAL_TOP_K: int = 8
     RETRIEVAL_CANDIDATES_PER_QUERY: int = 20
     RETRIEVAL_RRF_K: int = 60
+    # Development cross-encoder. Replace after a reranker benchmark if a better model wins.
+    RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    RERANKER_MIN_SCORE: float | None = None
+    EVIDENCE_TOP_K: int = 5
+    CONTEXT_TOKEN_BUDGET: int = 3000
 
     # ─── Embeddings ───
     # Current development model. Replace after a retrieval benchmark if a better model wins.

@@ -952,15 +952,15 @@ This separation reduces unnecessary model dependence.
 ## 50. Definition of Done
 
 - [ ] Query processing is implemented.
-- [ ] MQE is implemented behind an abstraction.
+- [x] MQE is implemented behind an abstraction.
 - [x] Dense retrieval is implemented.
 - [x] Pinecone integration is implemented.
 - [x] Elasticsearch BM25 retrieval is implemented.
-- [ ] RRF fusion is implemented.
+- [x] RRF fusion is implemented.
 - [x] Metadata filtering is implemented.
 - [x] Temporal applicability is supported.
-- [ ] Semantic reranking is implemented.
-- [ ] Context assembly is implemented.
+- [x] Semantic reranking is implemented.
+- [x] Context assembly is implemented.
 - [x] Evidence provenance is preserved.
 - [ ] Grounding decisions are represented explicitly.
 - [ ] Partial-support behavior is supported.
