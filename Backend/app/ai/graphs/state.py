@@ -21,3 +21,5 @@ class AgentState(TypedDict, total=False):
     chunk_ids: list[str]
     errors: list[str]
     output_ok: bool
+    full_trace: bool
+    trace: dict[str, object]

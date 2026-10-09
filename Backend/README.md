@@ -73,27 +73,34 @@ Production-oriented FastAPI backend for the RAG Bank advanced banking assistant.
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.10 – 3.12 (Recommended: Python 3.10. Note: Python 3.14+ is currently not supported by upstream ML dependencies like PyYAML, PyTorch, etc. without Microsoft C++ Build Tools)
 - pip
 
 ### Local Setup
 
-```bash
-# 1. Clone the repo
-git clone <repo-url> && cd <repo-name>
+```powershell
+# 1. Navigate to the Backend folder
+cd Backend
 
-# 2. Create & activate a virtual environment
-python -m venv venv
-venv\Scripts\activate          # Windows
-source venv/bin/activate       # macOS / Linux
+# 2. Create & activate virtual environment (.venv)
+python -m venv .venv
+
+# Windows PowerShell:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass   # Run if script execution is restricted
+.\.venv\Scripts\Activate.ps1
+
+# macOS / Linux:
+source .venv/bin/activate
 
 # 3. Install dependencies
 pip install -r requirements.txt
 
 # 4. Configure environment
-cp .env.example .env           # edit as needed
+cp .env.example .env           # On Windows: copy .env.example .env
 
 # 5. Start the server
+uvicorn main:app --reload
+# or
 python run.py
 ```
 
@@ -104,7 +111,7 @@ The server starts at **http://localhost:8000** with hot-reload enabled in develo
 Run this from the `Backend` directory after the virtual environment is active and dependencies are installed. The first run with the default embedding model downloads `paraphrase-MiniLM-L6-v2`, so the machine needs network access.
 
 ```powershell
-# Windows, from Backend/
+# Windows PowerShell, from Backend/
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python ingest.py
@@ -178,6 +185,22 @@ docker run -p 8000:8000 --env-file .env fastapi-app
 curl http://localhost:8000/api/v1/system/health
 # → {"success": true, "data": {"status": "healthy", ...}}
 ```
+
+### Chat & Retrieval Testing API
+
+Ask questions and inspect step-by-step intermediate pipeline outputs (input guardrails, MQE, vector search, BM25 search, RRF, reranking, context assembly, grounding, generation, output guardrails):
+
+**POST `/api/v1/chat`** *(or `/api/v1/chat/test`)*:
+
+```bash
+curl -X POST http://localhost:8000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is BSBDA?", "fullTrace": true}'
+```
+
+Request body fields:
+- `question` (or `query` / `message`): The user's banking query.
+- `fullTrace` (boolean, default `false`): When `true`, returns all intermediate pipeline step outputs in `data.trace`.
 
 Interactive docs (development only):
 

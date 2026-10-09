@@ -4,6 +4,7 @@ The graph routes; retrieval, grounding, and wording stay in their own modules.
 A failed retrieval or model call stops at a fixed message instead of guessing.
 """
 
+from datetime import date
 import logging
 from dataclasses import dataclass
 
@@ -20,8 +21,8 @@ from app.ai.rag.generation.answer import GenerationFailed
 from app.ai.rag.generation.grounding import assess
 from app.ai.rag.generation.models import GroundingDecision
 from app.ai.rag.indexing.filters import MetadataFilter
-from app.ai.rag.retrieval.context import build_context
-from app.ai.rag.retrieval.hybrid import LexicalSearcher, retrieve
+from app.ai.rag.retrieval.context import assemble_context, select_evidence
+from app.ai.rag.retrieval.hybrid import LexicalSearcher, retrieve_detailed
 from app.ai.rag.retrieval.models import EvidenceContext
 from app.ai.rag.retrieval.mqe import QueryExpander
 from app.ai.rag.retrieval.reranker import CrossEncoderReranker
@@ -50,6 +51,7 @@ class AgentTurn(BaseModel):
     reason_code: str | None = None
     chunk_ids: list[str] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)
+    trace: dict[str, object] | None = None
 
 
 @dataclass
@@ -72,10 +74,10 @@ class AgentResources:
     input_max_chars: int = 2000
 
 
-def run_agent(message: str, resources: AgentResources) -> AgentTurn:
+def run_agent(message: str, resources: AgentResources, *, full_trace: bool = False) -> AgentTurn:
     """Run one question through input checks, retrieval, grounding, and output checks."""
     graph = build_agent(resources)
-    state = graph.invoke({"user_message": message, "errors": []})
+    state = graph.invoke({"user_message": message, "full_trace": full_trace, "errors": [], "trace": {}})
     return AgentTurn(
         response=state.get("response", ""),
         response_type=state.get("response_type", "error"),
@@ -83,6 +85,7 @@ def run_agent(message: str, resources: AgentResources) -> AgentTurn:
         reason_code=state.get("reason_code"),
         chunk_ids=list(state.get("chunk_ids") or []),
         errors=list(state.get("errors") or []),
+        trace=state.get("trace") if full_trace else None,
     )
 
 
@@ -91,18 +94,30 @@ def build_agent(resources: AgentResources):
 
     def input_guard(state: AgentState) -> dict[str, object]:
         decision = check_input(state["user_message"], max_chars=resources.input_max_chars)
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
+        if is_full_trace:
+            trace["input_guardrail"] = {
+                "allowed": decision.allowed,
+                "normalized_query": decision.normalized,
+                "reason_code": decision.reason_code,
+                "response": decision.response,
+            }
         if not decision.allowed:
             return {
                 "response": decision.response or "",
                 "response_type": "rejected",
                 "reason_code": decision.reason_code or "MALFORMED_INPUT",
+                "trace": trace,
             }
-        return {"normalized_query": decision.normalized}
+        return {"normalized_query": decision.normalized, "trace": trace}
 
     def retrieve_node(state: AgentState) -> dict[str, object]:
         question = state["normalized_query"]
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
         try:
-            candidates = retrieve(
+            retrieval = retrieve_detailed(
                 question,
                 embedder=resources.embedder,
                 vector_store=resources.vector_store,
@@ -113,59 +128,140 @@ def build_agent(resources: AgentResources):
                 candidates_per_query=resources.candidates_per_query,
                 rrf_k=resources.rrf_k,
             )
-            evidence = build_context(
+            ranked_evidence = select_evidence(
                 question,
-                candidates,
+                retrieval.top_candidates,
                 resources.reranker,
+                as_of=date.today().isoformat(),
                 min_score=resources.min_score,
                 top_k=resources.evidence_top_k,
+            )
+            evidence = assemble_context(
+                question,
+                ranked_evidence,
                 token_budget=resources.token_budget,
             )
         except Exception as exc:
             logger.warning("Retrieval failed", extra={"error_type": type(exc).__name__})
             return _failure("RETRIEVAL_FAILURE", type(exc).__name__, state)
+
+        if is_full_trace:
+            trace["mqe"] = {"queries": retrieval.queries}
+            trace["vector_search"] = [
+                {"query": step.query, "hits": [hit.model_dump() for hit in step.dense_hits]}
+                for step in retrieval.searches
+            ]
+            trace["bm25_search"] = [
+                {"query": step.query, "hits": [hit.model_dump() for hit in step.bm25_hits]}
+                for step in retrieval.searches
+            ]
+            trace["rrf"] = {
+                "fused_candidates": [candidate.model_dump() for candidate in retrieval.all_fused],
+                "total_fused": len(retrieval.all_fused),
+            }
+            trace["reranking"] = {
+                "ranked_evidence": [item.model_dump() for item in ranked_evidence],
+                "total_ranked": len(ranked_evidence),
+            }
+            trace["context"] = {
+                "text": evidence.text,
+                "item_count": len(evidence.items),
+                "omitted": evidence.omitted,
+                "exceeds_budget": evidence.exceeds_budget,
+                "estimated_tokens": max(1, len(evidence.text) // 4) if evidence.text else 0,
+            }
+
         return {
             "evidence": evidence.model_dump(),
             "chunk_ids": [item.candidate.chunk_id for item in evidence.items],
+            "trace": trace,
         }
 
     def assess_node(state: AgentState) -> dict[str, object]:
         evidence = EvidenceContext.model_validate(state["evidence"])
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
         try:
             decision = assess(state["normalized_query"], evidence, resources.llm)
         except LLMNotConfiguredError as exc:
             return _failure("LLM_NOT_CONFIGURED", type(exc).__name__, state)
+
+        if is_full_trace:
+            trace["grounding"] = decision.model_dump()
+
         return {
             "decision": decision.model_dump(),
             "support_level": decision.status,
+            "trace": trace,
         }
 
     def generate_node(state: AgentState) -> dict[str, object]:
         evidence = EvidenceContext.model_validate(state["evidence"])
         decision = GroundingDecision.model_validate(state["decision"])
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
         try:
             generated = compose_answer(state["normalized_query"], evidence, decision, resources.llm)
         except (GenerationFailed, LLMNotConfiguredError) as exc:
             code = "LLM_NOT_CONFIGURED" if isinstance(exc, LLMNotConfiguredError) else "GENERATION_FAILED"
             return _failure(code, type(exc).__name__, state)
-        return _from_answer(generated.text, decision)
+
+        if is_full_trace:
+            trace["generation"] = {
+                "draft_answer": generated.text,
+                "rendered_response": generated.text,
+            }
+
+        out = _from_answer(generated.text, decision)
+        out["trace"] = trace
+        return out
 
     def policy_node(state: AgentState) -> dict[str, object]:
         decision = GroundingDecision.model_validate(state["decision"])
-        return _from_answer(render_response(decision, None), decision)
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
+        rendered = render_response(decision, None)
+
+        if is_full_trace:
+            trace["generation"] = {
+                "draft_answer": None,
+                "rendered_response": rendered,
+            }
+
+        out = _from_answer(rendered, decision)
+        out["trace"] = trace
+        return out
 
     def output_guard(state: AgentState) -> dict[str, object]:
-        return {"output_ok": output_is_safe(state.get("response", ""))}
+        safe = output_is_safe(state.get("response", ""))
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
+        if is_full_trace:
+            trace["output_guardrail"] = {
+                "output_ok": safe,
+                "fallback_triggered": not safe,
+                "final_response": state.get("response", "") if safe else SAFE_FALLBACK,
+            }
+        return {"output_ok": safe, "trace": trace}
 
     def fallback(state: AgentState) -> dict[str, object]:
         errors = list(state.get("errors") or [])
         errors.append("OUTPUT_UNSAFE")
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
+        if is_full_trace:
+            trace["output_guardrail"] = {
+                "output_ok": False,
+                "fallback_triggered": True,
+                "final_response": SAFE_FALLBACK,
+            }
         return {
             "response": SAFE_FALLBACK,
             "response_type": "fallback",
             "reason_code": "OUTPUT_UNSAFE",
             "output_ok": True,
             "errors": errors,
+            "trace": trace,
         }
 
     graph = StateGraph(AgentState)
@@ -223,12 +319,15 @@ def _route_output(state: AgentState) -> str:
 def _failure(reason_code: str, error_type: str, state: AgentState) -> dict[str, object]:
     errors = list(state.get("errors") or [])
     errors.append(error_type)
+    trace = dict(state.get("trace") or {})
     return {
         "response": GENERATION_FAILED_TEXT,
         "response_type": "error",
         "reason_code": reason_code,
         "errors": errors,
+        "trace": trace,
     }
+
 
 
 def _from_answer(text: str, decision: GroundingDecision) -> dict[str, object]:

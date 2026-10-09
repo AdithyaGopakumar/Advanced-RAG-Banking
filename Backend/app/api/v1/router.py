@@ -7,7 +7,7 @@ and mounts them under the `/api/v1` prefix.
 
 from fastapi import APIRouter
 
-# import all routers from the differnt modules
+from app.modules.chat.router import router as chat_router
 from app.modules.system.router import router as system_router
 
 v1_router = APIRouter(prefix="/api/v1")
@@ -15,4 +15,8 @@ v1_router = APIRouter(prefix="/api/v1")
 # ─── Register module routers ───
 # ──system router──
 v1_router.include_router(system_router)
+
+# ──chat router──
+v1_router.include_router(chat_router)
+
 
