@@ -67,6 +67,7 @@ class Settings(BaseSettings):
     RERANKER_MIN_SCORE: float | None = None
     EVIDENCE_TOP_K: int = 5
     CONTEXT_TOKEN_BUDGET: int = 3000
+    INPUT_MAX_CHARS: int = 2000
 
     # ─── Embeddings ───
     # Current development model. Replace after a retrieval benchmark if a better model wins.

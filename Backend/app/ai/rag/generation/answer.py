@@ -40,6 +40,26 @@ def answer(query: str, evidence: EvidenceContext, llm: LLMProvider) -> Generated
     )
 
 
+def compose_answer(
+    query: str,
+    evidence: EvidenceContext,
+    decision: GroundingDecision,
+    llm: LLMProvider,
+) -> GeneratedAnswer:
+    """Word an answer for a decision the graph has already made."""
+    question = " ".join(query.split())
+    if not question:
+        raise RetrievalQueryError("A retrieval query must contain text")
+    draft = _draft(question, evidence, decision, llm)
+    return GeneratedAnswer(
+        query=question,
+        status=decision.status,
+        claims=decision.claims,
+        text=render_response(decision, draft),
+        clarification=decision.clarification if decision.status in {"ambiguous", "partially_supported"} else None,
+    )
+
+
 def render_response(decision: GroundingDecision, draft: str | None) -> str:
     """Apply the support policy to a decision and an optional drafted answer."""
     if decision.status in {"no_relevant_evidence", "insufficient_evidence"}:

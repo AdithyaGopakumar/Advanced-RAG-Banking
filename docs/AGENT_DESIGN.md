@@ -998,28 +998,28 @@ A trace should identify the versions used for a given response.
 ### Functional
 - [ ] User can submit banking questions through the chat API
 - [ ] Agent maintains conversation context
-- [ ] Agent invokes the RAG pipeline
-- [ ] Agent distinguishes full, partial, ambiguous, and unsupported requests
-- [ ] Agent generates grounded answers
-- [ ] Agent asks clarification questions when required
-- [ ] Agent refuses unsupported banking claims
-- [ ] Agent handles multi-part questions correctly
+- [x] Agent invokes the RAG pipeline
+- [x] Agent distinguishes full, partial, ambiguous, and unsupported requests
+- [x] Agent generates grounded answers
+- [x] Agent asks clarification questions when required
+- [x] Agent refuses unsupported banking claims
+- [x] Agent handles multi-part questions correctly
 
 ### Guardrails
-- [ ] Input guardrails implemented
-- [ ] Prompt-injection defenses implemented
+- [x] Input guardrails implemented
+- [x] Prompt-injection defenses implemented
 - [ ] Retrieved content isolated from instructions
 - [ ] Output guardrails implemented
-- [ ] Partial-support policy enforced
-- [ ] Safe fallback behavior implemented
+- [x] Partial-support policy enforced
+- [x] Safe fallback behavior implemented
 
 ### Architecture
-- [ ] LangGraph workflow implemented
-- [ ] Agent state explicitly defined
-- [ ] LLM provider abstraction implemented
-- [ ] No unrestricted tool execution
-- [ ] Agent remains separate from API layer
-- [ ] Agent remains separate from retrieval implementation
+- [x] LangGraph workflow implemented
+- [x] Agent state explicitly defined
+- [x] LLM provider abstraction implemented
+- [x] No unrestricted tool execution
+- [x] Agent remains separate from API layer
+- [x] Agent remains separate from retrieval implementation
 
 ### Evaluation
 - [ ] Evaluation dataset created
@@ -1035,7 +1035,7 @@ A trace should identify the versions used for a given response.
 - [ ] Errors traced
 - [ ] Model and prompt versions recorded
 - [ ] Knowledge version recorded
-- [ ] Tests cover critical agent transitions
+- [x] Tests cover critical agent transitions
 
 # 38. Final Architecture
 
