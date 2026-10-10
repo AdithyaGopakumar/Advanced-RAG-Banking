@@ -45,18 +45,22 @@ Production-oriented FastAPI backend for the RAG Bank advanced banking assistant.
 │   │       └── router.py           # Mounts all module routers under /api/v1
 │   │
 │   ├── modules/                    # Domain modules — each is self-contained
-│   │   ├── system/                 # Health check (implemented)
+│   │   ├── system/                 # Health check & observability status
+│   │   ├── chat/                   # Banking chat agent endpoint & service
 │   │   └── knowledge/              # Knowledge domain models & identity
 │   │       ├── models.py           # KnowledgeDocument, KnowledgeSection, KnowledgeChunk
 │   │       └── identity.py         # Deterministic chunk IDs & content hashing
 │   │
 │   ├── ingestion/                  # Knowledge → retrieval artifact pipeline (CLI/job-driven)
 │   │
-│   ├── ai/                         # AI infrastructure (scaffold)
-│   │   ├── embeddings/             # Embedding utilities
-│   │   ├── prompts/                # Prompt templates
-│   │   ├── providers/              # LLM provider adapters
-│   │   └── rag/                    # RAG pipeline
+│   ├── ai/                         # AI & RAG infrastructure
+│   │   ├── embeddings/             # Embedding utilities (sentence-transformers / OpenAI)
+│   │   ├── prompts/                # Versioned prompt templates
+│   │   ├── providers/              # LLM provider adapters (OpenAI / mock)
+│   │   ├── rag/                    # Dense/lexical retrieval, MQE, RRF, reranking, context
+│   │   ├── guardrails/             # Input/output safety, PII detection, topic filters
+│   │   ├── graphs/                 # LangGraph state machine & agent workflow
+│   │   └── observability/          # LangSmith distributed tracing & metadata tagging
 │   │
 │   ├── shared/                     # Shared utilities (utc_now, helpers)
 │   ├── db/                         # Database layer (placeholder)
@@ -287,6 +291,10 @@ All settings live in `app/core/config.py` (Pydantic Settings) and are loaded fro
 | `ALLOWED_HOSTS`      | `*`                              | Trusted host header values          |
 | `RATE_LIMIT`         | `100/minute`                     | Default rate limit                  |
 | `LOG_LEVEL`          | `INFO`                           | Logging verbosity                   |
+| `LANGCHAIN_TRACING_V2` | `false`                        | Enable LangSmith distributed tracing |
+| `LANGCHAIN_API_KEY`  | empty                            | LangSmith API key                   |
+| `LANGCHAIN_PROJECT`  | `rag-bank-development`           | LangSmith project name              |
+| `LANGCHAIN_ENDPOINT` | `https://api.smith.langchain.com` | LangSmith API endpoint              |
 
 **Production validators** automatically reject unsafe config (e.g. `DEBUG=true`, wildcard hosts, default API key).
 
@@ -427,6 +435,50 @@ python eval.py --output-dir evaluation/reports
 - **RAGAS Integration**: RAGAS metric adapter with deterministic offline heuristic fallback.
 
 Reports are automatically generated and saved to `evaluation/reports/` in both JSON (`eval_run_<id>.json`) and Markdown (`eval_run_<id>.md`) formats.
+
+---
+
+## Observability & LangSmith Tracing
+
+The backend features integrated distributed tracing compliant with `docs/AGENT_DESIGN.md` and `docs/EVALUATION.md`. Tracing covers the entire LangGraph orchestration cycle: input guardrails, query processing (MQE), dense & lexical retrieval, Reciprocal Rank Fusion (RRF), semantic reranking, context assembly, grounding validation, and generation.
+
+### Enabling Tracing
+
+To enable LangSmith tracing, configure the following variables in `.env`:
+
+```env
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=lsv2_pt_...
+LANGCHAIN_PROJECT=rag-bank-development
+LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+```
+
+When disabled (`LANGCHAIN_TRACING_V2=false` or `LANGCHAIN_API_KEY` omitted), the pipeline operates with zero overhead and offline safety.
+
+### Observability Diagnostic Endpoint
+
+Check real-time tracing status via:
+
+```bash
+curl http://localhost:8000/api/v1/system/observability
+```
+
+Response envelope:
+```json
+{
+  "success": true,
+  "data": {
+    "enabled": true,
+    "project": "rag-bank-development",
+    "endpoint": "https://api.smith.langchain.com",
+    "langsmith_installed": true
+  }
+}
+```
+
+### Privacy & PII Protection
+
+In compliance with banking security rules (`docs/SECURITY.md`), all deterministic PII guardrails run *before* context construction and generation. Customer identifiers (PAN, Aadhaar, account numbers, card numbers) are masked (`[REDACTED_PAN]`, etc.) prior to tracing and LLM prompt assembly, preventing leakage of sensitive financial data into trace backends.
 
 ---
 

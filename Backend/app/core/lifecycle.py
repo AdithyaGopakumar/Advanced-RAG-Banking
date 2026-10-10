@@ -38,10 +38,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("  Debug: %s", settings.DEBUG)
     logger.info("=" * 60)
 
-    # TODO: Initialize database connections
-    # TODO: Initialize cache (Redis)
-    # TODO: Initialize message queue connections
-    # TODO: Initialize AI agent registry
+    # ─── Observability (LangSmith) ───
+    from app.ai.observability.tracer import setup_observability
+    setup_observability(settings)
 
     logger.info("Startup complete — ready to accept requests")
 

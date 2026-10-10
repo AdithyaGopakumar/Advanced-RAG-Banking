@@ -15,6 +15,7 @@ from app.ai.embeddings.provider import EmbeddingProvider
 from app.ai.graphs.state import AgentState
 from app.ai.guardrails.input import check_input
 from app.ai.guardrails.output import SAFE_FALLBACK, output_is_safe, sanitize_output
+from app.ai.observability.tracer import build_trace_config
 from app.ai.providers.llm import LLMNotConfiguredError, LLMProvider
 from app.ai.rag.generation.answer import GENERATION_FAILED_TEXT, compose_answer, render_response
 from app.ai.rag.generation.answer import GenerationFailed
@@ -74,10 +75,31 @@ class AgentResources:
     input_max_chars: int = 2000
 
 
-def run_agent(message: str, resources: AgentResources, *, full_trace: bool = False) -> AgentTurn:
+def run_agent(
+    message: str,
+    resources: AgentResources,
+    *,
+    full_trace: bool = False,
+    request_id: str | None = None,
+    metadata: dict[str, object] | None = None,
+) -> AgentTurn:
     """Run one question through input checks, retrieval, grounding, and output checks."""
     graph = build_agent(resources)
-    state = graph.invoke({"user_message": message, "full_trace": full_trace, "errors": [], "trace": {}})
+    config = build_trace_config(
+        request_id=request_id,
+        run_name="banking_agent_turn",
+        metadata={
+            "full_trace": full_trace,
+            "top_k": resources.top_k,
+            "evidence_top_k": resources.evidence_top_k,
+            "token_budget": resources.token_budget,
+            **(metadata or {}),
+        },
+    )
+    state = graph.invoke(
+        {"user_message": message, "full_trace": full_trace, "errors": [], "trace": {}},
+        config=config,
+    )
     return AgentTurn(
         response=state.get("response", ""),
         response_type=state.get("response_type", "error"),

@@ -23,3 +23,14 @@ async def health_check(request: Request):
     Returns current status, version, environment, and uptime.
     """
     return success_response(data=get_health())
+
+
+@router.get("/observability", dependencies=[Depends(require_auth)])
+@limiter.limit("30/minute")
+async def observability_status(request: Request):
+    """
+    Return LangSmith tracing and observability status.
+    """
+    from app.ai.observability.tracer import get_observability_status
+
+    return success_response(data=get_observability_status())

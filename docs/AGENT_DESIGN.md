@@ -1026,7 +1026,7 @@ A trace should identify the versions used for a given response.
 - [x] Ragas integrated
 - [x] Custom evaluators implemented
 - [ ] JEV/System One integrated for evaluation
-- [ ] LangSmith tracing enabled
+- [x] LangSmith tracing enabled
 - [x] Regression evaluation established
 
 ### Operations

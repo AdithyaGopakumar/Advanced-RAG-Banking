@@ -1196,12 +1196,12 @@ The project is considered complete when:
 
 ## Observability
 
--   [ ] LangSmith tracing is integrated.
+-   [x] LangSmith tracing is integrated.
 -   [x] Retrieval traces are visible.
 -   [x] LLM calls are traceable.
 -   [x] Guardrail decisions are traceable.
 -   [x] Knowledge versions are traceable.
--   [ ] Latency and token usage can be analyzed.
+-   [x] Latency and token usage can be analyzed.
 
 ## Engineering
 

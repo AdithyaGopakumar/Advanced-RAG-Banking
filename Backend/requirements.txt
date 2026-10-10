@@ -22,3 +22,6 @@ pinecone==7.3.0
 elasticsearch==8.19.3
 openai==2.54.0
 langgraph==1.0.10
+
+# ─── Observability ───
+langsmith==0.14.4

@@ -22,7 +22,13 @@ class EvaluationRunner:
     def evaluate_case(self, case: EvaluationCase) -> CaseEvaluationResult:
         """Execute one test case and compute all evaluation metrics."""
         start_time = time.perf_counter()
-        turn = run_agent(case.query, self.resources, full_trace=True)
+        turn = run_agent(
+            case.query,
+            self.resources,
+            full_trace=True,
+            request_id=case.id,
+            metadata={"evaluation_case_id": case.id, "evaluation_category": case.category.value},
+        )
         elapsed_ms = (time.perf_counter() - start_time) * 1000
 
         retrieved_chunk_ids = list(turn.chunk_ids)

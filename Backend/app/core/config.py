@@ -91,6 +91,12 @@ class Settings(BaseSettings):
     # Saved only when Pinecone is used, so the next run can skip unchanged vectors.
     INDEX_MANIFEST_PATH: str = ".index/manifest.json"
 
+    # ─── Observability & Tracing (LangSmith) ───
+    LANGCHAIN_TRACING_V2: bool = False
+    LANGCHAIN_API_KEY: str = ""
+    LANGCHAIN_PROJECT: str = "rag-bank"
+    LANGCHAIN_ENDPOINT: str = "https://api.smith.langchain.com"
+
     @property
     def is_production(self) -> bool:
         return self.ENVIRONMENT == "production"

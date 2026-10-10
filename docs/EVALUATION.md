@@ -1213,10 +1213,10 @@ The evaluation system is considered complete when:
 
 ### Observability
 
-- [ ] LangSmith traces expose major pipeline stages
-- [ ] Evaluation runs are traceable
+- [x] LangSmith traces expose major pipeline stages
+- [x] Evaluation runs are traceable
 - [x] Evaluation results are stored
-- [ ] Failure attribution is available
+- [x] Failure attribution is available
 
 ### Regression
 

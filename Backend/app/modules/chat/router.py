@@ -30,7 +30,8 @@ async def chat_post(
     """Ask a banking question via POST with question/query in request body."""
     if full_trace is not None:
         payload.full_trace = full_trace
-    data = service.ask(payload)
+    request_id = getattr(request.state, "request_id", None)
+    data = service.ask(payload, request_id=request_id)
     return success_response(data=data.model_dump())
 
 
@@ -47,6 +48,7 @@ async def chat_get(
 ):
     """Ask a banking question via GET for quick testing."""
     payload = ChatRequest(question=question, query=query, full_trace=full_trace)
-    data = service.ask(payload)
+    request_id = getattr(request.state, "request_id", None)
+    data = service.ask(payload, request_id=request_id)
     return success_response(data=data.model_dump())
 

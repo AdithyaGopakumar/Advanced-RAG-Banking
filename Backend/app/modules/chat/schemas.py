@@ -36,6 +36,7 @@ class StepInputGuardrail(BaseModel):
     normalized_query: str = ""
     reason_code: str | None = None
     response: str | None = None
+    pii_detected: list[str] = Field(default_factory=list)
 
 
 class StepMQE(BaseModel):
@@ -145,4 +146,5 @@ class ChatResponseData(BaseModel):
     chunk_ids: list[str] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)
     trace: PipelineTrace | None = None
+    request_id: str | None = None
 

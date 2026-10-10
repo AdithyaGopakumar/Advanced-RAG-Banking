@@ -10,12 +10,17 @@ class ChatService:
     def __init__(self, resources: AgentResources) -> None:
         self._resources = resources
 
-    def ask(self, request: ChatRequest) -> ChatResponseData:
+    def ask(self, request: ChatRequest, *, request_id: str | None = None) -> ChatResponseData:
         """Execute one query against the agent graph."""
         query_text = request.effective_message
         full_trace = request.full_trace
 
-        turn = run_agent(query_text, self._resources, full_trace=full_trace)
+        turn = run_agent(
+            query_text,
+            self._resources,
+            full_trace=full_trace,
+            request_id=request_id,
+        )
 
         trace_model = PipelineTrace.model_validate(turn.trace) if turn.trace else None
 
@@ -29,5 +34,6 @@ class ChatService:
             chunk_ids=turn.chunk_ids,
             errors=turn.errors,
             trace=trace_model,
+            request_id=request_id,
         )
 

@@ -968,7 +968,7 @@ This separation reduces unnecessary model dependence.
 - [x] LLM generation is integrated.
 - [x] Provider abstractions are in place.
 - [x] LangGraph orchestration is implemented.
-- [ ] LangSmith tracing is integrated.
+- [x] LangSmith tracing is integrated.
 - [x] Retrieval evaluation dataset exists.
 - [x] Retrieval metrics are measurable.
 - [x] Ragas evaluation is integrated.
