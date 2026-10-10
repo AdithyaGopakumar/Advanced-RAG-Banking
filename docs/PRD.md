@@ -1160,59 +1160,59 @@ The project is considered complete when:
 -   [x] Elasticsearch BM25 lexical retrieval works.
 -   [x] RRF is implemented.
 -   [x] Semantic reranking is implemented.
--   [ ] Retrieval quality is measured.
+-   [x] Retrieval quality is measured.
 -   [ ] Retrieval regressions are detectable.
 
 ## Agent
 
--   [ ] Agent workflow is explicit and traceable.
+-   [x] Agent workflow is explicit and traceable.
 -   [ ] Conversation context works.
 -   [ ] Query understanding works.
--   [ ] Answer generation is grounded.
--   [ ] Partial-answer behavior works.
--   [ ] Clarification behavior works.
+-   [x] Answer generation is grounded.
+-   [x] Partial-answer behavior works.
+-   [x] Clarification behavior works.
 
 ## Guardrails
 
--   [ ] Deterministic input controls exist.
+-   [x] Deterministic input controls exist.
 -   [ ] Scope control exists.
--   [ ] Prompt injection protection exists.
+-   [x] Prompt injection protection exists.
 -   [ ] Retrieved-content injection protection exists.
 -   [ ] PII protection exists.
 -   [ ] Retrieval validation exists.
 -   [ ] Output validation exists.
--   [ ] Unsupported claims can be detected.
--   [ ] Guardrail decisions are observable.
+-   [x] Unsupported claims can be detected.
+-   [x] Guardrail decisions are observable.
 
 ## Evaluation
 
--   [ ] Ragas is integrated.
+-   [x] Ragas is integrated.
 -   [ ] JEV-based evaluation is integrated.
--   [ ] Custom banking evaluators exist.
--   [ ] Evaluation dataset exists.
--   [ ] Adversarial cases are included.
--   [ ] Regression evaluation can run automatically.
+-   [x] Custom banking evaluators exist.
+-   [x] Evaluation dataset exists.
+-   [x] Adversarial cases are included.
+-   [x] Regression evaluation can run automatically.
 -   [ ] Quality thresholds are defined.
 
 ## Observability
 
 -   [ ] LangSmith tracing is integrated.
--   [ ] Retrieval traces are visible.
--   [ ] LLM calls are traceable.
--   [ ] Guardrail decisions are traceable.
--   [ ] Knowledge versions are traceable.
+-   [x] Retrieval traces are visible.
+-   [x] LLM calls are traceable.
+-   [x] Guardrail decisions are traceable.
+-   [x] Knowledge versions are traceable.
 -   [ ] Latency and token usage can be analyzed.
 
 ## Engineering
 
--   [ ] Automated tests cover core workflows.
--   [ ] Integration tests cover retrieval and generation.
--   [ ] Guardrail tests cover adversarial cases.
--   [ ] Docker builds successfully.
--   [ ] Production configuration is validated.
+-   [x] Automated tests cover core workflows.
+-   [x] Integration tests cover retrieval and generation.
+-   [x] Guardrail tests cover adversarial cases.
+-   [x] Docker builds successfully.
+-   [x] Production configuration is validated.
 -   [ ] Authentication is implemented before production deployment.
 -   [ ] No development secrets are used in production.
--   [ ] Documentation is maintained alongside implementation.
+-   [x] Documentation is maintained alongside implementation.
 
 ------------------------------------------------------------------------
 

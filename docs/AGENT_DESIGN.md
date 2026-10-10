@@ -996,7 +996,7 @@ A trace should identify the versions used for a given response.
 # 37. Definition of Done
 
 ### Functional
-- [ ] User can submit banking questions through the chat API
+- [x] User can submit banking questions through the chat API
 - [ ] Agent maintains conversation context
 - [x] Agent invokes the RAG pipeline
 - [x] Agent distinguishes full, partial, ambiguous, and unsupported requests
@@ -1022,17 +1022,17 @@ A trace should identify the versions used for a given response.
 - [x] Agent remains separate from retrieval implementation
 
 ### Evaluation
-- [ ] Evaluation dataset created
-- [ ] Ragas integrated
-- [ ] Custom evaluators implemented
+- [x] Evaluation dataset created
+- [x] Ragas integrated
+- [x] Custom evaluators implemented
 - [ ] JEV/System One integrated for evaluation
 - [ ] LangSmith tracing enabled
-- [ ] Regression evaluation established
+- [x] Regression evaluation established
 
 ### Operations
-- [ ] Latency measured by node
+- [x] Latency measured by node
 - [ ] Token usage tracked
-- [ ] Errors traced
+- [x] Errors traced
 - [ ] Model and prompt versions recorded
 - [ ] Knowledge version recorded
 - [x] Tests cover critical agent transitions

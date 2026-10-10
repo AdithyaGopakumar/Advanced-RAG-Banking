@@ -1112,26 +1112,26 @@ Benchmark:
 The guardrail system is considered complete for the initial
 production-oriented scope when:
 
--   [ ] KB-only policy is enforced;
--   [ ] unsupported banking claims are blocked;
--   [ ] partial-support behavior is implemented;
--   [ ] clarification behavior is implemented;
--   [ ] out-of-scope behavior is implemented;
--   [ ] direct prompt injection is handled;
+-   [x] KB-only policy is enforced;
+-   [x] unsupported banking claims are blocked;
+-   [x] partial-support behavior is implemented;
+-   [x] clarification behavior is implemented;
+-   [x] out-of-scope behavior is implemented;
+-   [x] direct prompt injection is handled;
 -   [ ] indirect document injection is handled;
 -   [ ] retrieved source validity is checked;
--   [ ] knowledge versions are respected;
--   [ ] claim-level support can be evaluated;
+-   [x] knowledge versions are respected;
+-   [x] claim-level support can be evaluated;
 -   [ ] output grounding is validated;
--   [ ] deterministic policies are separated from model-based policies;
+-   [x] deterministic policies are separated from model-based policies;
 -   [ ] NeMo Guardrails is integrated where appropriate;
--   [ ] guardrail decisions are represented in agent state;
+-   [x] guardrail decisions are represented in agent state;
 -   [ ] guardrail decisions are traceable;
--   [ ] adversarial tests exist;
--   [ ] regression evaluation exists;
--   [ ] Ragas/custom/JEV evaluation integration exists;
+-   [x] adversarial tests exist;
+-   [x] regression evaluation exists;
+-   [x] Ragas/custom/JEV evaluation integration exists;
 -   [ ] guardrail latency is benchmarked;
--   [ ] failure behavior is defined and tested.
+-   [x] failure behavior is defined and tested.
 
 ------------------------------------------------------------------------
 

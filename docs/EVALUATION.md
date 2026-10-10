@@ -1155,21 +1155,21 @@ The evaluation system is considered complete when:
 
 ### Dataset
 
-- [ ] Evaluation dataset schema is implemented
-- [ ] Fully supported cases exist
-- [ ] Partial-support cases exist
-- [ ] Unsupported cases exist
-- [ ] Ambiguous cases exist
-- [ ] Adversarial cases exist
-- [ ] Regression cases can be added
-- [ ] Dataset versions are tracked
+- [x] Evaluation dataset schema is implemented
+- [x] Fully supported cases exist
+- [x] Partial-support cases exist
+- [x] Unsupported cases exist
+- [x] Ambiguous cases exist
+- [x] Adversarial cases exist
+- [x] Regression cases can be added
+- [x] Dataset versions are tracked
 
 ### Retrieval
 
-- [ ] Recall@K is implemented
-- [ ] Precision@K is implemented
-- [ ] MRR is implemented
-- [ ] nDCG is implemented
+- [x] Recall@K is implemented
+- [x] Precision@K is implemented
+- [x] MRR is implemented
+- [x] nDCG is implemented
 - [ ] Retrieval ablation experiments are supported
 - [ ] MQE contribution can be measured
 - [ ] RRF contribution can be measured
@@ -1177,31 +1177,31 @@ The evaluation system is considered complete when:
 
 ### RAG
 
-- [ ] RAGAS is integrated
-- [ ] Faithfulness is measured
+- [x] RAGAS is integrated
+- [x] Faithfulness is measured
 - [ ] Context quality is measured
-- [ ] Answer relevance is measured
-- [ ] Answer correctness is measured where ground truth exists
-- [ ] Claim-level grounding is measured
-- [ ] Unsupported claim rate is measured
-- [ ] Claim coverage is measured
+- [x] Answer relevance is measured
+- [x] Answer correctness is measured where ground truth exists
+- [x] Claim-level grounding is measured
+- [x] Unsupported claim rate is measured
+- [x] Claim coverage is measured
 
 ### Guardrails
 
-- [ ] Input guardrail evaluation exists
+- [x] Input guardrail evaluation exists
 - [ ] Retrieval guardrail evaluation exists
-- [ ] Grounding guardrail evaluation exists
+- [x] Grounding guardrail evaluation exists
 - [ ] Output guardrail evaluation exists
-- [ ] Prompt-injection cases exist
-- [ ] Partial-support cases exist
-- [ ] Unsupported-query cases exist
+- [x] Prompt-injection cases exist
+- [x] Partial-support cases exist
+- [x] Unsupported-query cases exist
 
 ### Agent
 
-- [ ] Workflow adherence is evaluated
-- [ ] Agent boundaries are evaluated
-- [ ] Failure handling is evaluated
-- [ ] Clarification behavior is evaluated
+- [x] Workflow adherence is evaluated
+- [x] Agent boundaries are evaluated
+- [x] Failure handling is evaluated
+- [x] Clarification behavior is evaluated
 
 ### Judge
 
@@ -1215,13 +1215,13 @@ The evaluation system is considered complete when:
 
 - [ ] LangSmith traces expose major pipeline stages
 - [ ] Evaluation runs are traceable
-- [ ] Evaluation results are stored
+- [x] Evaluation results are stored
 - [ ] Failure attribution is available
 
 ### Regression
 
-- [ ] Regression suite exists
-- [ ] Evaluation can run automatically
+- [x] Regression suite exists
+- [x] Evaluation can run automatically
 - [ ] Evaluation gates are defined
 - [ ] Historical failures are preserved
 

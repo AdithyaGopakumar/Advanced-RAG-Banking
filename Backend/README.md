@@ -218,6 +218,7 @@ Interactive docs (development only):
 |------------|----------------------------------------------------------------------|
 | `run.py`   | Process-level — uncaught exception hook, `atexit` cleanup, launches uvicorn |
 | `ingest.py`| Knowledge ingestion — validate, chunk, and index eligible documents          |
+| `eval.py`  | Benchmark evaluation — execute golden test cases & compute metrics   |
 | `main.py`  | App-level — `create_app()` factory, wires middleware / routes / handlers    |
 
 **Running directly with uvicorn** is also supported:
@@ -397,6 +398,35 @@ pytest
 # Quick smoke test (server must be running)
 python test_smoke.py
 ```
+
+---
+
+## Evaluation & Benchmarking
+
+The system includes a governed evaluation and benchmarking pipeline adhering to `docs/EVALUATION.md` (Phases E0–E3). Curated test cases reside in `evaluation/datasets/` across 5 categories (`fully_supported`, `partially_supported`, `unsupported`, `ambiguous`, `adversarial`).
+
+### Running Evaluations
+
+```powershell
+# Run the complete evaluation suite
+python eval.py
+
+# Run a specific category
+python eval.py --category adversarial
+python eval.py --category fully_supported
+python eval.py --category unsupported
+
+# Specify custom report output directory
+python eval.py --output-dir evaluation/reports
+```
+
+### Metrics Computed
+
+- **Retrieval Metrics**: `Hit@K`, `Recall@K`, `Precision@K`, `MRR` (Mean Reciprocal Rank), `nDCG@K`.
+- **Grounding & Policy Metrics**: `behavior_accuracy`, `policy_compliance`, `claim_coverage`, `unsupported_claim_rate`, forbidden claim violation checks.
+- **RAGAS Integration**: RAGAS metric adapter with deterministic offline heuristic fallback.
+
+Reports are automatically generated and saved to `evaluation/reports/` in both JSON (`eval_run_<id>.json`) and Markdown (`eval_run_<id>.md`) formats.
 
 ---
 

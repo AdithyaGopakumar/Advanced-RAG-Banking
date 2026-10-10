@@ -969,15 +969,15 @@ This separation reduces unnecessary model dependence.
 - [x] Provider abstractions are in place.
 - [x] LangGraph orchestration is implemented.
 - [ ] LangSmith tracing is integrated.
-- [ ] Retrieval evaluation dataset exists.
-- [ ] Retrieval metrics are measurable.
-- [ ] Ragas evaluation is integrated.
-- [ ] Custom banking evaluators exist.
+- [x] Retrieval evaluation dataset exists.
+- [x] Retrieval metrics are measurable.
+- [x] Ragas evaluation is integrated.
+- [x] Custom banking evaluators exist.
 - [ ] JEV/System One evaluation is integrated.
-- [ ] RAG failure modes are tested.
-- [ ] Prompt-injection isolation is tested.
-- [ ] Retrieval latency is measurable.
-- [ ] End-to-end RAG tests exist.
+- [x] RAG failure modes are tested.
+- [x] Prompt-injection isolation is tested.
+- [x] Retrieval latency is measurable.
+- [x] End-to-end RAG tests exist.
 
 ## 51. Implementation Phases
 
