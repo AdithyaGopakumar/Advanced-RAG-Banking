@@ -1118,8 +1118,8 @@ production-oriented scope when:
 -   [x] clarification behavior is implemented;
 -   [x] out-of-scope behavior is implemented;
 -   [x] direct prompt injection is handled;
--   [ ] indirect document injection is handled;
--   [ ] retrieved source validity is checked;
+-   [x] indirect document injection is handled;
+-   [x] retrieved source validity is checked;
 -   [x] knowledge versions are respected;
 -   [x] claim-level support can be evaluated;
 -   [ ] output grounding is validated;
@@ -1130,7 +1130,7 @@ production-oriented scope when:
 -   [x] adversarial tests exist;
 -   [x] regression evaluation exists;
 -   [x] Ragas/custom/JEV evaluation integration exists;
--   [ ] guardrail latency is benchmarked;
+-   [x] guardrail latency is benchmarked;
 -   [x] failure behavior is defined and tested.
 
 ------------------------------------------------------------------------

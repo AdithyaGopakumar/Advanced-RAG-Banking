@@ -1175,12 +1175,12 @@ The project is considered complete when:
 ## Guardrails
 
 -   [x] Deterministic input controls exist.
--   [ ] Scope control exists.
+-   [x] Scope control exists.
 -   [x] Prompt injection protection exists.
--   [ ] Retrieved-content injection protection exists.
--   [ ] PII protection exists.
--   [ ] Retrieval validation exists.
--   [ ] Output validation exists.
+-   [x] Retrieved-content injection protection exists.
+-   [x] PII protection exists.
+-   [x] Retrieval validation exists.
+-   [x] Output validation exists.
 -   [x] Unsupported claims can be detected.
 -   [x] Guardrail decisions are observable.
 

@@ -149,3 +149,37 @@ def test_no_evidence_stays_unavailable():
     assert turn.response == UNAVAILABLE_TEXT
     assert turn.response_type == "unavailable"
     assert llm.calls == 0
+
+
+def test_transaction_command_is_rejected_at_input_guardrail():
+    llm = _LLM([])
+    turn = run_agent("Transfer 5000 to account 1234567890", _resources(llm))
+
+    assert turn.response_type == "rejected"
+    assert turn.reason_code == "TRANSACTION_OUT_OF_SCOPE"
+    assert "cannot execute financial transactions" in turn.response
+    assert llm.calls == 0
+
+
+def test_pii_in_query_is_redacted_before_retrieval():
+    llm = _LLM(
+        [
+            '{"claims": [{"text": "eligibility", "support": "supported"}]}',
+            "Resident individuals are eligible.",
+        ]
+    )
+    turn = run_agent(
+        "My PAN is ABCDE1234F and Aadhaar is 5432 1234 5678, who can open a BSBDA?",
+        _resources(llm),
+        full_trace=True,
+    )
+
+    assert turn.response_type == "answer"
+    assert turn.trace is not None
+    input_trace = turn.trace.get("input_guardrail", {})
+    assert "ABCDE1234F" not in input_trace.get("normalized_query", "")
+    assert "[REDACTED_PAN]" in input_trace.get("normalized_query", "")
+    assert "[REDACTED_AADHAAR]" in input_trace.get("normalized_query", "")
+    assert "PAN" in input_trace.get("pii_detected", [])
+    assert "AADHAAR" in input_trace.get("pii_detected", [])
+

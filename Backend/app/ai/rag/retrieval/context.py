@@ -6,6 +6,7 @@ version, and heading path so a later answer can be traced back.
 
 from datetime import date
 
+from app.ai.guardrails.retrieval import sanitize_chunk_text
 from app.ai.rag.indexing.filters import MetadataFilter, matches_filter
 from app.ai.rag.retrieval.hybrid import RetrievalQueryError
 from app.ai.rag.retrieval.models import EvidenceContext, FusedCandidate, RankedEvidence
@@ -125,7 +126,8 @@ def _render_block(item: RankedEvidence) -> str:
         f"[{item.rank}] {metadata.document_title} | version {item.candidate.document_version} "
         f"| {metadata.source_path} | {headings}"
     )
-    return f"{header}\n{item.candidate.text}"
+    sanitized = sanitize_chunk_text(item.candidate.text).text
+    return f"{header}\n{sanitized}"
 
 
 def _estimate_tokens(text: str) -> int:

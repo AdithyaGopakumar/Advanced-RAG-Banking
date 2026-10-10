@@ -14,7 +14,7 @@ from langgraph.graph import END, START, StateGraph
 from app.ai.embeddings.provider import EmbeddingProvider
 from app.ai.graphs.state import AgentState
 from app.ai.guardrails.input import check_input
-from app.ai.guardrails.output import SAFE_FALLBACK, output_is_safe
+from app.ai.guardrails.output import SAFE_FALLBACK, output_is_safe, sanitize_output
 from app.ai.providers.llm import LLMNotConfiguredError, LLMProvider
 from app.ai.rag.generation.answer import GENERATION_FAILED_TEXT, compose_answer, render_response
 from app.ai.rag.generation.answer import GenerationFailed
@@ -102,6 +102,7 @@ def build_agent(resources: AgentResources):
                 "normalized_query": decision.normalized,
                 "reason_code": decision.reason_code,
                 "response": decision.response,
+                "pii_detected": decision.pii_detected,
             }
         if not decision.allowed:
             return {
@@ -233,16 +234,18 @@ def build_agent(resources: AgentResources):
         return out
 
     def output_guard(state: AgentState) -> dict[str, object]:
-        safe = output_is_safe(state.get("response", ""))
+        raw_response = state.get("response", "")
+        safe = output_is_safe(raw_response)
+        sanitized = sanitize_output(raw_response) if safe else SAFE_FALLBACK
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
         if is_full_trace:
             trace["output_guardrail"] = {
                 "output_ok": safe,
                 "fallback_triggered": not safe,
-                "final_response": state.get("response", "") if safe else SAFE_FALLBACK,
+                "final_response": sanitized,
             }
-        return {"output_ok": safe, "trace": trace}
+        return {"output_ok": safe, "response": sanitized, "trace": trace}
 
     def fallback(state: AgentState) -> dict[str, object]:
         errors = list(state.get("errors") or [])
