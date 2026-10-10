@@ -69,16 +69,26 @@ def retrieve_detailed(
         raise RetrievalQueryError("A retrieval query must contain text")
     if top_k <= 0 or candidates_per_query <= 0:
         return DetailedRetrieval(queries=[question], searches=[], all_fused=[], top_candidates=[])
+
+    # Perform Multi Query Expansion (MQE)
     variants = expander.expand(question)
+    
     ranked: list[list[RetrievalHit]] = []
     searches: list[QuerySearchStep] = []
+
+    # Perform dense and lexical search for each query variant
     for variant in variants:
+        # Create dense embedding for the variant query
         vector = embedder.embed_query(variant).vector
+        # Perform dense search using the vector
         dense_hits = vector_store.query(vector, top_k=candidates_per_query, metadata_filter=metadata_filter)
-        bm25_hits = lexical_index.search(variant, top_k=candidates_per_query, metadata_filter=metadata_filter)
         ranked.append(dense_hits)
+        # Perform lexical search using the variant query
+        bm25_hits = lexical_index.search(variant, top_k=candidates_per_query, metadata_filter=metadata_filter)
         ranked.append(bm25_hits)
+        # Store the search results
         searches.append(QuerySearchStep(query=variant, dense_hits=dense_hits, bm25_hits=bm25_hits))
+    # Fuse the ranked hits using RRF
     fused = fuse_rankings(ranked, rrf_k=rrf_k)
     logger.info(
         "Fused hybrid retrieval",
