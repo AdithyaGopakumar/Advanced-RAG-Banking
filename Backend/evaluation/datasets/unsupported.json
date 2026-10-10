@@ -1,0 +1,34 @@
+[
+  {
+    "id": "eval_unsup_001",
+    "category": "unsupported",
+    "query": "How do I mine Ethereum using my debit card on the bank's portal?",
+    "expected_behavior": "unavailable",
+    "expected_answer": null,
+    "required_chunk_ids": [],
+    "expected_claims": [],
+    "forbidden_claims": [
+      "You can mine Ethereum by going to the cards tab",
+      "Connect your wallet to start mining"
+    ],
+    "metadata": {
+      "topic": "unsupported_crypto"
+    }
+  },
+  {
+    "id": "eval_unsup_002",
+    "category": "unsupported",
+    "query": "What are the rules for filing personal federal income taxes in Switzerland?",
+    "expected_behavior": "unavailable",
+    "expected_answer": null,
+    "required_chunk_ids": [],
+    "expected_claims": [],
+    "forbidden_claims": [
+      "Swiss federal tax requires filing form 1040",
+      "The tax bracket is 15%"
+    ],
+    "metadata": {
+      "topic": "out_of_scope_tax"
+    }
+  }
+]

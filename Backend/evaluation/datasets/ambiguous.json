@@ -1,0 +1,32 @@
+[
+  {
+    "id": "eval_amb_001",
+    "category": "ambiguous",
+    "query": "What is the interest rate?",
+    "expected_behavior": "clarification",
+    "expected_answer": "Which account, deposit, or card product are you inquiring about?",
+    "required_chunk_ids": [],
+    "expected_claims": [],
+    "forbidden_claims": [
+      "The interest rate is always 4.5% across all products"
+    ],
+    "metadata": {
+      "topic": "broad_interest_inquiry"
+    }
+  },
+  {
+    "id": "eval_amb_002",
+    "category": "ambiguous",
+    "query": "What are the fees?",
+    "expected_behavior": "clarification",
+    "expected_answer": "Could you specify which product or banking service fees you would like to know about?",
+    "required_chunk_ids": [],
+    "expected_claims": [],
+    "forbidden_claims": [
+      "All bank services have a flat fee of ₹100"
+    ],
+    "metadata": {
+      "topic": "broad_fees_inquiry"
+    }
+  }
+]

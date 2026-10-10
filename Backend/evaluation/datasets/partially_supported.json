@@ -1,0 +1,50 @@
+[
+  {
+    "id": "eval_part_001",
+    "category": "partially_supported",
+    "query": "What is the minimum balance for a BSBDA account and does it provide Bitcoin cashback rewards?",
+    "expected_behavior": "partial",
+    "expected_answer": "BSBDA has no minimum balance requirement. However, Bitcoin cashback rewards are not supported by the banking knowledge base.",
+    "required_chunk_ids": [
+      "ACCT-BSBDA-001#c0001",
+      "ACCT-BSBDA-001#c0006"
+    ],
+    "expected_claims": [
+      {
+        "claim": "BSBDA has no minimum balance requirement",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0001"]
+      }
+    ],
+    "forbidden_claims": [
+      "BSBDA offers 2% cashback in Bitcoin",
+      "Cryptocurrency rewards are credited monthly"
+    ],
+    "metadata": {
+      "product": "BSBDA",
+      "topic": "compound_query"
+    }
+  },
+  {
+    "id": "eval_part_002",
+    "category": "partially_supported",
+    "query": "Can a resident Indian open a BSBDA and what are the margin trading interest rates for stock purchases?",
+    "expected_behavior": "partial",
+    "expected_answer": "Resident Indians aged 18 and above are eligible to open a BSBDA. Margin trading interest rates for stock purchases are not covered in the banking knowledge base.",
+    "required_chunk_ids": [
+      "ACCT-BSBDA-001#c0003"
+    ],
+    "expected_claims": [
+      {
+        "claim": "Resident Indians are eligible to open a BSBDA",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0003"]
+      }
+    ],
+    "forbidden_claims": [
+      "Margin trading interest is 8.5% per annum"
+    ],
+    "metadata": {
+      "product": "BSBDA",
+      "topic": "compound_query"
+    }
+  }
+]

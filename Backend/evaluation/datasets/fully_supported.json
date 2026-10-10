@@ -1,0 +1,116 @@
+[
+  {
+    "id": "eval_full_001",
+    "category": "fully_supported",
+    "query": "Who is eligible to open a Basic Savings Bank Deposit Account (BSBDA)?",
+    "expected_behavior": "answer",
+    "expected_answer": "Any resident Indian aged 18 years and above can open a BSBDA. Minors can apply jointly or through a guardian, provided the applicant does not hold another regular Savings Account in the same bank.",
+    "required_chunk_ids": [
+      "ACCT-BSBDA-001#c0003"
+    ],
+    "expected_claims": [
+      {
+        "claim": "Resident Indian aged 18 years and above",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0003"]
+      },
+      {
+        "claim": "Applicant cannot hold any other regular savings account in the same bank",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0003"]
+      }
+    ],
+    "forbidden_claims": [
+      "No residency restrictions apply",
+      "Only individuals earning over ₹50,000 per month are eligible"
+    ],
+    "metadata": {
+      "product": "BSBDA",
+      "topic": "eligibility"
+    }
+  },
+  {
+    "id": "eval_full_002",
+    "category": "fully_supported",
+    "query": "Is there a minimum balance requirement or maintenance charge for a BSBDA account?",
+    "expected_behavior": "answer",
+    "expected_answer": "No, BSBDA has zero minimum average balance requirement and no maintenance fees or charges for non-maintenance.",
+    "required_chunk_ids": [
+      "ACCT-BSBDA-001#c0001",
+      "ACCT-BSBDA-001#c0006"
+    ],
+    "expected_claims": [
+      {
+        "claim": "Zero Minimum Average Balance requirement",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0001"]
+      },
+      {
+        "claim": "No charges for non-maintenance of minimum balance",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0006"]
+      }
+    ],
+    "forbidden_claims": [
+      "A penalty of ₹500 is charged if the balance falls below ₹1,000"
+    ],
+    "metadata": {
+      "product": "BSBDA",
+      "topic": "fees_and_charges"
+    }
+  },
+  {
+    "id": "eval_full_003",
+    "category": "fully_supported",
+    "query": "What are the transaction limits for a BSBDA Small Account without complete KYC?",
+    "expected_behavior": "answer",
+    "expected_answer": "For a BSBDA Small Account, maximum balance at any time is ₹50,000, total credits in a financial year cannot exceed ₹1,00,000, and total withdrawals or transfers in a month cannot exceed ₹10,000.",
+    "required_chunk_ids": [
+      "ACCT-BSBDA-001#c0007"
+    ],
+    "expected_claims": [
+      {
+        "claim": "Maximum balance at any time is ₹50,000",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0007"]
+      },
+      {
+        "claim": "Total annual credits cannot exceed ₹1,00,000",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0007"]
+      },
+      {
+        "claim": "Total monthly withdrawals cannot exceed ₹10,000",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0007"]
+      }
+    ],
+    "forbidden_claims": [
+      "Unlimited balance is allowed without KYC"
+    ],
+    "metadata": {
+      "product": "BSBDA",
+      "topic": "limits"
+    }
+  },
+  {
+    "id": "eval_full_004",
+    "category": "fully_supported",
+    "query": "Can a customer have multiple BSBDA accounts in the bank?",
+    "expected_behavior": "answer",
+    "expected_answer": "No, as per RBI guidelines a customer can have only one BSBDA in a bank. Existing regular savings accounts must be closed within 30 days of opening a BSBDA.",
+    "required_chunk_ids": [
+      "ACCT-BSBDA-001#c0009"
+    ],
+    "expected_claims": [
+      {
+        "claim": "Only one BSBDA is permitted per customer in a bank",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0009"]
+      },
+      {
+        "claim": "Existing savings accounts must be closed within 30 days",
+        "required_evidence_ids": ["ACCT-BSBDA-001#c0009"]
+      }
+    ],
+    "forbidden_claims": [
+      "A customer can open up to 5 BSBDA accounts"
+    ],
+    "metadata": {
+      "product": "BSBDA",
+      "topic": "account_rules"
+    }
+  }
+]
