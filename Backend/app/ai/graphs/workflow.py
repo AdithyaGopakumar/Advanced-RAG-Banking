@@ -14,6 +14,7 @@ from langgraph.graph import END, START, StateGraph
 from app.ai.embeddings.provider import EmbeddingProvider
 from app.ai.graphs.state import AgentState
 from app.ai.guardrails.input import check_input
+from app.ai.guardrails.nemo_adapter import get_nemo_service
 from app.ai.guardrails.output import SAFE_FALLBACK, output_is_safe, sanitize_output
 from app.ai.observability.tracer import build_trace_config
 from app.ai.providers.llm import LLMNotConfiguredError, LLMProvider
@@ -118,21 +119,44 @@ def build_agent(resources: AgentResources):
         decision = check_input(state["user_message"], max_chars=resources.input_max_chars)
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
-        if is_full_trace:
-            trace["input_guardrail"] = {
-                "allowed": decision.allowed,
-                "normalized_query": decision.normalized,
-                "reason_code": decision.reason_code,
-                "response": decision.response,
-                "pii_detected": decision.pii_detected,
-            }
         if not decision.allowed:
+            if is_full_trace:
+                trace["input_guardrail"] = {
+                    "allowed": False,
+                    "normalized_query": decision.normalized,
+                    "reason_code": decision.reason_code,
+                    "response": decision.response,
+                    "pii_detected": decision.pii_detected,
+                    "nemo_decision": None,
+                }
             return {
                 "response": decision.response or "",
                 "response_type": "rejected",
                 "reason_code": decision.reason_code or "MALFORMED_INPUT",
                 "trace": trace,
             }
+
+        nemo_service = get_nemo_service()
+        nemo_res = nemo_service.check_input_sync(decision.normalized)
+
+        if is_full_trace:
+            trace["input_guardrail"] = {
+                "allowed": decision.allowed and nemo_res.allowed,
+                "normalized_query": decision.normalized,
+                "reason_code": nemo_res.reason_code if not nemo_res.allowed else decision.reason_code,
+                "response": nemo_res.response if not nemo_res.allowed else decision.response,
+                "pii_detected": decision.pii_detected,
+                "nemo_decision": nemo_res.model_dump(),
+            }
+
+        if not nemo_res.allowed:
+            return {
+                "response": nemo_res.response or "I can only answer banking questions from the knowledge base.",
+                "response_type": "rejected",
+                "reason_code": nemo_res.reason_code,
+                "trace": trace,
+            }
+
         return {"normalized_query": decision.normalized, "trace": trace}
 
     def retrieve_node(state: AgentState) -> dict[str, object]:
@@ -258,7 +282,24 @@ def build_agent(resources: AgentResources):
     def output_guard(state: AgentState) -> dict[str, object]:
         raw_response = state.get("response", "")
         safe = output_is_safe(raw_response)
-        sanitized = sanitize_output(raw_response) if safe else SAFE_FALLBACK
+        nemo_res = None
+        if safe:
+            nemo_service = get_nemo_service()
+            nemo_res = nemo_service.check_output_sync(
+                message=state.get("user_message", ""),
+                drafted_answer=raw_response,
+            )
+            if not nemo_res.allowed:
+                safe = False
+
+        if not safe:
+            if nemo_res and not nemo_res.allowed and nemo_res.response:
+                sanitized = nemo_res.response
+            else:
+                sanitized = SAFE_FALLBACK
+        else:
+            sanitized = sanitize_output(raw_response)
+
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
         if is_full_trace:
@@ -266,6 +307,7 @@ def build_agent(resources: AgentResources):
                 "output_ok": safe,
                 "fallback_triggered": not safe,
                 "final_response": sanitized,
+                "nemo_decision": nemo_res.model_dump() if nemo_res else None,
             }
         return {"output_ok": safe, "response": sanitized, "trace": trace}
 

@@ -37,6 +37,7 @@ class StepInputGuardrail(BaseModel):
     reason_code: str | None = None
     response: str | None = None
     pii_detected: list[str] = Field(default_factory=list)
+    nemo_decision: dict[str, object] | None = None
 
 
 class StepMQE(BaseModel):
@@ -113,6 +114,7 @@ class StepOutputGuardrail(BaseModel):
     output_ok: bool
     fallback_triggered: bool = False
     final_response: str = ""
+    nemo_decision: dict[str, object] | None = None
 
 
 class PipelineTrace(BaseModel):

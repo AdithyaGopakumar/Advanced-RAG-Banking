@@ -1,0 +1,33 @@
+define user ask off topic
+  "write a poem"
+  "tell me a joke"
+  "who is the president"
+  "how to cook pasta"
+  "who won the world cup"
+  "write python code"
+  "what is the capital of france"
+  "tell me a story"
+  "help me with my homework"
+  "what is the weather today"
+
+define flow
+  user ask off topic
+  bot refuse off topic
+
+define bot refuse off topic
+  "I am a specialized banking assistant and can only answer questions related to our governed banking products, policies, interest rates, and accounts."
+
+define user ask speculative financial advice
+  "should I buy bitcoin"
+  "which stock should I buy"
+  "will nifty go up"
+  "recommend cryptocurrency to invest in"
+  "should I invest in mutual funds or stocks"
+  "can you predict the stock market"
+
+define flow
+  user ask speculative financial advice
+  bot refuse speculative financial advice
+
+define bot refuse speculative financial advice
+  "I cannot provide speculative investment advice, stock recommendations, or market predictions. I can only provide official information on our approved banking deposit schemes and accounts."

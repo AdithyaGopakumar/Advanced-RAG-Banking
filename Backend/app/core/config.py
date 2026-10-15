@@ -97,6 +97,10 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: str = "rag-bank"
     LANGCHAIN_ENDPOINT: str = "https://api.smith.langchain.com"
 
+    # ─── Safety & Guardrails (NeMo Guardrails) ───
+    ENABLE_NEMO_GUARDRAILS: bool = False
+    NEMO_GUARDRAILS_CONFIG_PATH: str = "app/ai/guardrails/nemo"
+
     @property
     def is_production(self) -> bool:
         return self.ENVIRONMENT == "production"

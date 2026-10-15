@@ -1,0 +1,64 @@
+define user express greeting
+  "hello"
+  "hi"
+  "hey"
+  "good morning"
+  "good afternoon"
+  "good evening"
+  "namaste"
+
+define flow
+  user express greeting
+  bot express greeting
+
+define bot express greeting
+  "Hello! Welcome to RAG Bank Assistant. How can I assist you with your banking accounts, deposit schemes, or card policies today?"
+
+define user express thanks
+  "thank you"
+  "thanks"
+  "thanks a lot"
+  "thank you so much"
+
+define flow
+  user express thanks
+  bot express thanks
+
+define bot express thanks
+  "You are very welcome! Please feel free to ask if you have any questions regarding our banking products and policies."
+
+define user ask capabilities
+  "who are you"
+  "what can you do"
+  "what is your role"
+  "how can you help me"
+
+define flow
+  user ask capabilities
+  bot answer capabilities
+
+define bot answer capabilities
+  "I am the RAG Bank Assistant, designed to answer your banking inquiries strictly based on our governed banking knowledge base, including account eligibility, interest rates, service fees, and card terms."
+
+define user ask banking query
+  "what is BSBDA"
+  "what are the fixed deposit interest rates"
+  "how to open a savings account"
+  "what is the minimum balance for premier savings"
+  "tell me about debit card charges"
+  "what documents are required for KYC"
+  "what is the penalty for premature withdrawal"
+  "how can I transfer funds"
+  "what are the charges for IMPS"
+  "what is the RTGS limit"
+  "explain savings account features"
+  "can a minor open an account"
+  "tell me about fixed deposit tenure"
+  "what is the locker rent"
+
+define flow
+  user ask banking query
+  bot pass to retrieval
+
+define bot pass to retrieval
+  "PROCEED_TO_RETRIEVAL"

@@ -1122,11 +1122,11 @@ production-oriented scope when:
 -   [x] retrieved source validity is checked;
 -   [x] knowledge versions are respected;
 -   [x] claim-level support can be evaluated;
--   [ ] output grounding is validated;
+-   [x] output grounding is validated;
 -   [x] deterministic policies are separated from model-based policies;
--   [ ] NeMo Guardrails is integrated where appropriate;
+-   [x] NeMo Guardrails is integrated where appropriate;
 -   [x] guardrail decisions are represented in agent state;
--   [ ] guardrail decisions are traceable;
+-   [x] guardrail decisions are traceable;
 -   [x] adversarial tests exist;
 -   [x] regression evaluation exists;
 -   [x] Ragas/custom/JEV evaluation integration exists;

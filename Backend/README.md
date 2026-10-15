@@ -295,6 +295,8 @@ All settings live in `app/core/config.py` (Pydantic Settings) and are loaded fro
 | `LANGCHAIN_API_KEY`  | empty                            | LangSmith API key                   |
 | `LANGCHAIN_PROJECT`  | `rag-bank-development`           | LangSmith project name              |
 | `LANGCHAIN_ENDPOINT` | `https://api.smith.langchain.com` | LangSmith API endpoint              |
+| `ENABLE_NEMO_GUARDRAILS` | `false`                      | Enable NeMo Guardrails & Colang flows |
+| `NEMO_GUARDRAILS_CONFIG_PATH` | `app/ai/guardrails/nemo` | Path to NeMo config & Colang flows  |
 
 **Production validators** automatically reject unsafe config (e.g. `DEBUG=true`, wildcard hosts, default API key).
 
@@ -482,12 +484,65 @@ In compliance with banking security rules (`docs/SECURITY.md`), all deterministi
 
 ---
 
+## Guardrails & Safety Architecture
+
+The system enforces a multi-layered defense architecture (`docs/GUARDRAILS.md`) combining deterministic controls and model-aware Colang dialog flows via NVIDIA NeMo Guardrails:
+
+```
+User Query
+    ↓
+1. Deterministic Input Guardrails (Length, regex injection, PII masking, transaction scope checks)
+    ↓
+2. NeMo Input Rails & Colang Flows (Greetings, off-topic deflection, speculative advice refusal, jailbreaks)
+    ↓
+3. Governed RAG Retrieval & Semantic Grounding Assessment
+    ↓
+4. LLM Generation (Strictly evidence-bounded)
+    ↓
+5. NeMo Output Rails (Forbidden claim detection & transaction commitment blocks)
+    ↓
+6. Deterministic Output Sanitization (Leak markers, prompt protection, PII masking)
+    ↓
+Final Response Envelope
+```
+
+### NeMo Guardrails & Colang Flows
+
+Colang flow specifications reside under `app/ai/guardrails/nemo/`:
+- `banking_dialog.co`: Natural conversation handling (greetings, identity, capabilities, and pass-through to retrieval).
+- `off_topic.co`: Off-topic deflection (recipes, jokes, coding questions) and speculative financial advice refusals.
+- `jailbreaks.co`: Active prompt injection and system jailbreak deflection.
+
+### Enabling NeMo Guardrails
+
+To enable NeMo Guardrails, set the following variable in `.env`:
+
+```env
+ENABLE_NEMO_GUARDRAILS=true
+NEMO_GUARDRAILS_CONFIG_PATH="app/ai/guardrails/nemo"
+```
+
+When disabled (`ENABLE_NEMO_GUARDRAILS=false`), the system relies on the fast deterministic guardrail layer with zero overhead.
+
+### Diagnostic Endpoint
+
+Inspect live guardrails configuration, NeMo version, and safety layers via:
+
+```bash
+curl http://localhost:8000/api/v1/system/guardrails
+```
+
+---
+
 ## Tech Stack
 
 | Category      | Technology                                   |
 |---------------|----------------------------------------------|
 | Framework     | FastAPI 0.139                                |
 | Server        | Uvicorn (ASGI)                               |
+| Orchestration | LangGraph 1.0                                |
+| Guardrails    | NeMo Guardrails 0.24 (Colang) + Deterministic|
+| Observability | LangSmith 0.14                               |
 | Config        | Pydantic Settings                            |
 | Rate Limiting | slowapi                                      |
 | Logging       | stdlib `logging` + `python-json-logger`      |

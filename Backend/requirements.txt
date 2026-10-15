@@ -25,3 +25,6 @@ langgraph==1.0.10
 
 # ─── Observability ───
 langsmith==0.14.4
+
+# ─── Safety & Guardrails ───
+nemoguardrails==0.24.1
