@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════
    RAG Bank Executive Theme — Custom Glassmorphic Dark Design System
+   Comprehensive Streamlit Dark Theme Override
    ═══════════════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -9,9 +10,12 @@
   --bg-secondary: #0f172a;
   --bg-card: rgba(15, 23, 42, 0.75);
   --bg-card-hover: rgba(30, 41, 59, 0.85);
+  --bg-surface: #111827;
+  --bg-elevated: #1e293b;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-highlight: rgba(56, 189, 248, 0.25);
-  
+  --border-medium: rgba(255, 255, 255, 0.12);
+
   --brand-primary: #38bdf8;
   --brand-primary-glow: rgba(56, 189, 248, 0.2);
   --brand-accent: #6366f1;
@@ -20,38 +24,98 @@
   --brand-rose: #f43f5e;
   --brand-purple: #a855f7;
 
-  --text-primary: #f8fafc;
+  --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  
+  --text-bright: #ffffff;
+
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Base App Overrides */
-html, body, [class*="st-"] {
-  font-family: var(--font-main);
-  color: var(--text-primary);
+
+/* ═══════════════════════════════════════
+   1. BASE APP BACKGROUND & TEXT
+   ═══════════════════════════════════════ */
+
+html, body {
+  font-family: var(--font-main) !important;
+  color: var(--text-primary) !important;
+  background: var(--bg-primary) !important;
 }
 
 .stApp {
-  background: radial-gradient(circle at 15% 15%, #0d1527 0%, #080c14 100%);
-  background-attachment: fixed;
+  background: radial-gradient(circle at 15% 15%, #0d1527 0%, #080c14 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--text-primary) !important;
 }
 
-/* Header & Typography */
+/* Force all Streamlit text to use light text on dark */
+.stApp, .stApp p, .stApp span, .stApp label, .stApp div,
+.stApp li, .stApp td, .stApp th, .stApp caption {
+  color: var(--text-primary) !important;
+}
+
+/* ═══════════════════════════════════════
+   2. HEADINGS & TYPOGRAPHY
+   ═══════════════════════════════════════ */
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading) !important;
   letter-spacing: -0.02em;
+  color: var(--text-bright) !important;
 }
+
+/* Markdown paragraphs inside chat */
+.stMarkdown, .stMarkdown p {
+  color: var(--text-primary) !important;
+  line-height: 1.65;
+}
+
+/* Bold text */
+.stMarkdown strong, .stMarkdown b {
+  color: var(--text-bright) !important;
+  font-weight: 600;
+}
+
+/* Inline code */
+.stMarkdown code {
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: var(--brand-primary) !important;
+  border: 1px solid rgba(56, 189, 248, 0.15) !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85em !important;
+}
+
+/* Code blocks */
+.stMarkdown pre {
+  background: rgba(11, 17, 32, 0.9) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+.stMarkdown pre code {
+  background: transparent !important;
+  border: none !important;
+  color: #e2e8f0 !important;
+  padding: 0 !important;
+}
+
+
+/* ═══════════════════════════════════════
+   3. BRAND HEADER
+   ═══════════════════════════════════════ */
 
 .brand-header {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 16px 20px;
-  background: var(--bg-card);
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.65) 100%);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
@@ -60,49 +124,438 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .brand-icon {
-  font-size: 2.2rem;
-  background: linear-gradient(135deg, #38bdf8, #6366f1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.3));
 }
 
 .brand-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-  line-height: 1.2;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: var(--text-bright) !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
 }
 
 .brand-subtitle {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin: 0;
-  font-weight: 400;
+  font-size: 0.82rem !important;
+  color: var(--text-secondary) !important;
+  margin: 4px 0 0 0 !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
 }
 
-/* Sidebar Custom Styling */
+
+/* ═══════════════════════════════════════
+   4. SIDEBAR COMPLETE STYLING
+   ═══════════════════════════════════════ */
+
 section[data-testid="stSidebar"] {
-  background-color: #0b1120 !important;
-  border-right: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, #0b1120 0%, #0a0f1e 100%) !important;
+  border-right: 1px solid var(--border-subtle) !important;
 }
 
-section[data-testid="stSidebar"] .stMarkdown h3 {
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-top: 1.2rem;
+/* Sidebar all text */
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] div,
+section[data-testid="stSidebar"] .stMarkdown {
+  color: var(--text-primary) !important;
 }
 
-/* Status Badges & Pills */
+section[data-testid="stSidebar"] .stMarkdown h3,
+section[data-testid="stSidebar"] h3 {
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--text-secondary) !important;
+  margin-top: 1.2rem !important;
+  font-weight: 600 !important;
+}
+
+/* Sidebar captions — ensure readable */
+section[data-testid="stSidebar"] .stCaption,
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p,
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+  color: var(--text-secondary) !important;
+  font-size: 0.82rem !important;
+}
+
+/* Sidebar dividers */
+section[data-testid="stSidebar"] hr {
+  border-color: var(--border-subtle) !important;
+  margin: 12px 0 !important;
+}
+
+
+/* ═══════════════════════════════════════
+   5. BUTTONS — Sidebar & Global
+   ═══════════════════════════════════════ */
+
+/* All Streamlit buttons */
+.stButton > button,
+button[kind="secondary"],
+button[kind="primary"] {
+  background: rgba(30, 41, 59, 0.6) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 10px !important;
+  font-family: var(--font-main) !important;
+  font-weight: 500 !important;
+  font-size: 0.82rem !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.stButton > button:hover,
+button[kind="secondary"]:hover,
+button[kind="primary"]:hover {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border-color: var(--brand-primary) !important;
+  color: var(--text-bright) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15) !important;
+}
+
+.stButton > button:active {
+  transform: translateY(0) !important;
+}
+
+/* Sidebar quick query buttons — extra styling */
+section[data-testid="stSidebar"] .stButton > button {
+  text-align: left !important;
+  justify-content: flex-start !important;
+  background: rgba(15, 23, 42, 0.7) !important;
+  border: 1px solid var(--border-subtle) !important;
+  font-size: 0.8rem !important;
+  padding: 10px 14px !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button:hover {
+  background: rgba(56, 189, 248, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  padding-left: 18px !important;
+}
+
+
+/* ═══════════════════════════════════════
+   6. TEXT INPUTS
+   ═══════════════════════════════════════ */
+
+/* Text input label */
+.stTextInput > label {
+  color: var(--text-secondary) !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+}
+
+/* Text input field */
+.stTextInput input {
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 8px !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.8rem !important;
+}
+
+.stTextInput input:focus {
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 2px var(--brand-primary-glow) !important;
+}
+
+.stTextInput input:disabled {
+  opacity: 0.6 !important;
+  color: var(--text-muted) !important;
+}
+
+
+/* ═══════════════════════════════════════
+   7. TOGGLE / CHECKBOX
+   ═══════════════════════════════════════ */
+
+.stToggle label,
+.stCheckbox label,
+[data-testid="stToggle"] label,
+[data-testid="stCheckbox"] label {
+  color: var(--text-primary) !important;
+  font-size: 0.85rem !important;
+}
+
+/* Toggle track color */
+[data-testid="stToggle"] [role="checkbox"][aria-checked="true"] {
+  background-color: var(--brand-primary) !important;
+}
+
+
+/* ═══════════════════════════════════════
+   8. CAPTIONS — Global
+   ═══════════════════════════════════════ */
+
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p,
+.stCaption, .stCaption p {
+  color: var(--text-secondary) !important;
+  font-size: 0.8rem !important;
+  line-height: 1.5 !important;
+}
+
+
+/* ═══════════════════════════════════════
+   9. METRICS (st.metric)
+   ═══════════════════════════════════════ */
+
+[data-testid="stMetric"],
+[data-testid="stMetricValue"],
+[data-testid="metric-container"] {
+  background: transparent !important;
+}
+
+/* Metric label */
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] p,
+[data-testid="stMetricLabel"] label {
+  color: var(--text-secondary) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  font-weight: 600 !important;
+}
+
+/* Metric value — large prominent text */
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] div {
+  color: var(--text-bright) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+}
+
+/* Metric delta */
+[data-testid="stMetricDelta"],
+[data-testid="stMetricDelta"] div {
+  font-size: 0.75rem !important;
+}
+
+
+/* ═══════════════════════════════════════
+   10. EXPANDERS (Pipeline Trace)
+   ═══════════════════════════════════════ */
+
+/* Expander container */
+[data-testid="stExpander"],
+details[data-testid="stExpander"] {
+  background: rgba(11, 17, 32, 0.7) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+/* Expander header / summary */
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] [data-testid="stExpanderToggleIcon"],
+details summary {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+}
+
+[data-testid="stExpander"] summary:hover {
+  background: rgba(30, 41, 59, 0.7) !important;
+}
+
+/* Expander summary text */
+[data-testid="stExpander"] summary span,
+[data-testid="stExpander"] summary p {
+  color: var(--text-primary) !important;
+}
+
+/* Expander content area */
+[data-testid="stExpander"] [data-testid="stExpanderDetails"],
+[data-testid="stExpander"] > div:last-child {
+  background: rgba(11, 17, 32, 0.5) !important;
+  padding: 12px 16px !important;
+}
+
+/* All text inside expanders */
+[data-testid="stExpander"] p,
+[data-testid="stExpander"] span,
+[data-testid="stExpander"] label,
+[data-testid="stExpander"] div,
+[data-testid="stExpander"] li,
+[data-testid="stExpander"] td,
+[data-testid="stExpander"] th {
+  color: var(--text-primary) !important;
+}
+
+/* Expander h4 step titles */
+[data-testid="stExpander"] h4 {
+  color: var(--brand-primary) !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  margin-top: 16px !important;
+  margin-bottom: 8px !important;
+  padding-bottom: 6px !important;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.12) !important;
+}
+
+
+/* ═══════════════════════════════════════
+   11. DATAFRAMES & TABLES
+   ═══════════════════════════════════════ */
+
+/* Streamlit dataframe wrapper */
+[data-testid="stDataFrame"],
+[data-testid="stTable"] {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+/* Table styling */
+[data-testid="stDataFrame"] table,
+[data-testid="stTable"] table {
+  background: rgba(15, 23, 42, 0.7) !important;
+}
+
+[data-testid="stDataFrame"] th,
+[data-testid="stTable"] th {
+  background: rgba(30, 41, 59, 0.8) !important;
+  color: var(--brand-primary) !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  border-bottom: 1px solid var(--border-medium) !important;
+  padding: 8px 12px !important;
+}
+
+[data-testid="stDataFrame"] td,
+[data-testid="stTable"] td {
+  color: var(--text-primary) !important;
+  background: rgba(15, 23, 42, 0.5) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  font-size: 0.82rem !important;
+  padding: 6px 12px !important;
+}
+
+[data-testid="stDataFrame"] tr:hover td,
+[data-testid="stTable"] tr:hover td {
+  background: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* Glide data grid cells (Streamlit's internal dataframe renderer) */
+[data-testid="stDataFrame"] [class*="glideDataEditor"],
+[data-testid="stDataFrame"] canvas + div {
+  color: var(--text-primary) !important;
+}
+
+
+/* ═══════════════════════════════════════
+   12. CHAT MESSAGES
+   ═══════════════════════════════════════ */
+
+div[data-testid="stChatMessage"] {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 16px !important;
+  padding: 18px 22px !important;
+  margin-bottom: 14px !important;
+  transition: all 0.25s ease-in-out;
+}
+
+div[data-testid="stChatMessage"]:hover {
+  border-color: var(--border-highlight) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* User messages */
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+  background: rgba(30, 41, 59, 0.55) !important;
+  border-left: 3px solid var(--brand-primary) !important;
+}
+
+/* Assistant messages */
+div[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border-left: 3px solid var(--brand-emerald) !important;
+}
+
+/* Chat message text */
+div[data-testid="stChatMessage"] p,
+div[data-testid="stChatMessage"] span,
+div[data-testid="stChatMessage"] li {
+  color: var(--text-primary) !important;
+  font-size: 0.92rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Chat avatar area */
+div[data-testid="stChatMessage"] [data-testid*="chatAvatar"] {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-radius: 10px !important;
+}
+
+
+/* ═══════════════════════════════════════
+   13. CHAT INPUT
+   ═══════════════════════════════════════ */
+
+/* Bottom chat input bar */
+[data-testid="stChatInput"],
+[data-testid="stChatInputContainer"],
+.stChatInput {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 14px !important;
+}
+
+[data-testid="stChatInput"] textarea,
+[data-testid="stChatInputContainer"] textarea,
+.stChatInput textarea {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-main) !important;
+  font-size: 0.9rem !important;
+  caret-color: var(--brand-primary) !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder,
+.stChatInput textarea::placeholder {
+  color: var(--text-muted) !important;
+  font-style: italic !important;
+}
+
+/* Chat send button */
+[data-testid="stChatInput"] button,
+.stChatInput button {
+  background: var(--brand-primary) !important;
+  color: var(--bg-primary) !important;
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+[data-testid="stChatInput"] button:hover,
+.stChatInput button:hover {
+  background: #22d3ee !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3) !important;
+}
+
+
+/* ═══════════════════════════════════════
+   14. STATUS PILLS (Online / Offline)
+   ═══════════════════════════════════════ */
+
 .status-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
+  padding: 7px 16px;
   border-radius: 9999px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   margin-bottom: 8px;
@@ -110,13 +563,13 @@ section[data-testid="stSidebar"] .stMarkdown h3 {
 
 .status-online {
   background: rgba(16, 185, 129, 0.12);
-  color: #34d399;
+  color: #34d399 !important;
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .status-offline {
   background: rgba(244, 63, 94, 0.12);
-  color: #fb7185;
+  color: #fb7185 !important;
   border: 1px solid rgba(244, 63, 94, 0.3);
 }
 
@@ -142,7 +595,11 @@ section[data-testid="stSidebar"] .stMarkdown h3 {
   50% { opacity: 0.5; transform: scale(1.2); }
 }
 
-/* Support Level Badges */
+
+/* ═══════════════════════════════════════
+   15. SUPPORT LEVEL BADGES
+   ═══════════════════════════════════════ */
+
 .badge-support {
   display: inline-flex;
   align-items: center;
@@ -151,68 +608,74 @@ section[data-testid="stSidebar"] .stMarkdown h3 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 6px;
-  margin-top: 8px;
+  margin-top: 10px;
+  transition: transform 0.15s ease;
+}
+
+.badge-support:hover {
+  transform: scale(1.03);
 }
 
 .badge-fully-supported {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
   border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
 .badge-partially-supported {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
   border: 1px solid rgba(245, 158, 11, 0.35);
 }
 
 .badge-ambiguous {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
+  background: rgba(168, 85, 247, 0.15) !important;
+  color: #c084fc !important;
   border: 1px solid rgba(168, 85, 247, 0.35);
 }
 
 .badge-unavailable {
-  background: rgba(244, 63, 94, 0.15);
-  color: #fb7185;
+  background: rgba(244, 63, 94, 0.15) !important;
+  color: #fb7185 !important;
   border: 1px solid rgba(244, 63, 94, 0.35);
 }
 
 .badge-rejected {
-  background: rgba(220, 38, 38, 0.15);
-  color: #f87171;
+  background: rgba(220, 38, 38, 0.15) !important;
+  color: #f87171 !important;
   border: 1px solid rgba(220, 38, 38, 0.35);
 }
 
-/* Chat Messages */
-div[data-testid="stChatMessage"] {
-  background: var(--bg-card) !important;
-  backdrop-filter: blur(12px) !important;
-  border: 1px solid var(--border-subtle) !important;
-  border-radius: 16px !important;
-  padding: 16px 20px !important;
-  margin-bottom: 14px !important;
-  transition: all 0.2s ease-in-out;
+
+/* ═══════════════════════════════════════
+   16. CHIP TAGS (Source Chunk IDs)
+   ═══════════════════════════════════════ */
+
+.chip-tag {
+  display: inline-block;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: var(--brand-primary) !important;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin: 2px 4px 2px 0;
+  transition: all 0.15s ease;
 }
 
-div[data-testid="stChatMessage"]:hover {
-  border-color: var(--border-highlight) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+.chip-tag:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
-div[data-testid="stChatMessage"][data-role="user"] {
-  background: rgba(30, 41, 59, 0.6) !important;
-  border-left: 3px solid var(--brand-primary) !important;
-}
 
-div[data-testid="stChatMessage"][data-role="assistant"] {
-  background: rgba(15, 23, 42, 0.8) !important;
-  border-left: 3px solid #10b981 !important;
-}
+/* ═══════════════════════════════════════
+   17. TRACE PIPELINE STYLING
+   ═══════════════════════════════════════ */
 
-/* Trace Pipeline Accordion Card */
 .trace-card {
   background: rgba(11, 17, 32, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -224,47 +687,13 @@ div[data-testid="stChatMessage"][data-role="assistant"] {
 
 .trace-step-title {
   font-weight: 600;
-  color: var(--brand-primary);
+  color: var(--brand-primary) !important;
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
 }
 
-.chip-tag {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin: 2px 4px 2px 0;
-}
-
-/* Quick prompt buttons */
-button.prompt-chip {
-  width: 100%;
-  text-align: left;
-  background: rgba(30, 41, 59, 0.5) !important;
-  border: 1px solid var(--border-subtle) !important;
-  color: var(--text-primary) !important;
-  font-size: 0.82rem !important;
-  border-radius: 8px !important;
-  padding: 8px 12px !important;
-  margin-bottom: 6px !important;
-  transition: all 0.2s ease !important;
-}
-
-button.prompt-chip:hover {
-  background: rgba(56, 189, 248, 0.1) !important;
-  border-color: var(--brand-primary) !important;
-  color: #fff !important;
-  transform: translateX(2px);
-}
-
-/* Evidence and Claim Tables */
 .evidence-box {
   background: rgba(15, 23, 42, 0.6);
   border-left: 2px solid var(--brand-accent);
@@ -272,11 +701,189 @@ button.prompt-chip:hover {
   border-radius: 0 8px 8px 0;
   margin: 8px 0;
   font-size: 0.8rem;
+  color: var(--text-primary) !important;
 }
 
 .evidence-source {
-  color: var(--brand-primary);
+  color: var(--brand-primary) !important;
   font-weight: 600;
   font-size: 0.75rem;
   margin-bottom: 4px;
+}
+
+
+/* ═══════════════════════════════════════
+   18. SPINNER & LOADING STATES
+   ═══════════════════════════════════════ */
+
+[data-testid="stSpinner"] p,
+[data-testid="stSpinner"] span,
+.stSpinner p,
+.stSpinner span {
+  color: var(--brand-primary) !important;
+  font-weight: 500 !important;
+  font-size: 0.88rem !important;
+}
+
+
+/* ═══════════════════════════════════════
+   19. WARNING / ERROR / SUCCESS / INFO
+   ═══════════════════════════════════════ */
+
+/* st.warning */
+[data-testid="stAlert"][data-baseweb-alert-kind="warning"],
+.stAlert {
+  background: rgba(245, 158, 11, 0.1) !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  border-radius: 10px !important;
+  color: #fbbf24 !important;
+}
+
+[data-testid="stAlert"] p {
+  color: #fcd34d !important;
+}
+
+/* st.error */
+.stException, [role="alert"] {
+  background: rgba(220, 38, 38, 0.1) !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+  border-radius: 10px !important;
+}
+
+.stException p, [role="alert"] p {
+  color: #fca5a5 !important;
+}
+
+
+/* ═══════════════════════════════════════
+   20. TOOLTIPS & HELP TEXT
+   ═══════════════════════════════════════ */
+
+[data-testid="stTooltipContent"],
+[data-testid="stTooltipContent"] p {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* ═══════════════════════════════════════
+   21. HORIZONTAL DIVIDERS
+   ═══════════════════════════════════════ */
+
+hr, [data-testid="stHorizontalBlock"] hr {
+  border-color: var(--border-subtle) !important;
+  margin: 16px 0 !important;
+  opacity: 0.5;
+}
+
+
+/* ═══════════════════════════════════════
+   22. SCROLLBAR THEMING
+   ═══════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.2) transparent;
+}
+
+
+/* ═══════════════════════════════════════
+   23. BOTTOM TOOLBAR / FOOTER
+   ═══════════════════════════════════════ */
+
+/* Hide Streamlit's default footer for cleaner look */
+footer {
+  visibility: hidden !important;
+}
+
+/* Bottom spacing for chat input */
+.stApp > div:last-child {
+  padding-bottom: 8px !important;
+}
+
+
+/* ═══════════════════════════════════════
+   24. ANIMATIONS
+   ═══════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+div[data-testid="stChatMessage"] {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.brand-header {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Subtle hover glow on brand header */
+.brand-header:hover {
+  box-shadow: 0 8px 40px rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.12);
+}
+
+
+/* ═══════════════════════════════════════
+   25. SELECTBOX, MULTISELECT, SLIDER
+   ═══════════════════════════════════════ */
+
+[data-testid="stSelectbox"] label,
+[data-testid="stMultiSelect"] label,
+[data-testid="stSlider"] label {
+  color: var(--text-secondary) !important;
+  font-size: 0.82rem !important;
+}
+
+[data-testid="stSelectbox"] div[data-baseweb="select"],
+[data-testid="stMultiSelect"] div[data-baseweb="select"] {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: 8px !important;
+}
+
+[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+[data-testid="stMultiSelect"] div[data-baseweb="select"] span {
+  color: var(--text-primary) !important;
+}
+
+
+/* ═══════════════════════════════════════
+   26. COLUMNS LAYOUT FIX
+   ═══════════════════════════════════════ */
+
+/* Ensure columns inside expanders have proper spacing */
+[data-testid="stExpander"] [data-testid="stHorizontalBlock"] {
+  gap: 12px !important;
+}
+
+[data-testid="stExpander"] [data-testid="stColumn"] {
+  background: rgba(15, 23, 42, 0.4) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
 }

@@ -13,6 +13,16 @@ from typing import Any
 import streamlit as st
 from api_client import BackendClient
 
+# ─── Badge Configuration ───
+BADGE_MAP: dict[str, tuple[str, str]] = {
+    "fully_supported": ("badge-fully-supported", "✅ Fully Supported"),
+    "partially_supported": ("badge-partially-supported", "⚠️ Partially Supported"),
+    "ambiguous": ("badge-ambiguous", "❓ Ambiguous (Clarification Needed)"),
+    "insufficient_evidence": ("badge-unavailable", "❌ Unavailable / Insufficient Evidence"),
+    "no_relevant_evidence": ("badge-unavailable", "❌ No Governed Evidence"),
+    "rejected": ("badge-rejected", "🛑 Request Rejected"),
+}
+
 # ─── Page Configuration ───
 st.set_page_config(
     page_title="RAG Bank — Intelligent Banking Assistant",
@@ -142,6 +152,35 @@ with st.sidebar:
             st.rerun()
 
 
+# ─── Helper: Render support badge ───
+def _render_badge(support_level: str, response_type: str) -> None:
+    """Render a grounding support level badge."""
+    css_class, badge_label = BADGE_MAP.get(
+        support_level,
+        ("badge-rejected", f"🛡️ {response_type.upper()}")
+        if response_type == "rejected"
+        else ("badge-support", support_level.upper()),
+    )
+    st.markdown(
+        f'<div class="badge-support {css_class}">{badge_label}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def _render_sources(chunk_ids: list[str]) -> None:
+    """Render source chunk ID chips."""
+    if chunk_ids:
+        chips = "".join(
+            f'<span class="chip-tag">{cid}</span>' for cid in chunk_ids
+        )
+        st.markdown(
+            f"<div style='margin-top:6px;'>"
+            f"<b style='font-size:0.75rem; color:#94a3b8;'>Sources:</b> {chips}"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
+
 # ─── Main Chat Interface ───
 st.markdown(
     """
@@ -150,7 +189,7 @@ st.markdown(
         <div>
             <h1 class="brand-title">RAG Bank Intelligent Assistant</h1>
             <p class="brand-subtitle">
-                Governed Banking Knowledge • Hybrid Retrieval (Pinecone + BM25) • Claim-Level Grounding • NeMo Safety Rails
+                Governed Banking Knowledge &bull; Hybrid Retrieval (Pinecone + BM25) &bull; Claim-Level Grounding &bull; NeMo Safety Rails
             </p>
         </div>
     </div>
@@ -276,6 +315,26 @@ def render_trace_inspector(trace: dict[str, Any]) -> None:
                 st.metric("Fallback Triggered", "Yes" if og.get("fallback_triggered") else "No")
 
 
+# ─── Welcome Message (Empty State) ───
+if not st.session_state.messages:
+    st.markdown(
+        """
+        <div style="
+            text-align: center;
+            padding: 60px 24px 40px;
+            color: #64748b;
+        ">
+            <div style="font-size: 3.5rem; margin-bottom: 16px; opacity: 0.5;">🏛️</div>
+            <h3 style="color: #94a3b8 !important; font-weight: 500; margin-bottom: 8px;">Welcome to RAG Bank</h3>
+            <p style="color: #64748b !important; max-width: 420px; margin: 0 auto; font-size: 0.88rem; line-height: 1.6;">
+                Ask any banking question below. Responses are grounded in governed<br/>
+                banking knowledge with full retrieval transparency.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 # ─── Render Existing Message History ───
 for msg in st.session_state.messages:
     role = msg.get("role", "user")
@@ -291,31 +350,13 @@ for msg in st.session_state.messages:
             chunk_ids = data.get("chunk_ids") or []
             resolved_query = data.get("resolved_query")
 
-            # Support badge class mapping
-            badge_map = {
-                "fully_supported": ("badge-fully-supported", "✅ Fully Supported"),
-                "partially_supported": ("badge-partially-supported", "⚠️ Partially Supported"),
-                "ambiguous": ("badge-ambiguous", "❓ Ambiguous (Clarification Needed)"),
-                "insufficient_evidence": ("badge-unavailable", "❌ Unavailable / Insufficient Evidence"),
-                "no_relevant_evidence": ("badge-unavailable", "❌ No Governed Evidence"),
-                "rejected": ("badge-rejected", "🛑 Request Rejected"),
-            }
-            css_class, badge_label = badge_map.get(
-                support_level,
-                ("badge-rejected", f"🛡️ {response_type.upper()}") if response_type == "rejected" else ("badge-support", support_level.upper())
-            )
-
-            badge_html = f'<div class="badge-support {css_class}">{badge_label}</div>'
-            st.markdown(badge_html, unsafe_allow_html=True)
+            _render_badge(support_level, response_type)
 
             if resolved_query and resolved_query != data.get("query"):
                 st.caption(f"🔄 **Query Resolved As**: *{resolved_query}*")
 
-            if chunk_ids:
-                chips_html = "".join(f'<span class="chip-tag">{cid}</span>' for cid in chunk_ids)
-                st.markdown(f"<div style='margin-top:6px;'><b style='font-size:0.75rem; color:#94a3b8;'>Sources:</b> {chips_html}</div>", unsafe_allow_html=True)
+            _render_sources(chunk_ids)
 
-            # Trace accordion if available
             trace = data.get("trace")
             if trace:
                 render_trace_inspector(trace)
@@ -358,28 +399,12 @@ if user_query:
 
             st.markdown(response_text)
 
-            badge_map = {
-                "fully_supported": ("badge-fully-supported", "✅ Fully Supported"),
-                "partially_supported": ("badge-partially-supported", "⚠️ Partially Supported"),
-                "ambiguous": ("badge-ambiguous", "❓ Ambiguous (Clarification Needed)"),
-                "insufficient_evidence": ("badge-unavailable", "❌ Unavailable / Insufficient Evidence"),
-                "no_relevant_evidence": ("badge-unavailable", "❌ No Governed Evidence"),
-                "rejected": ("badge-rejected", "🛑 Request Rejected"),
-            }
-            css_class, badge_label = badge_map.get(
-                support_level,
-                ("badge-rejected", f"🛡️ {response_type.upper()}") if response_type == "rejected" else ("badge-support", support_level.upper())
-            )
-
-            badge_html = f'<div class="badge-support {css_class}">{badge_label}</div>'
-            st.markdown(badge_html, unsafe_allow_html=True)
+            _render_badge(support_level, response_type)
 
             if resolved_query and resolved_query != user_query:
                 st.caption(f"🔄 **Query Resolved As**: *{resolved_query}*")
 
-            if chunk_ids:
-                chips_html = "".join(f'<span class="chip-tag">{cid}</span>' for cid in chunk_ids)
-                st.markdown(f"<div style='margin-top:6px;'><b style='font-size:0.75rem; color:#94a3b8;'>Sources:</b> {chips_html}</div>", unsafe_allow_html=True)
+            _render_sources(chunk_ids)
 
             trace = data.get("trace")
             if trace:
