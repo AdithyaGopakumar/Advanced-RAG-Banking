@@ -18,37 +18,16 @@ def get_chat_service(resources: AgentResources = Depends(get_agent_resources)) -
 
 
 @router.post("", dependencies=[Depends(require_auth)])
-@router.post("/", dependencies=[Depends(require_auth)])
-@router.post("/test", dependencies=[Depends(require_auth)])
 @limiter.limit("60/minute")
-async def chat_post(
+async def chat(
     request: Request,
     payload: ChatRequest,
-    full_trace: bool | None = Query(None, alias="fullTrace", description="Optional query parameter override for full trace"),
+    full_trace: bool | None = Query(None, alias="fullTrace", description="Query param override for full trace"),
     service: ChatService = Depends(get_chat_service),
 ):
-    """Ask a banking question via POST with question/query in request body."""
+    """Ask a banking question. Expects JSON body with query, conversationId, fullTrace."""
     if full_trace is not None:
         payload.full_trace = full_trace
-    request_id = getattr(request.state, "request_id", None)
-    data = service.ask(payload, request_id=request_id)
-    return success_response(data=data.model_dump())
-
-
-@router.get("", dependencies=[Depends(require_auth)])
-@router.get("/", dependencies=[Depends(require_auth)])
-@router.get("/test", dependencies=[Depends(require_auth)])
-@limiter.limit("60/minute")
-async def chat_get(
-    request: Request,
-    question: str | None = Query(None, description="User question"),
-    query: str | None = Query(None, description="Alternative alias for question"),
-    conversation_id: str | None = Query(None, alias="conversationId", description="Conversation session ID"),
-    full_trace: bool = Query(False, alias="fullTrace", description="Include step-by-step trace"),
-    service: ChatService = Depends(get_chat_service),
-):
-    """Ask a banking question via GET for quick testing."""
-    payload = ChatRequest(question=question, query=query, conversation_id=conversation_id, full_trace=full_trace)
     request_id = getattr(request.state, "request_id", None)
     data = service.ask(payload, request_id=request_id)
     return success_response(data=data.model_dump())

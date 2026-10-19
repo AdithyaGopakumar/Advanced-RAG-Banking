@@ -146,22 +146,10 @@ class TestChatAPI:
         assert trace["generation"]["draft_answer"] == "A resident individual is eligible to open a BSBDA."
         assert trace["output_guardrail"]["output_ok"] is True
 
-    async def test_get_chat_with_full_trace(self, client):
-        resources = _build_test_resources(
-            [
-                '{"claims": [{"text": "eligibility for BSBDA", "support": "supported", "evidence_ids": ["BSBDA#c0001"]}]}',
-                "A resident individual is eligible to open a BSBDA.",
-            ]
-        )
-        app.dependency_overrides[get_agent_resources] = lambda: resources
-
+    async def test_get_chat_method_not_allowed(self, client):
+        """Verify GET /api/v1/chat is disallowed (405 Method Not Allowed)."""
         response = await client.get("/api/v1/chat", params={"query": "Who can open a BSBDA?", "fullTrace": "true"})
-        assert response.status_code == 200
-
-        body = response.json()
-        assert body["success"] is True
-        assert body["data"]["trace"] is not None
-        assert body["data"]["trace"]["input_guardrail"]["allowed"] is True
+        assert response.status_code == 405
 
     async def test_post_chat_accepts_message_field(self, client):
         resources = _build_test_resources(
@@ -201,7 +189,8 @@ class TestChatAPI:
         assert data["trace"] is not None
         assert data["trace"]["input_guardrail"]["allowed"] is True
 
-    async def test_post_chat_test_endpoint_alias(self, client):
+    async def test_post_chat_query_param_full_trace_override(self, client):
+        """Verify fullTrace query parameter overrides payload."""
         resources = _build_test_resources(
             [
                 '{"claims": [{"text": "eligibility", "support": "supported"}]}',
@@ -211,7 +200,7 @@ class TestChatAPI:
         app.dependency_overrides[get_agent_resources] = lambda: resources
 
         response = await client.post(
-            "/api/v1/chat/test",
+            "/api/v1/chat",
             json={"question": "Who can open a BSBDA?"},
             params={"fullTrace": "true"},
         )
