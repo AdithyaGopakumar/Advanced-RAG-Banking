@@ -28,3 +28,7 @@ langsmith==0.14.4
 
 # ─── Safety & Guardrails ───
 nemoguardrails==0.24.1
+
+# ─── Frontend & UI ───
+streamlit>=1.40.0
+
