@@ -96,7 +96,15 @@ def resolve_contextual_query(
     if not has_anaphora and not is_follow_up and not is_short:
         return clean_query
 
-    # Try model-based contextualization first if an active LLM provider is configured
+    # 1. Deterministic fast resolution: extract antecedent banking entity and resolve pronouns
+    entity = extract_recent_entity(history)
+    if entity and entity.lower() not in clean_query.lower():
+        if has_anaphora:
+            return _ANAPHORA_PATTERN.sub(entity, clean_query, count=1)
+        if is_follow_up or is_short:
+            return f"{clean_query} for {entity}"
+
+    # 2. Model-based contextualization fallback: for nuanced queries where entity extraction failed
     if llm is not None:
         try:
             recent_turns = history[-6:]  # Last 3 turns (user + assistant)
@@ -110,16 +118,6 @@ def resolve_contextual_query(
             if rewritten and len(rewritten) > 5 and not rewritten.lower().startswith("conversation"):
                 return rewritten
         except (LLMNotConfiguredError, Exception) as exc:
-            logger.debug("Model-based query contextualization failed (%s); using deterministic fallback", exc)
-
-    # Deterministic fallback: extract antecedent banking entity and augment the query
-    entity = extract_recent_entity(history)
-    if entity and entity.lower() not in clean_query.lower():
-        # Replace pronouns directly if present
-        if has_anaphora:
-            augmented = _ANAPHORA_PATTERN.sub(entity, clean_query, count=1)
-            return augmented
-        # Otherwise append the entity context
-        return f"{clean_query} for {entity}"
+            logger.debug("Model-based query contextualization failed (%s); returning original query", exc)
 
     return clean_query

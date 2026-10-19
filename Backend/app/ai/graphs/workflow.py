@@ -207,6 +207,15 @@ def build_agent(resources: AgentResources):
         return {"normalized_query": decision.normalized, "trace": trace}
 
     def load_context_node(state: AgentState) -> dict[str, object]:
+        """Node 2: Conversation Context Loading & Antecedent Query Resolution.
+
+        Retrieves recent turns from the governed SessionStore and reformulates
+        anaphoric follow-up queries (e.g., 'What is the minimum balance for it?')
+        into standalone banking questions before hybrid retrieval begins.
+
+        Governance Rule (AGENTS.md Rule 37):
+        - Memory is context for query understanding, NOT an authoritative source of truth.
+        """
         conversation_id = state.get("conversation_id")
         normalized_query = state.get("normalized_query", "")
         is_full_trace = state.get("full_trace", False)
@@ -220,10 +229,28 @@ def build_agent(resources: AgentResources):
                 history_messages = session.get_recent_messages(max_turns=resources.max_memory_turns)
                 formatted_history = format_history_for_prompt(history_messages)
 
-        # Contextualize follow-up query using recent turn history
+        # ── Fast path: Turn 1 (no prior history) ──
+        # When history is empty, the normalized query is already standalone.
+        if not history_messages:
+            if is_full_trace:
+                trace["conversation"] = {
+                    "conversation_id": conversation_id,
+                    "history_turns": 0,
+                    "resolved_query": normalized_query,
+                    "context": [],
+                }
+            return {
+                "conversation_context": [],
+                "resolved_query": normalized_query,
+                "trace": trace,
+            }
+
+        # ── Multi-turn contextualization ──
+        # Reformulate pronoun/anaphoric dependencies using antecedent turn entities
         resolved = resolve_contextual_query(
             normalized_query,
             history_messages,
+            llm=resources.llm,
         )
 
         if is_full_trace:
@@ -309,8 +336,9 @@ def build_agent(resources: AgentResources):
         evidence = EvidenceContext.model_validate(state["evidence"])
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
+        query = state.get("resolved_query") or state["normalized_query"]
         try:
-            decision = assess(state["normalized_query"], evidence, resources.llm)
+            decision = assess(query, evidence, resources.llm)
         except LLMNotConfiguredError as exc:
             return _failure("LLM_NOT_CONFIGURED", type(exc).__name__, state)
 
@@ -328,8 +356,9 @@ def build_agent(resources: AgentResources):
         decision = GroundingDecision.model_validate(state["decision"])
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
+        query = state.get("resolved_query") or state["normalized_query"]
         try:
-            generated = compose_answer(state["normalized_query"], evidence, decision, resources.llm)
+            generated = compose_answer(query, evidence, decision, resources.llm)
         except (GenerationFailed, LLMNotConfiguredError) as exc:
             code = "LLM_NOT_CONFIGURED" if isinstance(exc, LLMNotConfiguredError) else "GENERATION_FAILED"
             return _failure(code, type(exc).__name__, state)
