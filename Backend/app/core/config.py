@@ -70,6 +70,7 @@ class Settings(BaseSettings):
     INPUT_MAX_CHARS: int = 2000
     ENABLE_METADATA_ENRICHMENT: bool = True
     ENRICHMENT_BATCH_SIZE: int = 5
+    ENRICHMENT_MAX_WORKERS: int = 8
 
     # ─── Embeddings ───
     # Current development model. Replace after a retrieval benchmark if a better model wins.

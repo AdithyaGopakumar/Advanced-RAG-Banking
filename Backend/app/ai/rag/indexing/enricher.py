@@ -47,21 +47,52 @@ class NoOpChunkEnricher:
 
 
 class LLMChunkEnricher:
-    """Enrich chunks using a language model in batches."""
+    """Enrich chunks using a language model in parallel batches."""
 
-    def __init__(self, llm: LLMProvider, *, batch_size: int = 5) -> None:
+    def __init__(self, llm: LLMProvider, *, batch_size: int = 5, max_workers: int = 8) -> None:
         self._llm = llm
         self._batch_size = max(1, batch_size)
+        self._max_workers = max(1, max_workers)
 
     def enrich(self, chunks: Sequence[KnowledgeChunk]) -> list[KnowledgeChunk]:
         if not chunks:
             return []
 
-        enriched: list[KnowledgeChunk] = []
-        for start in range(0, len(chunks), self._batch_size):
-            batch = list(chunks[start : start + self._batch_size])
-            enriched.extend(self._enrich_batch(batch))
-        return enriched
+        batches = [
+            list(chunks[i : i + self._batch_size])
+            for i in range(0, len(chunks), self._batch_size)
+        ]
+        total_batches = len(batches)
+        print(f"Enriching {len(chunks)} chunks with LLM metadata ({total_batches} batches, concurrency={self._max_workers})...", flush=True)
+
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        import sys
+
+        enriched_results: list[tuple[int, list[KnowledgeChunk]]] = []
+        completed_count = 0
+
+        with ThreadPoolExecutor(max_workers=self._max_workers) as executor:
+            future_to_idx = {
+                executor.submit(self._enrich_batch, batch): idx
+                for idx, batch in enumerate(batches)
+            }
+            for future in as_completed(future_to_idx):
+                idx = future_to_idx[future]
+                batch_res = future.result()
+                enriched_results.append((idx, batch_res))
+                completed_count += 1
+                percent = int((completed_count / total_batches) * 100)
+                sys.stdout.write(f"\r  Progress: {completed_count}/{total_batches} batches completed ({percent}%)")
+                sys.stdout.flush()
+
+        sys.stdout.write("\n")
+        sys.stdout.flush()
+
+        enriched_results.sort(key=lambda item: item[0])
+        flattened: list[KnowledgeChunk] = []
+        for _, batch in enriched_results:
+            flattened.extend(batch)
+        return flattened
 
     def _enrich_batch(self, batch: list[KnowledgeChunk]) -> list[KnowledgeChunk]:
         user_prompt = _build_batch_prompt(batch)
@@ -103,7 +134,8 @@ def create_chunk_enricher(
         except LLMNotConfiguredError:
             return NoOpChunkEnricher()
 
-    return LLMChunkEnricher(llm, batch_size=current.ENRICHMENT_BATCH_SIZE)
+    max_workers = getattr(current, "ENRICHMENT_MAX_WORKERS", 8)
+    return LLMChunkEnricher(llm, batch_size=current.ENRICHMENT_BATCH_SIZE, max_workers=max_workers)
 
 
 def _build_batch_prompt(batch: list[KnowledgeChunk]) -> str:

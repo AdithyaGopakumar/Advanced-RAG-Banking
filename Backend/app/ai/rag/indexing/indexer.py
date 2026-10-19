@@ -37,6 +37,7 @@ def index_knowledge(
     if to_upsert:
         if enricher is not None:
             to_upsert = enricher.enrich(to_upsert)
+        print(f"Generating dense embeddings for {len(to_upsert)} chunks...", flush=True)
         embedded = embedder.embed_documents([chunk.text for chunk in to_upsert])
         records = [
             VectorRecord(
@@ -47,10 +48,14 @@ def index_knowledge(
             )
             for chunk, vector in zip(to_upsert, embedded.vectors)
         ]
+        print(f"Upserting {len(records)} vector records to {vector_store.backend_name}...", flush=True)
         vector_store.upsert(records)
-    vector_store.delete(to_delete)
+    if to_delete:
+        print(f"Deleting {len(to_delete)} removed chunks from vector store...", flush=True)
+        vector_store.delete(to_delete)
     enriched_by_id = {chunk.chunk_id: chunk for chunk in to_upsert}
     all_indexed = [enriched_by_id.get(chunk.chunk_id, chunk) for chunk in eligible]
+    print(f"Syncing {len(all_indexed)} chunks to Elasticsearch BM25 index...", flush=True)
     lexical_index.sync([(chunk.text, _metadata(chunk, embedder.model_name)) for chunk in all_indexed])
     logger.info(
         "Indexed knowledge chunks",
