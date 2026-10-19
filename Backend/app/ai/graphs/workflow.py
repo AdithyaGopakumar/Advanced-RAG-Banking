@@ -140,7 +140,11 @@ def run_agent(
 
 
 def build_agent(resources: AgentResources):
-    """Compile the workflow. Conversation persistence is intentionally absent."""
+    """Compile the governed banking LangGraph state machine.
+
+    Orchestrates input safety, multi-turn context resolution, hybrid retrieval,
+    claim-level grounding, output guardrails, and conversation persistence.
+    """
 
     def input_guard(state: AgentState) -> dict[str, object]:
         decision = check_input(state["user_message"], max_chars=resources.input_max_chars)
@@ -408,31 +412,92 @@ def build_agent(resources: AgentResources):
             resources.session_store.save(session)
         return {}
 
+    # ────────────────── Graph Assembly & Pipeline Topology ──────────────────
+    # The LangGraph StateGraph enforces strict governance boundaries across all steps.
     graph = StateGraph(AgentState)
+
+    # ────────── Register workflow nodes ──────────
+    # 1. Input Guardrails inspect raw user queries (PII redaction, prompt injection, input bounds).
     graph.add_node("input_guard", input_guard)
+
+    # 2. Context Loading resolves multi-turn conversational references & antecedents.
     graph.add_node("load_context", load_context_node)
+
+    # 3. Hybrid Retrieval executes dense Pinecone + sparse BM25 + RRF + cross-encoder reranking.
     graph.add_node("retrieve", retrieve_node)
+
+    # 4. Grounding Assessment strictly validates claims against retrieved chunks.
     graph.add_node("assess", assess_node)
+
+    # 5. Answer Generation drafts responses strictly within verified evidence boundaries.
     graph.add_node("generate", generate_node)
+
+    # 6. Policy Node returns deterministic responses for unsupported queries or clarification.
     graph.add_node("policy", policy_node)
+
+    # 7. Output Guardrails verify response safety and prevent leakage of internal instructions.
     graph.add_node("output_guard", output_guard)
+
+    # 8. Safe Fallback delivers controlled messaging if output guardrails detect unsafe content.
     graph.add_node("fallback", fallback)
+
+    # 9. Session Persistence records the audited turn into conversation memory.
     graph.add_node("persist", persist_node)
 
+    # ────────── Workflow Edges ──────────
+    # Entry point: all requests must start at input safety inspection
     graph.add_edge(START, "input_guard")
-    graph.add_conditional_edges("input_guard", _route_input, {"reject": END, "allowed": "load_context"})
+
+    # Input guardrail routing:
+    # Malicious/injection queries terminate immediately (END) with a refusal envelope.
+    # Safe queries proceed to multi-turn conversation memory resolution.
+    graph.add_conditional_edges(
+        "input_guard",
+        _route_input,
+        {"reject": END, "allowed": "load_context"},
+    )
+
+    # Sequential edge: context resolution feeds the contextualized query into hybrid retrieval
     graph.add_edge("load_context", "retrieve")
-    graph.add_conditional_edges("retrieve", _route_retrieve, {"fail": "output_guard", "assess": "assess"})
+
+    # Retrieval routing:
+    # If both dense and lexical search fail catastrophically, route directly to output safety
+    # to deliver a safe error message without attempting LLM generation.
+    # Successful candidate retrieval proceeds to claim grounding assessment.
+    graph.add_conditional_edges(
+        "retrieve",
+        _route_retrieve,
+        {"fail": "output_guard", "assess": "assess"},
+    )
+
+    # Grounding assessment routing:
+    # - Fully/partially supported claims route to answer generation.
+    # - Completely unsupported claims or missing evidence route to standard policy responses.
+    # - Evaluator failures bypass generation directly to output guardrails.
     graph.add_conditional_edges(
         "assess",
         _route_assess,
         {"generate": "generate", "policy": "policy", "fail": "output_guard"},
     )
+
+    # Both generated answers and deterministic policy responses must pass output validation
     graph.add_edge("generate", "output_guard")
     graph.add_edge("policy", "output_guard")
-    graph.add_conditional_edges("output_guard", _route_output, {"fallback": "fallback", "done": "persist"})
+
+    # Output guardrail routing:
+    # If the response leaks instructions or violates safety policies, route to static fallback;
+    # otherwise proceed directly to session persistence.
+    graph.add_conditional_edges(
+        "output_guard",
+        _route_output,
+        {"fallback": "fallback", "done": "persist"},
+    )
+
+    # Both normal completions and safe fallbacks are saved to conversation memory
+    # so multi-turn context stays consistent, then the graph terminates.
     graph.add_edge("fallback", "persist")
     graph.add_edge("persist", END)
+
     return graph.compile()
 
 
