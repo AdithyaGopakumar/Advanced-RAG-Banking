@@ -84,6 +84,13 @@ class AgentResources:
     token_budget: int = 3000
     min_score: float | None = None
     input_max_chars: int = 2000
+    compiled_graph: object = None
+
+    def get_graph(self) -> object:
+        """Return the compiled LangGraph workflow, compiling and caching it once."""
+        if self.compiled_graph is None:
+            self.compiled_graph = build_agent(self)
+        return self.compiled_graph
 
 
 def run_agent(
@@ -96,7 +103,7 @@ def run_agent(
     metadata: dict[str, object] | None = None,
 ) -> AgentTurn:
     """Run one question through input checks, retrieval, grounding, and output checks."""
-    graph = build_agent(resources)
+    graph = resources.get_graph()
     config = build_trace_config(
         request_id=request_id,
         run_name="banking_agent_turn",
