@@ -11,16 +11,23 @@ Implements model-aware conversational controls using NVIDIA NeMo Guardrails:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 import time
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.core.config import get_settings
+
+try:
+    import nest_asyncio
+    nest_asyncio.apply()
+except ImportError:
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +69,14 @@ class NeMoGuardrailsService:
         self._initialized = False
 
     def _ensure_initialized(self) -> bool:
-        """Lazy initialization of LLMRails from the configured Colang path."""
+        """Lazy initialization of LLMRails from the configured Colang path.
+
+        NeMo Initialization Lifecycle:
+        - Only executes once (singleton pattern guarded by `self._initialized`).
+        - Loads `config.yml` (specifies embeddings_only mode and LLM engine).
+        - Compiles Colang `.co` files (dialog flows, canonical user intents, and bot actions).
+        - Reuses the compiled `LLMRails` instance across all concurrent queries.
+        """
         if self._initialized:
             return self._rails is not None
 
@@ -75,7 +89,7 @@ class NeMoGuardrailsService:
 
             resolved_path = self.config_path
             if not resolved_path.is_absolute():
-                # Resolve relative to backend root
+                # Resolve relative to backend root directory
                 backend_dir = Path(__file__).resolve().parent.parent.parent.parent
                 resolved_path = backend_dir / self.config_path
 
@@ -83,6 +97,7 @@ class NeMoGuardrailsService:
                 logger.warning("NeMo Guardrails config directory not found: %s", resolved_path)
                 return False
 
+            # Compile Colang flow trees and build the LLMRails execution engine
             config = RailsConfig.from_path(str(resolved_path))
             self._rails = LLMRails(config=config)
             logger.info("NeMo Guardrails successfully loaded from %s", resolved_path)
@@ -93,21 +108,27 @@ class NeMoGuardrailsService:
             return False
 
     async def check_input(self, message: str) -> NemoRailDecision:
-        """Evaluate input rails and Colang dialog flows.
+        """Evaluate input rails and Colang dialog flows against the user query.
+
+        How NeMo Intent Routing Works:
+        1. Semantic Match: NeMo embeds the incoming message and compares it against canonical
+           intents defined in `.co` files (e.g., `user express greeting`, `user ask banking query`).
+        2. Banking Inquiries: Legit banking questions map to `bot pass to retrieval`, which emits
+           the special sentinel token `PROCEED_TO_RETRIEVAL`. The adapter interprets this as `allowed=True`.
+        3. Dialog Rails: Greetings, thanks, or capability queries trigger conversational flows and
+           are intercepted immediately (`allowed=False, action="intercept"`), avoiding RAG overhead.
+        4. Deflection Rails: Off-topic questions (recipes, poems) or jailbreak attempts trigger
+           refusal flows and are blocked immediately (`allowed=False, action="block"`).
 
         Returns:
-            NemoRailDecision with:
-            - allowed=True, action="allow", reason_code="NEMO_PASSED" when query should proceed to RAG.
-            - allowed=False, action="intercept", reason_code="NEMO_GREETING" / "NEMO_CONVERSATIONAL"
-              when query is conversational (e.g. greeting or capabilities).
-            - allowed=False, action="block", reason_code="NEMO_OFF_TOPIC" / "NEMO_JAILBREAK"
-              when query violates safety or topical boundaries.
+            NemoRailDecision with structured metadata, action, and latency.
         """
         if not self.enabled or not self._ensure_initialized() or self._rails is None:
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
 
         start_time = time.perf_counter()
         try:
+            # Generate response through NeMo's Colang state machine
             res = await self._rails.generate_async(messages=[{"role": "user", "content": message}])
             latency = (time.perf_counter() - start_time) * 1000
 
@@ -119,7 +140,7 @@ class NeMoGuardrailsService:
             elif isinstance(res, str):
                 content = res.strip()
 
-            # 1. On-topic banking questions mapped to PROCEED_TO_RETRIEVAL
+            # 1. On-topic banking questions mapped to PROCEED_TO_RETRIEVAL sentinel
             if content == PROCEED_TOKEN or not content:
                 return NemoRailDecision(
                     allowed=True,
@@ -128,7 +149,7 @@ class NeMoGuardrailsService:
                     latency_ms=round(latency, 2),
                 )
 
-            # 2. Jailbreak refusal
+            # 2. Jailbreak refusal flow
             if "cannot bypass system policies" in content.lower():
                 return NemoRailDecision(
                     allowed=False,
@@ -236,16 +257,23 @@ class NeMoGuardrailsService:
                 latency_ms=round(latency, 2),
             )
 
+    def _run_sync(self, coro: Any) -> Any:
+        """Run an async coroutine synchronously, handling active or nested event loops."""
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
+            return loop.run_until_complete(coro)
+        return asyncio.run(coro)
+
     def check_input_sync(self, message: str) -> NemoRailDecision:
         """Synchronous wrapper for check_input to support synchronous workflows."""
         if not self.enabled:
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
         try:
-            import asyncio
-            import nest_asyncio
-
-            nest_asyncio.apply()
-            return asyncio.run(self.check_input(message))
+            return self._run_sync(self.check_input(message))
         except Exception as exc:
             logger.warning("NeMo sync input check error, falling back: %s", exc)
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_ERROR_FALLBACK")
@@ -260,11 +288,7 @@ class NeMoGuardrailsService:
         if not self.enabled:
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
         try:
-            import asyncio
-            import nest_asyncio
-
-            nest_asyncio.apply()
-            return asyncio.run(self.check_output(message, drafted_answer, evidence))
+            return self._run_sync(self.check_output(message, drafted_answer, evidence))
         except Exception as exc:
             logger.warning("NeMo sync output check error, falling back: %s", exc)
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_ERROR_FALLBACK")
@@ -272,5 +296,9 @@ class NeMoGuardrailsService:
 
 @lru_cache()
 def get_nemo_service() -> NeMoGuardrailsService:
-    """Cached singleton provider for NeMo Guardrails service."""
+    """Cached singleton provider for NeMo Guardrails service.
+
+    Ensures the heavy LLMRails instance and parsed Colang rules are initialized
+    only once during the server lifecycle and reused across all requests.
+    """
     return NeMoGuardrailsService()
