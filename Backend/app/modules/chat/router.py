@@ -43,11 +43,12 @@ async def chat_get(
     request: Request,
     question: str | None = Query(None, description="User question"),
     query: str | None = Query(None, description="Alternative alias for question"),
+    conversation_id: str | None = Query(None, alias="conversationId", description="Conversation session ID"),
     full_trace: bool = Query(False, alias="fullTrace", description="Include step-by-step trace"),
     service: ChatService = Depends(get_chat_service),
 ):
     """Ask a banking question via GET for quick testing."""
-    payload = ChatRequest(question=question, query=query, full_trace=full_trace)
+    payload = ChatRequest(question=question, query=query, conversation_id=conversation_id, full_trace=full_trace)
     request_id = getattr(request.state, "request_id", None)
     data = service.ask(payload, request_id=request_id)
     return success_response(data=data.model_dump())

@@ -15,6 +15,7 @@ class ChatRequest(BaseModel):
     question: str | None = Field(default=None, description="The user's banking question.")
     query: str | None = Field(default=None, description="Alternative alias for question.")
     message: str | None = Field(default=None, description="Alternative alias for question.")
+    conversation_id: str | None = Field(default=None, alias="conversationId", description="Optional conversation session ID for multi-turn history.")
     full_trace: bool = Field(default=False, alias="fullTrace", description="Return full trace of each step.")
 
     @property
@@ -123,6 +124,7 @@ class PipelineTrace(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     input_guardrail: StepInputGuardrail | None = None
+    conversation: dict[str, object] | None = None
     mqe: StepMQE | None = None
     vector_search: list[QueryHits] | None = None
     bm25_search: list[QueryHits] | None = None
@@ -137,10 +139,12 @@ class PipelineTrace(BaseModel):
 class ChatResponseData(BaseModel):
     """Chat response payload inside the standard envelope."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
 
+    conversation_id: str | None = Field(default=None, alias="conversationId")
     question: str = ""
     query: str = ""
+    resolved_query: str | None = Field(default=None, alias="resolvedQuery")
     response: str
     response_type: str
     support_level: str | None = None

@@ -10,8 +10,11 @@ from typing import TypedDict
 class AgentState(TypedDict, total=False):
     """Fields the workflow reads and writes. Nodes return only what they change."""
 
+    conversation_id: str | None
     user_message: str
     normalized_query: str
+    resolved_query: str
+    conversation_context: list[dict[str, str]]
     evidence: dict[str, object]
     decision: dict[str, object]
     support_level: str

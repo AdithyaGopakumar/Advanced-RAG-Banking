@@ -52,6 +52,10 @@ def _build_agent_resources(settings: Settings) -> AgentResources:
         logger.warning("LLM provider unavailable (%s); using unconfigured LLM fallback", exc)
         llm = UnconfiguredLLMProvider()
 
+    from app.ai.memory import get_session_store
+
+    session_store = get_session_store() if settings.ENABLE_CONVERSATION_MEMORY else None
+
     return AgentResources(
         embedder=embedder,
         vector_store=vector_store,
@@ -59,6 +63,8 @@ def _build_agent_resources(settings: Settings) -> AgentResources:
         expander=expander,
         reranker=reranker,
         llm=llm,
+        session_store=session_store,
+        max_memory_turns=settings.MAX_MEMORY_TURNS,
         top_k=settings.RETRIEVAL_TOP_K,
         candidates_per_query=settings.RETRIEVAL_CANDIDATES_PER_QUERY,
         rrf_k=settings.RETRIEVAL_RRF_K,

@@ -1137,12 +1137,12 @@ The project is considered complete when:
 
 ## Product
 
--   [ ] Users can ask banking questions conversationally.
--   [ ] Supported questions receive grounded answers.
--   [ ] Unsupported questions do not result in fabricated information.
--   [ ] Partial-support queries return supported portions.
--   [ ] Ambiguous queries produce targeted clarification questions.
--   [ ] Out-of-scope queries are handled according to policy.
+-   [x] Users can ask banking questions conversationally.
+-   [x] Supported questions receive grounded answers.
+-   [x] Unsupported questions do not result in fabricated information.
+-   [x] Partial-support queries return supported portions.
+-   [x] Ambiguous queries produce targeted clarification questions.
+-   [x] Out-of-scope queries are handled according to policy.
 
 ## Knowledge
 
@@ -1166,8 +1166,8 @@ The project is considered complete when:
 ## Agent
 
 -   [x] Agent workflow is explicit and traceable.
--   [ ] Conversation context works.
--   [ ] Query understanding works.
+-   [x] Conversation context works.
+-   [x] Query understanding works.
 -   [x] Answer generation is grounded.
 -   [x] Partial-answer behavior works.
 -   [x] Clarification behavior works.

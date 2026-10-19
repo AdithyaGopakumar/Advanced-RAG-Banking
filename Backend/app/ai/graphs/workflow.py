@@ -16,6 +16,12 @@ from app.ai.graphs.state import AgentState
 from app.ai.guardrails.input import check_input
 from app.ai.guardrails.nemo_adapter import get_nemo_service
 from app.ai.guardrails.output import SAFE_FALLBACK, output_is_safe, sanitize_output
+from app.ai.memory import (
+    ConversationSession,
+    SessionStore,
+    format_history_for_prompt,
+    resolve_contextual_query,
+)
 from app.ai.observability.tracer import build_trace_config
 from app.ai.providers.llm import LLMNotConfiguredError, LLMProvider
 from app.ai.rag.generation.answer import GENERATION_FAILED_TEXT, compose_answer, render_response
@@ -47,6 +53,8 @@ class AgentTurn(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    conversation_id: str | None = None
+    resolved_query: str | None = None
     response: str
     response_type: str
     support_level: str | None = None
@@ -66,6 +74,8 @@ class AgentResources:
     expander: QueryExpander
     reranker: CrossEncoderReranker
     llm: LLMProvider
+    session_store: SessionStore | None = None
+    max_memory_turns: int = 5
     metadata_filter: MetadataFilter | None = None
     top_k: int = 8
     candidates_per_query: int = 20
@@ -80,6 +90,7 @@ def run_agent(
     message: str,
     resources: AgentResources,
     *,
+    conversation_id: str | None = None,
     full_trace: bool = False,
     request_id: str | None = None,
     metadata: dict[str, object] | None = None,
@@ -90,6 +101,7 @@ def run_agent(
         request_id=request_id,
         run_name="banking_agent_turn",
         metadata={
+            "conversation_id": conversation_id,
             "full_trace": full_trace,
             "top_k": resources.top_k,
             "evidence_top_k": resources.evidence_top_k,
@@ -98,10 +110,18 @@ def run_agent(
         },
     )
     state = graph.invoke(
-        {"user_message": message, "full_trace": full_trace, "errors": [], "trace": {}},
+        {
+            "conversation_id": conversation_id,
+            "user_message": message,
+            "full_trace": full_trace,
+            "errors": [],
+            "trace": {},
+        },
         config=config,
     )
     return AgentTurn(
+        conversation_id=conversation_id,
+        resolved_query=state.get("resolved_query"),
         response=state.get("response", ""),
         response_type=state.get("response_type", "error"),
         support_level=state.get("support_level"),
@@ -159,8 +179,42 @@ def build_agent(resources: AgentResources):
 
         return {"normalized_query": decision.normalized, "trace": trace}
 
+    def load_context_node(state: AgentState) -> dict[str, object]:
+        conversation_id = state.get("conversation_id")
+        normalized_query = state.get("normalized_query", "")
+        is_full_trace = state.get("full_trace", False)
+        trace = dict(state.get("trace") or {})
+
+        history_messages = []
+        formatted_history = []
+        if conversation_id and resources.session_store is not None:
+            session = resources.session_store.get(conversation_id)
+            if session:
+                history_messages = session.get_recent_messages(max_turns=resources.max_memory_turns)
+                formatted_history = format_history_for_prompt(history_messages)
+
+        # Contextualize follow-up query using recent turn history
+        resolved = resolve_contextual_query(
+            normalized_query,
+            history_messages,
+        )
+
+        if is_full_trace:
+            trace["conversation"] = {
+                "conversation_id": conversation_id,
+                "history_turns": len(history_messages) // 2,
+                "resolved_query": resolved,
+                "context": formatted_history,
+            }
+
+        return {
+            "conversation_context": formatted_history,
+            "resolved_query": resolved,
+            "trace": trace,
+        }
+
     def retrieve_node(state: AgentState) -> dict[str, object]:
-        question = state["normalized_query"]
+        question = state.get("resolved_query") or state["normalized_query"]
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
         try:
@@ -331,16 +385,36 @@ def build_agent(resources: AgentResources):
             "trace": trace,
         }
 
+    def persist_node(state: AgentState) -> dict[str, object]:
+        conversation_id = state.get("conversation_id")
+        if conversation_id and resources.session_store is not None:
+            session = resources.session_store.get(conversation_id) or ConversationSession(
+                conversation_id=conversation_id
+            )
+            session.add_turn(
+                user_content=state.get("user_message", ""),
+                assistant_content=state.get("response", ""),
+                response_type=state.get("response_type"),
+                reason_code=state.get("reason_code"),
+                chunk_ids=state.get("chunk_ids"),
+            )
+            resources.session_store.save(session)
+        return {}
+
     graph = StateGraph(AgentState)
     graph.add_node("input_guard", input_guard)
+    graph.add_node("load_context", load_context_node)
     graph.add_node("retrieve", retrieve_node)
     graph.add_node("assess", assess_node)
     graph.add_node("generate", generate_node)
     graph.add_node("policy", policy_node)
     graph.add_node("output_guard", output_guard)
     graph.add_node("fallback", fallback)
+    graph.add_node("persist", persist_node)
+
     graph.add_edge(START, "input_guard")
-    graph.add_conditional_edges("input_guard", _route_input, {"reject": END, "retrieve": "retrieve"})
+    graph.add_conditional_edges("input_guard", _route_input, {"reject": END, "allowed": "load_context"})
+    graph.add_edge("load_context", "retrieve")
     graph.add_conditional_edges("retrieve", _route_retrieve, {"fail": "output_guard", "assess": "assess"})
     graph.add_conditional_edges(
         "assess",
@@ -349,15 +423,16 @@ def build_agent(resources: AgentResources):
     )
     graph.add_edge("generate", "output_guard")
     graph.add_edge("policy", "output_guard")
-    graph.add_conditional_edges("output_guard", _route_output, {"fallback": "fallback", "done": END})
-    graph.add_edge("fallback", END)
+    graph.add_conditional_edges("output_guard", _route_output, {"fallback": "fallback", "done": "persist"})
+    graph.add_edge("fallback", "persist")
+    graph.add_edge("persist", END)
     return graph.compile()
 
 
 def _route_input(state: AgentState) -> str:
     if state.get("response_type") == "rejected":
         return "reject"
-    return "retrieve"
+    return "allowed"
 
 
 def _route_retrieve(state: AgentState) -> str:

@@ -101,6 +101,10 @@ class Settings(BaseSettings):
     ENABLE_NEMO_GUARDRAILS: bool = False
     NEMO_GUARDRAILS_CONFIG_PATH: str = "app/ai/guardrails/nemo"
 
+    # ─── Conversation Memory & Session State ───
+    ENABLE_CONVERSATION_MEMORY: bool = True
+    MAX_MEMORY_TURNS: int = 5
+
     @property
     def is_production(self) -> bool:
         return self.ENVIRONMENT == "production"

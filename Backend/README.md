@@ -297,6 +297,8 @@ All settings live in `app/core/config.py` (Pydantic Settings) and are loaded fro
 | `LANGCHAIN_ENDPOINT` | `https://api.smith.langchain.com` | LangSmith API endpoint              |
 | `ENABLE_NEMO_GUARDRAILS` | `false`                      | Enable NeMo Guardrails & Colang flows |
 | `NEMO_GUARDRAILS_CONFIG_PATH` | `app/ai/guardrails/nemo` | Path to NeMo config & Colang flows  |
+| `ENABLE_CONVERSATION_MEMORY` | `true`                   | Enable multi-turn session state & memory |
+| `MAX_MEMORY_TURNS`   | `5`                              | Maximum turns preserved in memory context |
 
 **Production validators** automatically reject unsafe config (e.g. `DEBUG=true`, wildcard hosts, default API key).
 
@@ -531,6 +533,62 @@ Inspect live guardrails configuration, NeMo version, and safety layers via:
 ```bash
 curl http://localhost:8000/api/v1/system/guardrails
 ```
+
+---
+
+## Multi-Turn Conversation Memory & Session Continuity
+
+The chat agent supports continuous multi-turn conversations while enforcing the strict **Knowledge-Base-Only Policy** (`AGENTS.md` Sections 36 & 37, `docs/AGENT_DESIGN.md` Section 12).
+
+### Information Hierarchy & Primacy Rules
+
+```text
+Governed Knowledge Base Evidence
+        >
+Conversation Memory (Context Only)
+        >
+LLM Pretrained Knowledge (Never Authoritative)
+```
+
+- **Reference Resolution Only**: Conversation memory is used strictly to resolve anaphora, pronouns ("it", "this card", "that account"), and inherit antecedent banking products/entities across follow-ups.
+- **No Hallucinated Authority**: Facts or statements made in previous conversational turns cannot bypass retrieval grounding. Answering banking claims requires evidence from the governed knowledge base.
+
+### API Usage
+
+To maintain continuity across dialogue turns, pass the `conversationId` returned from turn 1 into subsequent requests:
+
+#### Turn 1: Initial Question
+```bash
+curl -X POST http://localhost:8000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What are the Fixed Deposit interest rates?"}'
+```
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "conversationId": "c92d5218-e8cb-469b-8f19-a1b7e4f9b231",
+    "query": "What are the Fixed Deposit interest rates?",
+    "resolvedQuery": "What are the Fixed Deposit interest rates?",
+    "response": "Fixed deposit rates range up to 7.25% p.a. depending on tenure.",
+    "response_type": "answer",
+    "support_level": "fully_supported"
+  }
+}
+```
+
+#### Turn 2: Contextual Follow-up
+```bash
+curl -X POST http://localhost:8000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conversationId": "c92d5218-e8cb-469b-8f19-a1b7e4f9b231",
+    "query": "What about premature closure?",
+    "fullTrace": true
+  }'
+```
+The agent automatically loads recent session history, resolves the query to `"What about premature closure? for Fixed Deposit"`, and executes hybrid retrieval against the governed corpus.
 
 ---
 

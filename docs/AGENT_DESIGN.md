@@ -960,12 +960,12 @@ A trace should identify the versions used for a given response.
 - Clarification policy
 - NeMo Guardrails integration
 
-## Phase D — Conversation Context
-- Conversation storage
-- Context selection
-- Follow-up resolution
-- Context-window management
-- Context safety rules
+## Phase D — Conversation Context (Implemented)
+- [x] Conversation storage (`SessionStore`, thread-safe `InMemorySessionStore`)
+- [x] Context selection (bounded recent turns via `MAX_MEMORY_TURNS`)
+- [x] Follow-up resolution (`resolve_contextual_query` with pronoun resolution and antecedent entity inheritance)
+- [x] Context-window management (`format_history_for_prompt`, turn truncation)
+- [x] Context safety rules (`Knowledge Base Evidence > Conversation Memory > LLM Pretrained Knowledge`)
 
 ## Phase E — Observability
 - LangSmith integration
