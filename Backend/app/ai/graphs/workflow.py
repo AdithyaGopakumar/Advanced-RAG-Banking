@@ -268,10 +268,25 @@ def build_agent(resources: AgentResources):
         }
 
     def retrieve_node(state: AgentState) -> dict[str, object]:
+        """Node 3: Hybrid Retrieval, Reciprocal Rank Fusion (RRF) & Context Assembly.
+
+        Executes the 6-stage governed retrieval pipeline:
+        1. Multi-Query Expansion (MQE): Generates diverse semantic query variations.
+        2. Dual-Path Retrieval:
+           - Dense Vector Search: Pinecone semantic similarity on embeddings.
+           - Sparse Lexical Search: Elasticsearch native BM25 for banking acronyms & keywords.
+        3. Reciprocal Rank Fusion (RRF): Reconciles non-comparable score distributions.
+        4. Semantic Cross-Encoder Reranking: High-precision neural reranking (`ms-marco-MiniLM`).
+        5. Effective Date & Governance Filtering: Eliminates expired or unapproved policies.
+        6. Governed Context Assembly: Concatenates top chunks within strict token budget.
+        """
+        # Prioritize contextualized query from Node 2; fallback to normalized user query
         question = state.get("resolved_query") or state["normalized_query"]
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
+
         try:
+            # ── Stages 1 to 3: MQE + Dense/Sparse Search + Reciprocal Rank Fusion (RRF) ──
             retrieval = retrieve_detailed(
                 question,
                 embedder=resources.embedder,
@@ -283,6 +298,8 @@ def build_agent(resources: AgentResources):
                 candidates_per_query=resources.candidates_per_query,
                 rrf_k=resources.rrf_k,
             )
+
+            # ── Stages 4 & 5: Cross-Encoder Neural Reranking & Effective Date Filtering ──
             ranked_evidence = select_evidence(
                 question,
                 retrieval.top_candidates,
@@ -291,15 +308,19 @@ def build_agent(resources: AgentResources):
                 min_score=resources.min_score,
                 top_k=resources.evidence_top_k,
             )
+
+            # ── Stage 6: Governed Context Construction & Token Budget Enforcement ──
             evidence = assemble_context(
                 question,
                 ranked_evidence,
                 token_budget=resources.token_budget,
             )
         except Exception as exc:
+            # On network timeouts or vector DB outages, fail gracefully to safe error response
             logger.warning("Retrieval failed", extra={"error_type": type(exc).__name__})
             return _failure("RETRIEVAL_FAILURE", type(exc).__name__, state)
 
+        # ── Pipeline Telemetry: Full Trace Instrumentation ──
         if is_full_trace:
             trace["mqe"] = {"queries": retrieval.queries}
             trace["vector_search"] = [
