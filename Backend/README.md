@@ -102,13 +102,16 @@ pip install -r requirements.txt
 # 4. Configure environment
 cp .env.example .env           # On Windows: copy .env.example .env
 
-# 5. Start the server
-uvicorn main:app --reload
-# or
+# 5. Start the backend server
 python run.py
+# (or uvicorn main:app --reload)
+
+# 6. Launch the Streamlit UI (in a new terminal)
+.\.venv\Scripts\streamlit.exe run ../frontend/app.py
 ```
 
-The server starts at **http://localhost:8000** with hot-reload enabled in development.
+The backend server runs at **http://localhost:8000** (Swagger docs at `/docs`).
+The Streamlit interface runs at **http://localhost:8501**.
 
 ### Knowledge ingestion
 
