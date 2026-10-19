@@ -146,10 +146,24 @@ def build_agent(resources: AgentResources):
     claim-level grounding, output guardrails, and conversation persistence.
     """
 
+    # Resolve NeMo service once during graph compilation
+    nemo_service = get_nemo_service()
+
     def input_guard(state: AgentState) -> dict[str, object]:
-        decision = check_input(state["user_message"], max_chars=resources.input_max_chars)
+        """Node 1: Layered Input Guardrails (Deterministic + NeMo Colang Rails).
+
+        Executes two defensive layers:
+        1. Sub-millisecond deterministic checks (control chars, length bounds, injection regex, scope, PII redaction).
+        2. Semantic Colang rails (off-topic deflection, jailbreak evasion, speculative advice refusal, greetings).
+        """
+        user_message = state["user_message"]
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
+
+        # ── Step 1: Deterministic fast validation ──
+        decision = check_input(user_message, max_chars=resources.input_max_chars)
+
+        # Early exit if deterministic safety checks fail
         if not decision.allowed:
             if is_full_trace:
                 trace["input_guardrail"] = {
@@ -167,7 +181,7 @@ def build_agent(resources: AgentResources):
                 "trace": trace,
             }
 
-        nemo_service = get_nemo_service()
+        # ── Step 2: Semantic & dialog rails via NVIDIA NeMo Guardrails ──
         nemo_res = nemo_service.check_input_sync(decision.normalized)
 
         if is_full_trace:
@@ -180,6 +194,7 @@ def build_agent(resources: AgentResources):
                 "nemo_decision": nemo_res.model_dump(),
             }
 
+        # Early exit if NeMo blocks (off-topic, jailbreak, speculative advice) or intercepts (greetings)
         if not nemo_res.allowed:
             return {
                 "response": nemo_res.response or "I can only answer banking questions from the knowledge base.",
@@ -188,6 +203,7 @@ def build_agent(resources: AgentResources):
                 "trace": trace,
             }
 
+        # Both gates passed: propagate sanitized, PII-redacted query downstream
         return {"normalized_query": decision.normalized, "trace": trace}
 
     def load_context_node(state: AgentState) -> dict[str, object]:
