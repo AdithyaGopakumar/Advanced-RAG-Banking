@@ -15,6 +15,7 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 
 from app.ai.embeddings.factory import create_embedding_provider
 from app.ai.embeddings.provider import EmbeddingProvider
+from app.ai.rag.indexing.enricher import ChunkEnricher, create_chunk_enricher
 from app.ai.rag.indexing.indexer import diff_chunks, index_knowledge
 from app.ai.rag.indexing.lexical import ElasticsearchLexicalIndex, create_lexical_index
 from app.ai.rag.indexing.models import IndexManifest
@@ -54,6 +55,7 @@ def run_ingestion(
     embedder: EmbeddingProvider | None = None,
     vector_store: VectorStore | None = None,
     lexical_index: ElasticsearchLexicalIndex | None = None,
+    enricher: ChunkEnricher | None = None,
     manifest_path: Path | None = None,
 ) -> IngestionResult:
     """Validate the knowledge base and index every eligible chunk."""
@@ -64,6 +66,8 @@ def run_ingestion(
     vector_store = vector_store if vector_store is not None else create_vector_store(current)
     if lexical_index is None:
         lexical_index = create_lexical_index(current)
+    if enricher is None:
+        enricher = create_chunk_enricher(current)
     eligible = build.eligible_chunks
     previous = _load_previous(destination, embedder, vector_store)
     previous_hashes = previous.hashes_by_id() if previous is not None else {}
@@ -74,6 +78,7 @@ def run_ingestion(
         vector_store,
         lexical_index,
         embedding_provider=current.EMBEDDING_PROVIDER.strip().lower(),
+        enricher=enricher,
         previous=previous,
     )
     saved = _save_manifest(destination, manifest)

@@ -546,6 +546,22 @@ def _assemble(
     drafts: list[tuple[KnowledgeSection | None, list[tuple[int, str]], _Piece]],
 ) -> list[KnowledgeChunk]:
     metadata = document.metadata
+    doc_keywords: list[str] = []
+    if metadata.keywords:
+        doc_keywords.extend(metadata.keywords)
+    if metadata.search_aliases:
+        doc_keywords.extend(metadata.search_aliases)
+    if metadata.tags:
+        doc_keywords.extend(metadata.tags)
+
+    seen: set[str] = set()
+    initial_keywords: list[str] = []
+    for item in doc_keywords:
+        cleaned = item.strip()
+        if cleaned and cleaned.casefold() not in seen:
+            seen.add(cleaned.casefold())
+            initial_keywords.append(cleaned)
+
     chunks: list[KnowledgeChunk] = []
     for index, (section, breadcrumbs, piece) in enumerate(drafts):
         heading_path = [heading for _level, heading in breadcrumbs]
@@ -564,9 +580,11 @@ def _assemble(
                 status=metadata.status,
                 effective_from=metadata.effective_from,
                 effective_until=metadata.effective_until,
+                category=metadata.category,
                 product=metadata.sub_category,
                 jurisdiction=metadata.region,
                 audience=metadata.target_audience,
+                keywords=list(initial_keywords),
                 source_location=source_location,
                 source_path=document.source_path,
                 content=piece.body,

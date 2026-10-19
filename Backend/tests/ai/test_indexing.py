@@ -30,6 +30,7 @@ def _chunk(
     eligible: bool = True,
     status: str = "approved",
     product: str = "bsbda",
+    keywords: list[str] | None = None,
     effective_from: str | None = "2026-01-01",
     effective_until: str | None = None,
 ) -> KnowledgeChunk:
@@ -48,6 +49,7 @@ def _chunk(
         product=product,
         jurisdiction="IN",
         audience="customer",
+        keywords=keywords or [],
         source_location="Eligibility",
         source_path="docs/accounts/bsbda.md",
         content=text,
@@ -402,3 +404,71 @@ def test_reindex_upserts_changed_hashes_and_deletes_removed_ids():
     lexical_hits = lexical.search("RTGS", top_k=5)
     assert [hit.chunk_id for hit in dense] == ["ACCT#c0001"]
     assert lexical_hits == []
+
+
+def test_matches_filter_with_keywords():
+    metadata = _metadata(keywords=["BSBDA", "zero balance", "financial inclusion"])
+
+    assert matches_filter(metadata, MetadataFilter(keywords=["zero balance"])) is True
+    assert matches_filter(metadata, MetadataFilter(keywords=["ZERO BALANCE"])) is True
+    assert matches_filter(metadata, MetadataFilter(keywords=["fixed deposit", "BSBDA"])) is True
+    assert matches_filter(metadata, MetadataFilter(keywords=["credit card", "personal loan"])) is False
+
+
+def test_to_pinecone_filter_includes_keywords():
+    filter_clause = to_pinecone_filter(MetadataFilter(keywords=["zero balance", "bsbda"]))
+
+    assert filter_clause == {
+        "$and": [
+            {"status": {"$in": ["approved", "current"]}},
+            {"keywords": {"$in": ["zero balance", "bsbda"]}},
+        ]
+    }
+
+
+def test_in_memory_vector_store_filters_by_keywords():
+    embedder = DeterministicEmbeddingProvider("paraphrase-MiniLM-L6-v2", 4)
+    store = InMemoryVectorStore()
+
+    meta1 = _metadata(chunk_id="C1", keywords=["BSBDA", "zero balance"])
+    meta2 = _metadata(chunk_id="C2", keywords=["fixed deposit", "term deposit"])
+
+    vec1 = embedder.embed_query("zero balance").vector
+    vec2 = embedder.embed_query("fixed deposit").vector
+
+    store.upsert([
+        VectorRecord(chunk_id="C1", vector=vec1, metadata=meta1, text="BSBDA zero balance"),
+        VectorRecord(chunk_id="C2", vector=vec2, metadata=meta2, text="Fixed deposit rates"),
+    ])
+
+    hits = store.query(vec1, top_k=5, metadata_filter=MetadataFilter(keywords=["zero balance"]))
+    assert len(hits) == 1
+    assert hits[0].chunk_id == "C1"
+
+    hits_none = store.query(vec1, top_k=5, metadata_filter=MetadataFilter(keywords=["nonexistent"]))
+    assert hits_none == []
+
+
+def test_index_knowledge_runs_enricher_on_upserted_chunks():
+    class _DummyEnricher:
+        def enrich(self, chunks):
+            return [chunk.model_copy(update={"keywords": chunk.keywords + ["enriched_term"]}) for chunk in chunks]
+
+    embedder = _CountingEmbedder()
+    store = InMemoryVectorStore()
+    lexical, _ = _lexical()
+    chunk = _chunk("ACCT#c0001", "Text", keywords=["base_kw"])
+
+    index_knowledge(
+        [chunk],
+        embedder,
+        store,
+        lexical,
+        embedding_provider="deterministic",
+        enricher=_DummyEnricher(),
+    )
+
+    hits = store.query(embedder.embed_query("Text").vector, top_k=1)
+    assert len(hits) == 1
+    assert "enriched_term" in hits[0].metadata.keywords
+    assert "base_kw" in hits[0].metadata.keywords

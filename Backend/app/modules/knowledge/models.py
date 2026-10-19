@@ -107,6 +107,8 @@ class KnowledgeChunk(BaseModel):
     oversized: bool = False
     procedure_step_start: int | None = None
     procedure_step_end: int | None = None
+    category: str | None = None
+    keywords: list[str] = Field(default_factory=list)
     content_hash: str | None = None
     eligible: bool = False
 

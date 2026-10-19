@@ -9,16 +9,18 @@ DEFAULT_ELIGIBLE_STATUSES = ("approved", "current")
 
 
 class MetadataFilter(BaseModel):
-    """Equality and effective-date constraints shared by both indexes."""
+    """Equality, keyword, and effective-date constraints shared by both indexes."""
 
     model_config = ConfigDict(extra="forbid")
 
     statuses: tuple[str, ...] | None = DEFAULT_ELIGIBLE_STATUSES
     product: str | None = None
+    category: str | None = None
     jurisdiction: str | None = None
     audience: str | None = None
     document_type: str | None = None
     document_id: str | None = None
+    keywords: tuple[str, ...] | list[str] | None = None
     as_of: str | None = None
 
 
@@ -34,6 +36,7 @@ class ChunkMetadata(BaseModel):
     document_title: str
     status: str
     product: str | None = None
+    category: str | None = None
     jurisdiction: str | None = None
     audience: str | None = None
     effective_from: str | None = None
@@ -41,6 +44,7 @@ class ChunkMetadata(BaseModel):
     source_path: str
     content_hash: str
     heading_path: list[str] = Field(default_factory=list)
+    keywords: list[str] = Field(default_factory=list)
     embedding_model: str = ""
 
     def as_filter_dict(self) -> dict[str, str | list[str]]:
@@ -58,7 +62,9 @@ class ChunkMetadata(BaseModel):
         }
         if self.heading_path:
             payload["heading_path"] = list(self.heading_path)
-        for field_name in ("product", "jurisdiction", "audience", "effective_from", "effective_until"):
+        if self.keywords:
+            payload["keywords"] = list(self.keywords)
+        for field_name in ("category", "product", "jurisdiction", "audience", "effective_from", "effective_until"):
             value = getattr(self, field_name)
             if value:
                 payload[field_name] = value
@@ -71,6 +77,8 @@ def matches_filter(metadata: ChunkMetadata, constraint: MetadataFilter) -> bool:
         return False
     if constraint.product is not None and metadata.product != constraint.product:
         return False
+    if constraint.category is not None and metadata.category != constraint.category:
+        return False
     if constraint.jurisdiction is not None and metadata.jurisdiction != constraint.jurisdiction:
         return False
     if constraint.audience is not None and metadata.audience != constraint.audience:
@@ -79,20 +87,29 @@ def matches_filter(metadata: ChunkMetadata, constraint: MetadataFilter) -> bool:
         return False
     if constraint.document_id is not None and metadata.document_id != constraint.document_id:
         return False
+    if constraint.keywords:
+        constraint_kw = {k.casefold().strip() for k in constraint.keywords if k.strip()}
+        metadata_kw = {k.casefold().strip() for k in metadata.keywords if k.strip()}
+        if not constraint_kw.intersection(metadata_kw):
+            return False
     if constraint.as_of is not None and not _is_effective(metadata, constraint.as_of):
         return False
     return True
 
 
 def to_pinecone_filter(constraint: MetadataFilter) -> dict[str, object] | None:
-    """Equality filters Pinecone can apply. Effective dates are checked afterwards."""
+    """Equality and membership filters Pinecone can apply. Effective dates are checked afterwards."""
     clauses: list[dict[str, object]] = []
     if constraint.statuses:
         clauses.append({"status": {"$in": list(constraint.statuses)}})
-    for field_name in ("product", "jurisdiction", "audience", "document_type", "document_id"):
+    for field_name in ("category", "product", "jurisdiction", "audience", "document_type", "document_id"):
         value = getattr(constraint, field_name)
         if value is not None:
             clauses.append({field_name: {"$eq": value}})
+    if constraint.keywords:
+        valid_kw = [k.strip() for k in constraint.keywords if k.strip()]
+        if valid_kw:
+            clauses.append({"keywords": {"$in": valid_kw}})
     if not clauses:
         return None
     if len(clauses) == 1:

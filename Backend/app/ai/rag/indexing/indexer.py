@@ -10,6 +10,7 @@ from collections.abc import Sequence
 from typing import Literal
 
 from app.ai.embeddings.provider import EmbeddingProvider
+from app.ai.rag.indexing.enricher import ChunkEnricher
 from app.ai.rag.indexing.filters import ChunkMetadata
 from app.ai.rag.indexing.lexical import ElasticsearchLexicalIndex
 from app.ai.rag.indexing.models import IndexManifest, IndexedRecord, manifest_hash
@@ -26,6 +27,7 @@ def index_knowledge(
     lexical_index: ElasticsearchLexicalIndex,
     *,
     embedding_provider: str,
+    enricher: ChunkEnricher | None = None,
     previous: IndexManifest | None = None,
 ) -> IndexManifest:
     """Index eligible chunks and return the manifest for the next re-index."""
@@ -33,6 +35,8 @@ def index_knowledge(
     previous_hashes = previous.hashes_by_id() if previous is not None else {}
     to_upsert, to_delete = diff_chunks(previous_hashes, eligible)
     if to_upsert:
+        if enricher is not None:
+            to_upsert = enricher.enrich(to_upsert)
         embedded = embedder.embed_documents([chunk.text for chunk in to_upsert])
         records = [
             VectorRecord(
@@ -45,7 +49,9 @@ def index_knowledge(
         ]
         vector_store.upsert(records)
     vector_store.delete(to_delete)
-    lexical_index.sync([(chunk.text, _metadata(chunk, embedder.model_name)) for chunk in eligible])
+    enriched_by_id = {chunk.chunk_id: chunk for chunk in to_upsert}
+    all_indexed = [enriched_by_id.get(chunk.chunk_id, chunk) for chunk in eligible]
+    lexical_index.sync([(chunk.text, _metadata(chunk, embedder.model_name)) for chunk in all_indexed])
     logger.info(
         "Indexed knowledge chunks",
         extra={
@@ -119,9 +125,11 @@ def _metadata(chunk: KnowledgeChunk, embedding_model: str) -> ChunkMetadata:
         document_type=chunk.document_type,
         document_title=chunk.document_title,
         status=chunk.status,
+        category=chunk.category,
         product=chunk.product,
         jurisdiction=chunk.jurisdiction,
         audience=chunk.audience,
+        keywords=list(chunk.keywords),
         effective_from=chunk.effective_from or None,
         effective_until=chunk.effective_until or None,
         source_path=chunk.source_path,

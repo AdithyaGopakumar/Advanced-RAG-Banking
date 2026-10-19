@@ -12,7 +12,13 @@ from app.ai.rag.retrieval.rrf import fuse_rankings
 from app.core.config import Settings
 
 
-def _metadata(chunk_id: str, *, product: str = "bsbda") -> ChunkMetadata:
+def _metadata(
+    chunk_id: str,
+    *,
+    product: str = "bsbda",
+    category: str | None = None,
+    keywords: list[str] | None = None,
+) -> ChunkMetadata:
     return ChunkMetadata(
         chunk_id=chunk_id,
         document_id=chunk_id.split("#")[0],
@@ -20,7 +26,9 @@ def _metadata(chunk_id: str, *, product: str = "bsbda") -> ChunkMetadata:
         document_type="reference",
         document_title="Account",
         status="approved",
+        category=category,
         product=product,
+        keywords=keywords or [],
         source_path="docs/accounts/bsbda.md",
         content_hash="hash",
     )
@@ -191,3 +199,125 @@ def test_blank_query_is_rejected():
             lexical_index=Lexical(),
             expander=OriginalQueryExpander(),
         )
+
+
+def test_normalize_expansion_extracts_queries_and_keywords():
+    from app.ai.rag.retrieval.mqe import normalize_expansion
+
+    raw_output = """{
+        "queries": ["BSBDA zero balance requirements", "Minimum balance in BSBDA"],
+        "keywords": ["BSBDA", "zero balance", "minimum balance"]
+    }"""
+    expansion = normalize_expansion("What is BSBDA zero balance?", raw_output, max_queries=3)
+
+    assert expansion.queries == [
+        "What is BSBDA zero balance?",
+        "BSBDA zero balance requirements",
+        "Minimum balance in BSBDA",
+    ]
+    assert expansion.keywords == ["BSBDA", "zero balance", "minimum balance"]
+
+
+def test_strategy_2_soft_prefilter_falls_back_when_no_candidates_match_keyword():
+    from app.ai.rag.retrieval.hybrid import retrieve_detailed
+    from app.ai.rag.retrieval.mqe import ExpansionResult
+
+    embedder = DeterministicEmbeddingProvider("paraphrase-MiniLM-L6-v2", 4)
+    store = InMemoryVectorStore()
+    vec = embedder.embed_query("BSBDA account").vector
+    store.upsert([
+        VectorRecord(
+            chunk_id="ACCT#c0001",
+            vector=vec,
+            metadata=_metadata("ACCT#c0001", keywords=["BSBDA", "zero balance"]),
+            text="BSBDA zero balance account details",
+        )
+    ])
+
+    class _Lexical:
+        def search(self, query: str, *, top_k: int, metadata_filter: MetadataFilter | None = None) -> list[RetrievalHit]:
+            if metadata_filter and metadata_filter.keywords and "unmatched_keyword" in metadata_filter.keywords:
+                return []
+            return [_hit("ACCT#c0001", "bm25", 1.5, "BSBDA zero balance account details")]
+
+    class _ExpanderWithUnmatchedKeywords:
+        def expand_detailed(self, query: str) -> ExpansionResult:
+            return ExpansionResult(
+                queries=[query],
+                keywords=["unmatched_keyword"],  # No chunks have this keyword!
+            )
+
+        def expand(self, query: str) -> list[str]:
+            return [query]
+
+    # Without fallback, keyword filter on "unmatched_keyword" would return 0 hits (recall collapse).
+    # With Strategy 2, it automatically falls back to unfiltered search and returns the chunk!
+    detailed = retrieve_detailed(
+        "BSBDA account",
+        embedder=embedder,
+        vector_store=store,
+        lexical_index=_Lexical(),
+        expander=_ExpanderWithUnmatchedKeywords(),
+        top_k=2,
+        min_fallback_candidates=1,
+    )
+
+    assert len(detailed.top_candidates) == 1
+    assert detailed.top_candidates[0].chunk_id == "ACCT#c0001"
+    assert detailed.keywords == ["unmatched_keyword"]
+
+
+def test_strategy_2_prefilter_succeeds_when_keywords_match():
+    from app.ai.rag.retrieval.hybrid import retrieve_detailed
+    from app.ai.rag.retrieval.mqe import ExpansionResult
+
+    embedder = DeterministicEmbeddingProvider("paraphrase-MiniLM-L6-v2", 4)
+    store = InMemoryVectorStore()
+    vec1 = embedder.embed_query("BSBDA account").vector
+    vec2 = embedder.embed_query("Fixed deposit").vector
+
+    store.upsert([
+        VectorRecord(
+            chunk_id="ACCT#c0001",
+            vector=vec1,
+            metadata=_metadata("ACCT#c0001", keywords=["BSBDA", "zero balance"]),
+            text="BSBDA zero balance account details",
+        ),
+        VectorRecord(
+            chunk_id="DEP#c0001",
+            vector=vec2,
+            metadata=_metadata("DEP#c0001", keywords=["fixed deposit"]),
+            text="Fixed deposit rates",
+        ),
+    ])
+
+    class _Lexical:
+        def search(self, query: str, *, top_k: int, metadata_filter: MetadataFilter | None = None) -> list[RetrievalHit]:
+            if metadata_filter and metadata_filter.keywords:
+                if "BSBDA" in metadata_filter.keywords:
+                    return [_hit("ACCT#c0001", "bm25", 2.0, "BSBDA zero balance")]
+            return []
+
+    class _ExpanderWithMatchingKeywords:
+        def expand_detailed(self, query: str) -> ExpansionResult:
+            return ExpansionResult(
+                queries=[query],
+                keywords=["BSBDA"],
+            )
+
+        def expand(self, query: str) -> list[str]:
+            return [query]
+
+    detailed = retrieve_detailed(
+        "BSBDA account",
+        embedder=embedder,
+        vector_store=store,
+        lexical_index=_Lexical(),
+        expander=_ExpanderWithMatchingKeywords(),
+        top_k=5,
+        min_fallback_candidates=1,
+    )
+
+    assert len(detailed.top_candidates) == 1
+    assert detailed.top_candidates[0].chunk_id == "ACCT#c0001"
+    assert detailed.keywords == ["BSBDA"]

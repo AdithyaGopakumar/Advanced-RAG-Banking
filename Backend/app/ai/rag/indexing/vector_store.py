@@ -228,6 +228,8 @@ def _matches(response: object) -> list[dict[str, object]]:
 def _metadata_from_payload(payload: dict[str, object], *, chunk_id: str) -> ChunkMetadata:
     heading = payload.get("heading_path") or []
     heading_path = [str(item) for item in heading] if isinstance(heading, list) else []
+    raw_kw = payload.get("keywords") or []
+    keywords = [str(item) for item in raw_kw] if isinstance(raw_kw, list) else []
     return ChunkMetadata(
         chunk_id=str(payload.get("chunk_id") or chunk_id),
         document_id=str(payload.get("document_id") or ""),
@@ -235,6 +237,7 @@ def _metadata_from_payload(payload: dict[str, object], *, chunk_id: str) -> Chun
         document_type=str(payload.get("document_type") or ""),
         document_title=str(payload.get("document_title") or ""),
         status=str(payload.get("status") or ""),
+        category=_optional(payload.get("category")),
         product=_optional(payload.get("product")),
         jurisdiction=_optional(payload.get("jurisdiction")),
         audience=_optional(payload.get("audience")),
@@ -243,6 +246,7 @@ def _metadata_from_payload(payload: dict[str, object], *, chunk_id: str) -> Chun
         source_path=str(payload.get("source_path") or ""),
         content_hash=str(payload.get("content_hash") or ""),
         heading_path=heading_path,
+        keywords=keywords,
         embedding_model=str(payload.get("embedding_model") or ""),
     )
 

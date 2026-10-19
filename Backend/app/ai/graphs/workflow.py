@@ -322,7 +322,7 @@ def build_agent(resources: AgentResources):
 
         # ── Pipeline Telemetry: Full Trace Instrumentation ──
         if is_full_trace:
-            trace["mqe"] = {"queries": retrieval.queries}
+            trace["mqe"] = {"queries": retrieval.queries, "keywords": retrieval.keywords}
             trace["vector_search"] = [
                 {"query": step.query, "hits": [hit.model_dump() for hit in step.dense_hits]}
                 for step in retrieval.searches

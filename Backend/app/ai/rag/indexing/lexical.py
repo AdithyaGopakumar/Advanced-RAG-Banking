@@ -185,9 +185,11 @@ def _index_mappings() -> dict[str, object]:
             "document_type": keyword,
             "document_title": keyword,
             "status": keyword,
+            "category": keyword,
             "product": keyword,
             "jurisdiction": keyword,
             "audience": keyword,
+            "keywords": keyword,
             "effective_from": keyword,
             "effective_until": keyword,
             "effective_from_date": date,
@@ -217,9 +219,11 @@ def _search_arguments(query: str, top_k: int, constraint: MetadataFilter) -> dic
             "document_type",
             "document_title",
             "status",
+            "category",
             "product",
             "jurisdiction",
             "audience",
+            "keywords",
             "effective_from",
             "effective_until",
             "source_path",
@@ -243,10 +247,14 @@ def _filters(constraint: MetadataFilter) -> list[dict[str, object]] | None:
         if not constraint.statuses:
             return None
         filters.append({"terms": {"status": list(constraint.statuses)}})
-    for field_name in ("product", "jurisdiction", "audience", "document_type", "document_id"):
+    for field_name in ("category", "product", "jurisdiction", "audience", "document_type", "document_id"):
         value = getattr(constraint, field_name)
         if value is not None:
             filters.append({"term": {field_name: value}})
+    if constraint.keywords:
+        valid_kw = [k.strip() for k in constraint.keywords if k.strip()]
+        if valid_kw:
+            filters.append({"terms": {"keywords": valid_kw}})
     if constraint.as_of is not None:
         day = _valid_day(constraint.as_of)
         if day is None:
@@ -297,7 +305,9 @@ def _source(text: str, metadata: ChunkMetadata) -> dict[str, object]:
         "heading_path": list(metadata.heading_path),
         "embedding_model": metadata.embedding_model,
     }
-    for field_name in ("product", "jurisdiction", "audience"):
+    if metadata.keywords:
+        payload["keywords"] = list(metadata.keywords)
+    for field_name in ("category", "product", "jurisdiction", "audience"):
         value = getattr(metadata, field_name)
         if value:
             payload[field_name] = value
@@ -311,6 +321,8 @@ def _source(text: str, metadata: ChunkMetadata) -> dict[str, object]:
 def _metadata_from_source(source: dict[str, object], *, chunk_id: str) -> ChunkMetadata:
     heading = source.get("heading_path") or []
     heading_path = [str(item) for item in heading] if isinstance(heading, list) else []
+    raw_kw = source.get("keywords") or []
+    keywords = [str(item) for item in raw_kw] if isinstance(raw_kw, list) else []
     return ChunkMetadata(
         chunk_id=str(source.get("chunk_id") or chunk_id),
         document_id=str(source.get("document_id") or ""),
@@ -318,6 +330,7 @@ def _metadata_from_source(source: dict[str, object], *, chunk_id: str) -> ChunkM
         document_type=str(source.get("document_type") or ""),
         document_title=str(source.get("document_title") or ""),
         status=str(source.get("status") or ""),
+        category=_optional(source.get("category")),
         product=_optional(source.get("product")),
         jurisdiction=_optional(source.get("jurisdiction")),
         audience=_optional(source.get("audience")),
@@ -326,6 +339,7 @@ def _metadata_from_source(source: dict[str, object], *, chunk_id: str) -> ChunkM
         source_path=str(source.get("source_path") or ""),
         content_hash=str(source.get("content_hash") or ""),
         heading_path=heading_path,
+        keywords=keywords,
         embedding_model=str(source.get("embedding_model") or ""),
     )
 
