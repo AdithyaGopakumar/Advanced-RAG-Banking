@@ -65,20 +65,51 @@ def retrieve_detailed(
     rrf_k: int = 60,
     min_fallback_candidates: int = 3,
 ) -> DetailedRetrieval:
-    """Expand one question, search both indexes per query, and return detailed results.
+    """Expand one question, search dense and lexical indexes per query, and return fused results.
 
-    Applies Strategy 2 (Soft Pre-filtering with Graceful Fallback):
-    If domain keywords are extracted, search is executed with keyword pre-filtering.
-    If the filtered candidates are fewer than min_fallback_candidates, automatically
-    falls back to unfiltered hybrid retrieval to prevent recall collapse.
+    Retrieval Pipeline Execution:
+    1. Multi-Query Expansion (MQE) + Domain Keyword Extraction:
+       Generates diverse semantic reformulations of the question while identifying
+       key banking entities, products, and acronyms for targeted pre-filtering.
+    2. Dual-Path Retrieval (Dense + BM25):
+       For each query variant, retrieves top-k candidates from:
+       - Dense Vector Store (Pinecone semantic cosine similarity)
+       - Sparse Lexical Index (Elasticsearch native BM25 for precise token matching)
+    3. Strategy 2 Soft Pre-Filtering with Graceful Fallback:
+       - Tries initial retrieval with an active keyword filter ($in membership).
+       - If the resulting candidate count falls below `min_fallback_candidates`,
+         automatically triggers a fallback to unfiltered hybrid search (retaining
+         authoritative status and date constraints) to eliminate false-negative recall collapse.
+    4. Reciprocal Rank Fusion (RRF):
+       Combines non-comparable score distributions across dense and lexical result sets
+       using rank positions: RRF_score = sum(1 / (rrf_k + rank)).
+
+    Args:
+        query: The normalized or contextually resolved user banking question.
+        embedder: Embedding provider used to generate dense query vectors.
+        vector_store: Target vector store (Pinecone or InMemoryVectorStore).
+        lexical_index: Target lexical index (Elasticsearch BM25).
+        expander: Query expansion provider (LLMQueryExpander or OriginalQueryExpander).
+        metadata_filter: Governed constraints (status, effective dates, product).
+        top_k: Maximum number of fused candidate chunks to return.
+        candidates_per_query: Candidate pool size retrieved per search engine per variant.
+        rrf_k: Constant smoothing factor for Reciprocal Rank Fusion (default 60).
+        min_fallback_candidates: Minimum candidate count required before triggering
+            unfiltered search fallback to prevent zero-result recall drops.
+
+    Returns:
+        DetailedRetrieval containing query variants, extracted keywords, individual
+        search steps, all fused candidates, and the top-k final candidates.
     """
+    # ── Step 1: Input Validation & Normalization ──
     question = " ".join(query.split())
     if not question:
         raise RetrievalQueryError("A retrieval query must contain text")
     if top_k <= 0 or candidates_per_query <= 0:
         return DetailedRetrieval(queries=[question], searches=[], all_fused=[], top_candidates=[])
 
-    # Perform Multi Query Expansion (MQE) with keyword extraction
+    # ── Step 2: Multi-Query Expansion (MQE) & Keyword Extraction ──
+    # Single LLM call extracts both alternative search queries and domain keywords
     if hasattr(expander, "expand_detailed"):
         expansion = expander.expand_detailed(question)
         variants = expansion.queries
@@ -87,7 +118,8 @@ def retrieve_detailed(
         variants = expander.expand(question)
         extracted_keywords = []
 
-    # Prepare initial filter with keywords if available and not already provided
+    # ── Step 3: Pre-Filter Construction ──
+    # Attach extracted keywords to active filter if not explicitly constrained by caller
     active_filter = metadata_filter
     if extracted_keywords:
         if metadata_filter is not None and metadata_filter.keywords is None:
@@ -95,22 +127,31 @@ def retrieve_detailed(
         elif metadata_filter is None:
             active_filter = MetadataFilter(keywords=extracted_keywords)
 
+    # Helper closure to execute dual-path search across all query variants
     def _execute_search(filter_to_use: MetadataFilter | None) -> tuple[list[list[RetrievalHit]], list[QuerySearchStep]]:
         ranked_hits: list[list[RetrievalHit]] = []
         search_steps: list[QuerySearchStep] = []
         for variant in variants:
+            # Dense Vector Search (semantic similarity)
             vector = embedder.embed_query(variant).vector
             dense_hits = vector_store.query(vector, top_k=candidates_per_query, metadata_filter=filter_to_use)
             ranked_hits.append(dense_hits)
+
+            # Sparse Lexical Search (BM25 exact token matching)
             bm25_hits = lexical_index.search(variant, top_k=candidates_per_query, metadata_filter=filter_to_use)
             ranked_hits.append(bm25_hits)
+
             search_steps.append(QuerySearchStep(query=variant, dense_hits=dense_hits, bm25_hits=bm25_hits))
         return ranked_hits, search_steps
 
+    # ── Step 4: Primary Retrieval Execution & Score Fusion ──
     ranked, searches = _execute_search(active_filter)
     fused = fuse_rankings(ranked, rrf_k=rrf_k)
 
-    # Strategy 2: Graceful fallback if keyword filtering caused a recall drop
+    # ── Step 5: Strategy 2 Recall Protection (Graceful Fallback) ──
+    # If keyword filtering was applied but yielded insufficient candidates,
+    # re-execute retrieval without the keyword filter while keeping authoritative
+    # governance constraints (e.g. approved statuses and temporal dates) intact.
     threshold = min(top_k, min_fallback_candidates)
     if active_filter is not metadata_filter and len(fused) < threshold:
         logger.info(
@@ -124,6 +165,7 @@ def retrieve_detailed(
         ranked, searches = _execute_search(metadata_filter)
         fused = fuse_rankings(ranked, rrf_k=rrf_k)
 
+    # ── Step 6: Log Telemetry & Package Results ──
     logger.info(
         "Fused hybrid retrieval",
         extra={
