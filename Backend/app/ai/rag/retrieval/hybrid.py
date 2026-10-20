@@ -122,10 +122,18 @@ def retrieve_detailed(
     # Attach extracted keywords to active filter if not explicitly constrained by caller
     active_filter = metadata_filter
     if extracted_keywords:
+        expanded_keywords: set[str] = set()
+        for kw in extracted_keywords:
+            cleaned = kw.strip()
+            if cleaned:
+                expanded_keywords.add(cleaned)
+                expanded_keywords.add(cleaned.lower())
+                expanded_keywords.add(cleaned.title())
+        kw_list = sorted(expanded_keywords)
         if metadata_filter is not None and metadata_filter.keywords is None:
-            active_filter = metadata_filter.model_copy(update={"keywords": extracted_keywords})
+            active_filter = metadata_filter.model_copy(update={"keywords": kw_list})
         elif metadata_filter is None:
-            active_filter = MetadataFilter(keywords=extracted_keywords)
+            active_filter = MetadataFilter(keywords=kw_list)
 
     # Helper closure to execute dual-path search across all query variants
     def _execute_search(filter_to_use: MetadataFilter | None) -> tuple[list[list[RetrievalHit]], list[QuerySearchStep]]:

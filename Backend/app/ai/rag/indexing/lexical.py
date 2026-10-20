@@ -361,16 +361,30 @@ def _valid_day(value: str | None) -> str | None:
 
 
 def _hits(response: object) -> list[dict[str, object]]:
-    outer = response.get("hits") if isinstance(response, dict) else getattr(response, "hits", None)
+    outer: object | None = None
+    if hasattr(response, "get"):
+        outer = response.get("hits")
+    elif hasattr(response, "body") and hasattr(response.body, "get"):
+        outer = response.body.get("hits")
+    else:
+        outer = getattr(response, "hits", None)
+
     if outer is None:
         return []
-    raw_hits = outer.get("hits") if isinstance(outer, dict) else getattr(outer, "hits", None)
+
+    raw_hits: object | None = None
+    if hasattr(outer, "get"):
+        raw_hits = outer.get("hits")
+    else:
+        raw_hits = getattr(outer, "hits", None)
+
     if not raw_hits:
         return []
+
     normalized: list[dict[str, object]] = []
     for hit in raw_hits:
-        if isinstance(hit, dict):
-            normalized.append(hit)
+        if hasattr(hit, "get"):
+            normalized.append(dict(hit))
             continue
         normalized.append(
             {

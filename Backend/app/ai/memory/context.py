@@ -12,9 +12,23 @@ logger = logging.getLogger(__name__)
 
 # Pronouns and anaphoric cues that indicate the current query depends on previous turns
 _ANAPHORA_PATTERN = re.compile(
-    r"\b(it|its|that account|this account|this card|that card|this deposit|that deposit|the same|same account)\b",
+    r"\b(it|its|one|that account|this account|this card|that card|this deposit|that deposit|the same|same account)\b",
     re.IGNORECASE,
 )
+
+
+def _substitute_anaphora(text: str, entity: str) -> str:
+    """Substitute anaphoric pronouns with the antecedent entity cleanly."""
+    def _repl(match: re.Match[str]) -> str:
+        word = match.group(0).lower()
+        if word == "its":
+            return f"{entity}'s"
+        if word == "one":
+            article = "an" if entity[0].lower() in "aeiou" else "a"
+            return f"{article} {entity}"
+        return entity
+
+    return _ANAPHORA_PATTERN.sub(_repl, text, count=1)
 
 _FOLLOW_UP_PATTERN = re.compile(
     r"^(what about|how about|what of|tell me about|and what|and how|and the)\b",
@@ -100,9 +114,10 @@ def resolve_contextual_query(
     entity = extract_recent_entity(history)
     if entity and entity.lower() not in clean_query.lower():
         if has_anaphora:
-            return _ANAPHORA_PATTERN.sub(entity, clean_query, count=1)
+            return _substitute_anaphora(clean_query, entity)
         if is_follow_up or is_short:
-            return f"{clean_query} for {entity}"
+            base = clean_query.rstrip("?. ")
+            return f"{base} for {entity}?"
 
     # 2. Model-based contextualization fallback: for nuanced queries where entity extraction failed
     if llm is not None:
