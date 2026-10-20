@@ -1,8 +1,8 @@
-# Security Architecture & Design
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent: Security Architecture & Design
 
 ## 1. Purpose
 
-This document defines the security architecture for the Advanced RAG Banking System.
+This document defines the security architecture for Cognibank AI — Hybrid, Multi-Turn RAG Agent.
 
 It focuses specifically on security concerns relevant to the system:
 

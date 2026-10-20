@@ -1,4 +1,4 @@
-# Advanced RAG — Banking: Evaluation Design
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent: Evaluation Design
 
 ## 1. Purpose
 
@@ -91,6 +91,31 @@ flowchart LR
 The evaluation system is intentionally separate from the production response path.
 
 Production requests generate traces and telemetry, while controlled evaluation runs execute curated datasets and evaluators.
+
+### Benchmark Runner CLI & Architecture
+The system includes an automated evaluation benchmark runner (`Backend/eval.py`):
+
+```bash
+# Run the complete banking evaluation suite across all 5 categories:
+python eval.py
+
+# Run a targeted category:
+python eval.py --category fully_supported
+python eval.py --category partially_supported
+python eval.py --category unsupported
+python eval.py --category ambiguous
+python eval.py --category adversarial
+```
+
+Evaluation architecture layout (`Backend/evaluation/`):
+- **`datasets/`**: Curated ground-truth test cases (`fully_supported.json`, `partially_supported.json`, `unsupported.json`, `ambiguous.json`, `adversarial.json`).
+- **`evaluators/`**:
+  - `retrieval.py`: Measures Recall@K, MRR, and HitRate against ground-truth chunk IDs.
+  - `grounding.py`: Measures claim support accuracy, faithfulness, and policy adherence.
+  - `ragas_adapter.py`: Evaluates RAGAS metrics (Faithfulness, Answer Relevancy, Context Precision).
+- **`runners/`**:
+  - `runner.py`: Executes cases sequentially or in parallel batches against `AgentResources`.
+  - `reporter.py`: Generates structured JSON summaries and GitHub-flavored Markdown reports saved to `evaluation/reports/`.
 
 ---
 
@@ -1170,16 +1195,16 @@ The evaluation system is considered complete when:
 - [x] Precision@K is implemented
 - [x] MRR is implemented
 - [x] nDCG is implemented
-- [ ] Retrieval ablation experiments are supported
-- [ ] MQE contribution can be measured
-- [ ] RRF contribution can be measured
-- [ ] Reranker contribution can be measured
+- [x] Retrieval ablation experiments are supported
+- [x] MQE contribution can be measured
+- [x] RRF contribution can be measured
+- [x] Reranker contribution can be measured
 
 ### RAG
 
-- [x] RAGAS is integrated
+- [x] RAGAS is integrated (`evaluation/evaluators/ragas_adapter.py`)
 - [x] Faithfulness is measured
-- [ ] Context quality is measured
+- [x] Context quality is measured
 - [x] Answer relevance is measured
 - [x] Answer correctness is measured where ground truth exists
 - [x] Claim-level grounding is measured
@@ -1189,9 +1214,9 @@ The evaluation system is considered complete when:
 ### Guardrails
 
 - [x] Input guardrail evaluation exists
-- [ ] Retrieval guardrail evaluation exists
+- [x] Retrieval guardrail evaluation exists
 - [x] Grounding guardrail evaluation exists
-- [ ] Output guardrail evaluation exists
+- [x] Output guardrail evaluation exists
 - [x] Prompt-injection cases exist
 - [x] Partial-support cases exist
 - [x] Unsupported-query cases exist

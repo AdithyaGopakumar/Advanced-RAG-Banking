@@ -1,8 +1,8 @@
-# RAG Design
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent: RAG Design
 
-**Project:** Advanced RAG — Banking Chat Agent  
+**Project:** Cognibank AI — Hybrid, Multi-Turn RAG Agent  
 **Document Type:** Retrieval-Augmented Generation Design Specification  
-**Version:** 1.0  
+**Version:** 2.0 (Post-Implementation Baseline)  
 **Status:** Baseline
 
 ## 1. Purpose
@@ -83,30 +83,25 @@ flowchart TD
 
 ## 5. Retrieval Pipeline
 
+The production retrieval pipeline is implemented across 6 composable stages (`retrieve_detailed` in `app/ai/rag/retrieval/hybrid.py`):
+
 ```text
-User Query
-    ↓
-Input Processing
-    ↓
-Query Understanding
-    ↓
-Multi-Query Expansion
-    ↓
-Dense + BM25 Retrieval
-    ↓
-RRF
-    ↓
-Metadata / Applicability Filtering
-    ↓
-Semantic Reranking
-    ↓
-Evidence Selection
-    ↓
-Context Assembly
-    ↓
-Grounding Validation
-    ↓
-LLM Generation
+Normalized or Contextually Resolved Query
+                    ↓
+Stage 1: Multi-Query Expansion (MQE) + Domain Keyword Extraction (Single LLM Call)
+                    ↓
+Stage 2: Strategy 2 Soft Pre-Filter Construction (Lower/Title/Original Case Expansion)
+                    ↓
+Stage 3: Dual-Path Retrieval
+         ├── Dense Vector Search (Pinecone / InMemory 384d Cosine)
+         └── Sparse Lexical Search (Elasticsearch Native BM25)
+         [Graceful Fallback: if candidates < min_fallback_candidates (3), re-query unfiltered]
+                    ↓
+Stage 4: Reciprocal Rank Fusion (RRF with k=60)
+                    ↓
+Stage 5: Neural Cross-Encoder Reranking (ms-marco-MiniLM-L-6-v2) + Effective Date Filtering
+                    ↓
+Stage 6: Governed Context Assembly & Token Budget Enforcement (Default 3,000 tokens)
 ```
 
 ## 6. Input Processing
@@ -139,23 +134,27 @@ Question type
 
 Query understanding must not invent missing requirements.
 
-## 8. Multi-Query Expansion
+## 8. Multi-Query Expansion & Keyword Extraction
 
-The system uses **Multi-Query Expansion (MQE)** to improve retrieval recall.
+The system uses unified **Multi-Query Expansion (MQE) and Domain Keyword Extraction** implemented in `LLMQueryExpander.expand_detailed` (`app/ai/rag/retrieval/mqe.py`).
+
+In a **single LLM call**, the model generates:
+1. Diverse semantic query formulations (preserving banking entities, conditions, and intent).
+2. Domain banking keywords, acronyms, and product entities (e.g. `BSBDA`, `minimum balance`, `penalty`, `KYC`).
 
 ```mermaid
 flowchart TD
-    Query["Original User Query"] --> MQE["MQE"]
-    MQE --> Q1["Query 1"]
-    MQE --> Q2["Query 2"]
-    MQE --> Q3["Query 3"]
+    Query["Contextualized User Query"] --> MQE["LLMQueryExpander.expand_detailed"]
+    MQE --> Q1["Query Variant 1"]
+    MQE --> Q2["Query Variant 2"]
+    MQE --> Q3["Query Variant 3"]
+    MQE --> KW["Domain Keywords (for Pre-Filtering)"]
 
-    Q1 --> Retrieval["Retrieval Layer"]
+    Q1 --> Retrieval["Hybrid Retrieval"]
     Q2 --> Retrieval
     Q3 --> Retrieval
+    KW --> PreFilter["Soft Pre-Filter Construction"]
 ```
-
-MQE generates alternative formulations that preserve the original intent.
 
 Example:
 
@@ -163,13 +162,16 @@ Example:
 Original:
 "What are the charges for opening a BSBDA account?"
 
-Expanded:
+Expanded Queries:
 1. BSBDA account opening charges
 2. BSBDA fees for opening an account
 3. charges applicable when opening a Basic Savings Bank Deposit Account
-```
 
-MQE must preserve important entities, numbers, temporal constraints, and product identity.
+Extracted Keywords:
+- BSBDA
+- account opening charges
+- Basic Savings Bank Deposit Account
+```
 
 ## 9. Dense Retrieval
 
@@ -298,23 +300,14 @@ status: active
 
 This metadata supports debugging, evaluation, observability, and auditability.
 
-## 15. Metadata and Applicability Filtering
+## 15. Strategy 2 Soft Pre-Filtering with Graceful Fallback
 
-Candidates may be filtered using:
+Pre-filtering ensures that queries about specific banking products do not retrieve irrelevant documents, while avoiding false-negative recall drops:
 
-```text
-status
-effective_from
-effective_until
-product
-jurisdiction
-audience
-document_type
-classification
-access_scope
-```
-
-Historical or superseded documents must not automatically be treated as current knowledge.
+1. **Case-Insensitive Keyword Expansion**: Extracted keywords are expanded to lowercase, uppercase, and title-case (e.g., `savings account`, `Savings Account`, `SAVINGS ACCOUNT`) to ensure robust metadata matching across storage backends.
+2. **Soft Pre-Filter Application**: The active filter is passed to Pinecone vector search and Elasticsearch BM25 queries.
+3. **Graceful Fallback Mechanism**:
+   If the candidate pool returned by the filtered search is smaller than `min_fallback_candidates` (default `3`), the system automatically executes a fallback query without the keyword filter (retaining only document `status` and `effective_date` constraints). This guarantees that terminology discrepancies never cause complete retrieval failure.
 
 ## 16. Temporal Retrieval
 
@@ -402,21 +395,15 @@ flowchart TD
     Support --> None["Unsupported"]
 ```
 
-## 21. Support Policy
+## 21. Runtime Support Levels
 
-### Fully Supported
+Grounding assessment (`assess` in `app/ai/rag/generation/grounding.py`) classifies the evidence into five explicit support states:
 
-Provide the answer using retrieved evidence.
-
-### Partially Supported
-
-Return the supported portion and explicitly avoid presenting unsupported information as fact.
-
-### Insufficient / Ambiguous
-
-Provide available information and ask for clarification where required.
-
-The system must not fill unsupported gaps using the LLM's pretrained knowledge.
+- **`fully_supported`**: Retrieved evidence sufficiently supports all assertions needed to answer the question. Answers directly from evidence.
+- **`partially_supported`**: Query contains multiple claims, but evidence only supports a subset. Answers supported portions and explicitly disclaims unavailable portions.
+- **`ambiguous`**: Insufficient information exists to determine which specific product or policy is requested; prompts targeted clarification when helpful.
+- **`insufficient_evidence`**: Question is clear but governed knowledge base lacks supporting evidence. Emits safe unavailable response without hallucination.
+- **`contradictory_evidence`**: Retrieved governed policies contain conflicting terms; surfaces the conflict or requests clarification rather than silently guessing.
 
 ## 22. Claim-Level Grounding
 

@@ -1,8 +1,8 @@
-# Knowledge Engineering
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent: Knowledge Engineering
 
-**Project:** Advanced RAG — Banking Chat Agent  
+**Project:** Cognibank AI — Hybrid, Multi-Turn RAG Agent  
 **Document Type:** Knowledge Engineering Specification  
-**Version:** 1.0  
+**Version:** 2.0 (Post-Implementation Baseline)  
 **Status:** Baseline
 
 ## 1. Purpose

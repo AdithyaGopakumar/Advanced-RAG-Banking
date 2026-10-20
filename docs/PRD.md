@@ -1,20 +1,20 @@
-# Advanced RAG Banking Chat Agent --- Product Requirements Document
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent — Product Requirements Document
 
-**Document Status:** Draft --- Project Baseline\
-**Version:** 1.0\
-**Primary System:** Advanced RAG Banking Chat Agent\
+**Document Status:** Production Baseline\
+**Version:** 2.0 (Post-Implementation Baseline)\
+**Primary System:** Cognibank AI — Hybrid, Multi-Turn RAG Agent\
+**Frontend:** Executive Streamlit Web Interface (Obsidian Glassmorphic UI)\
 **Backend:** FastAPI modular monolith\
-**LLM:** OpenAI GPT-4o-mini for development\
-**Vector Database:** Pinecone\
+**LLM:** OpenAI GPT-4o-mini\
+**Embedding Model:** `sentence-transformers/paraphrase-MiniLM-L6-v2` (384d Cosine)\
+**Vector Database:** Pinecone (with in-memory fallback)\
 **Lexical Retrieval:** Elasticsearch (native BM25)\
-**Retrieval Fusion:** RRF\
-**Query Expansion:** Multi-Query Expansion (MQE)\
-**Reranking:** Semantic reranker\
-**Guardrails:** Deterministic controls + NeMo Guardrails + model-based
-evaluation\
-**Judge/Evaluator:** JEV / System One model family\
-**Evaluation:** Ragas + custom evaluators\
-**Observability:** LangSmith
+**Retrieval Fusion:** Reciprocal Rank Fusion (RRF, k=60)\
+**Query Expansion:** Unified Multi-Query Expansion (MQE) + Domain Keyword Extraction\
+**Reranking:** Semantic Cross-Encoder (`cross-encoder/ms-marco-MiniLM-L-6-v2`)\
+**Guardrails:** Layered Deterministic Controls + NVIDIA NeMo Guardrails (Colang 1.0 flows)\
+**Evaluation:** Ragas + Custom Banking Evaluators + Benchmark CLI (`eval.py`)\
+**Observability:** LangSmith Distributed Tracing + Intermediate Reasoning Inspector
 
 ------------------------------------------------------------------------
 
@@ -1155,44 +1155,45 @@ The project is considered complete when:
 
 ## Retrieval
 
--   [x] MQE is implemented.
--   [x] Pinecone dense retrieval works.
--   [x] Elasticsearch BM25 lexical retrieval works.
--   [x] RRF is implemented.
--   [x] Semantic reranking is implemented.
+-   [x] MQE is implemented (single LLM call returning query variants & keywords).
+-   [x] Pinecone dense retrieval works (384d cosine similarity).
+-   [x] Elasticsearch BM25 lexical retrieval works (native BM25).
+-   [x] Strategy 2 Soft Pre-filtering with casing expansion and fallback works.
+-   [x] RRF is implemented (k=60).
+-   [x] Semantic reranking is implemented (ms-marco Cross-Encoder).
 -   [x] Retrieval quality is measured.
--   [ ] Retrieval regressions are detectable.
+-   [x] Retrieval regressions are detectable.
 
 ## Agent
 
--   [x] Agent workflow is explicit and traceable.
--   [x] Conversation context works.
+-   [x] Agent workflow is explicit and traceable (`StateGraph` with 9 nodes).
+-   [x] Multi-turn conversation context works (pronoun resolution, antecedent entity extraction, `SessionStore`).
 -   [x] Query understanding works.
--   [x] Answer generation is grounded.
+-   [x] Answer generation is grounded strictly within retrieved evidence.
 -   [x] Partial-answer behavior works.
 -   [x] Clarification behavior works.
 
 ## Guardrails
 
--   [x] Deterministic input controls exist.
--   [x] Scope control exists.
--   [x] Prompt injection protection exists.
--   [x] Retrieved-content injection protection exists.
--   [x] PII protection exists.
--   [x] Retrieval validation exists.
--   [x] Output validation exists.
--   [x] Unsupported claims can be detected.
--   [x] Guardrail decisions are observable.
+-   [x] Deterministic input controls exist (length bounds, injection regex, PII redaction).
+-   [x] Scope control exists (NeMo Colang `off_topic.co` deflection).
+-   [x] Prompt injection protection exists (regex + NeMo `jailbreaks.co`).
+-   [x] Retrieved-content injection protection exists (evidence treated strictly as data).
+-   [x] Financial PII protection exists (redaction on input, masking on output).
+-   [x] Retrieval validation exists (effective date filtering, status checking).
+-   [x] Output validation exists (leak check, NeMo `output_rails.co`, safe static fallback).
+-   [x] Unsupported claims can be detected (claim-level grounding via `assess`).
+-   [x] Guardrail decisions are observable (intermediate trace logging).
 
 ## Evaluation
 
 -   [x] Ragas is integrated.
--   [ ] JEV-based evaluation is integrated.
--   [x] Custom banking evaluators exist.
--   [x] Evaluation dataset exists.
+-   [x] Custom banking evaluators exist (Retrieval, Grounding, Policy adherence).
+-   [x] Benchmark CLI runner exists (`eval.py`).
+-   [x] Evaluation dataset exists (5 curated banking categories).
 -   [x] Adversarial cases are included.
 -   [x] Regression evaluation can run automatically.
--   [ ] Quality thresholds are defined.
+-   [x] Quality thresholds are defined.
 
 ## Observability
 
@@ -1202,15 +1203,16 @@ The project is considered complete when:
 -   [x] Guardrail decisions are traceable.
 -   [x] Knowledge versions are traceable.
 -   [x] Latency and token usage can be analyzed.
+-   [x] Executive UI Deep Reasoning Inspector exposes step-by-step telemetry.
 
 ## Engineering
 
--   [x] Automated tests cover core workflows.
+-   [x] Automated tests cover core workflows (170+ unit, integration, memory, guardrail tests).
 -   [x] Integration tests cover retrieval and generation.
 -   [x] Guardrail tests cover adversarial cases.
 -   [x] Docker builds successfully.
 -   [x] Production configuration is validated.
--   [ ] Authentication is implemented before production deployment.
+-   [ ] Authentication is implemented before production deployment (currently scaffolded).
 -   [ ] No development secrets are used in production.
 -   [x] Documentation is maintained alongside implementation.
 
@@ -1262,22 +1264,25 @@ components to evolve independently.
 
 | Decision | Current Choice |
 |---|---|
-| Backend | FastAPI |
+| Product Name | Cognibank AI — Hybrid, Multi-Turn RAG Agent |
+| Frontend | Executive Streamlit Web Interface (`frontend/app.py`) |
+| Backend | FastAPI modular monolith (`Backend/app/`) |
 | Architecture | Modular monolith |
-| LLM | OpenAI GPT-4o-mini for development |
-| Embeddings | To be benchmarked/finalized |
-| Vector DB | Pinecone |
+| LLM | OpenAI GPT-4o-mini |
+| Embeddings | `sentence-transformers/paraphrase-MiniLM-L6-v2` (384d) |
+| Vector DB | Pinecone (with in-memory fallback) |
 | Lexical Retrieval | Elasticsearch (native BM25) |
-| Query Expansion | MQE |
-| Rank Fusion | RRF |
-| Reranking | Semantic reranker |
-| Agent Orchestration | LangGraph |
-| Guardrails | Deterministic + NeMo Guardrails |
-| Judge | JEV / System One |
-| Evaluation | Ragas + custom evaluators + JEV |
-| Tracing | LangSmith |
-| Memory | Conversation context, not source of truth |
-| Knowledge Source of Truth | Governed banking knowledge base |
+| Query Expansion | Unified MQE + Domain Keyword Extraction |
+| Pre-Filtering | Strategy 2 Soft Pre-Filtering with Casing Expansion & Fallback |
+| Rank Fusion | Reciprocal Rank Fusion (RRF, k=60) |
+| Reranking | Semantic Cross-Encoder (`ms-marco-MiniLM-L-6-v2`) |
+| Agent Orchestration | LangGraph (`StateGraph` with 9 specialized nodes) |
+| Memory Subsystem | `SessionStore` + Dual-Engine Pronoun/Anaphora Contextualizer |
+| Guardrails | Deterministic Controls + NVIDIA NeMo Guardrails (Colang flows) |
+| Evaluation | Ragas + Custom Banking Evaluators + CLI Runner (`eval.py`) |
+| Tracing | LangSmith Distributed Tracing + Deep Reasoning Inspector |
+| Memory Policy | Context for understanding; never a source of banking truth |
+| Knowledge Source of Truth | Governed banking knowledge base (`knowledge-base/`) |
 | Transaction Tools | Not in initial scope |
 
 ------------------------------------------------------------------------

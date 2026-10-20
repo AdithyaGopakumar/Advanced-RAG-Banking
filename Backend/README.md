@@ -57,8 +57,9 @@ Production-oriented FastAPI backend for Cognibank AI — Hybrid, Multi-Turn RAG 
 │   │   ├── embeddings/             # Embedding utilities (sentence-transformers / OpenAI)
 │   │   ├── prompts/                # Versioned prompt templates
 │   │   ├── providers/              # LLM provider adapters (OpenAI / mock)
+│   │   ├── memory/                 # Multi-turn memory (store.py, context.py anaphora engine, models.py)
 │   │   ├── rag/                    # Dense/lexical retrieval, MQE, RRF, reranking, context
-│   │   ├── guardrails/             # Input/output safety, PII detection, topic filters
+│   │   ├── guardrails/             # Input/output safety, PII detection, NeMo Colang rails
 │   │   ├── graphs/                 # LangGraph state machine & agent workflow
 │   │   └── observability/          # LangSmith distributed tracing & metadata tagging
 │   │

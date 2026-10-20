@@ -1,26 +1,82 @@
-# Advanced RAG Banking Chat Agent --- Architecture
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent — Architecture
 
-**Document Status:** Draft --- Architecture Baseline\
-**Version:** 1.0\
+**Document Status:** Architecture Baseline & Implementation Specification\
+**Version:** 2.0 (Post-Implementation Baseline)\
 **Related Document:** `PRD.md`
 
 ------------------------------------------------------------------------
 
 ## 1. Architecture Overview
 
-The Advanced RAG Banking Chat Agent is a **modular monolith** built
-around a governed knowledge base, hybrid retrieval, a constrained
-conversational agent, layered guardrails, and a first-class evaluation
-and observability system.
+Cognibank AI is a **modular monolith** built around a governed banking knowledge base, hybrid dual-path retrieval, an explicit LangGraph multi-turn conversational agent, layered deterministic and NeMo guardrails, and an Executive Streamlit Web Interface with end-to-end reasoning telemetry.
 
-The system is an **information-answering agent**, not a transactional
-banking agent.
+The system is strictly an **information-answering agent**, governed by the **Knowledge-Base-Only Policy**: banking claims must be supported by the governed banking knowledge base.
 
 ``` mermaid
 flowchart TB
-    User["User"] --> API["FastAPI API"]
-    API --> InputGuard["Input Guardrails"]
-    InputGuard --> Agent["LangGraph Chat Agent"]
+    subgraph UI["Executive User Interface (Streamlit :8501)"]
+        ChatUI["Glassmorphic Chat UI"]
+        Inspector["Deep Reasoning Pipeline Inspector"]
+        HealthUI["Live Health Monitor"]
+    end
+
+    subgraph API["FastAPI Modular Monolith (:8000)"]
+        Router["/api/v1/chat"]
+        HealthRouter["/api/v1/system/health"]
+    end
+
+    subgraph Graph["LangGraph State Machine (AgentState)"]
+        InputGuard["1. input_guard<br/>(Deterministic + NeMo Colang Rails)"]
+        LoadContext["2. load_context<br/>(SessionStore + Pronoun / Anaphora Engine)"]
+        Retrieve["3. retrieve<br/>(MQE + Dense + Sparse BM25 + Soft Pre-Filter)"]
+        Assess["4. assess<br/>(Claim Grounding Assessment)"]
+        Generate["5a. generate / 5b. policy<br/>(Evidence Synthesis / Unavailable Policy)"]
+        OutputGuard["6. output_guard<br/>(Deterministic + NeMo Output Rails + PII Masking)"]
+        Fallback["7. fallback<br/>(Safe Static Output Fallback)"]
+        Persist["8. persist<br/>(Audited Session Memory Commit)"]
+    end
+
+    subgraph Search["Hybrid Retrieval Subsystem"]
+        MQE["Multi-Query Expansion + Keyword Extraction"]
+        Pinecone[("Pinecone (384d Dense)")]
+        ES[("Elasticsearch (Native BM25)")]
+        RRF["Reciprocal Rank Fusion (k=60)"]
+        Reranker["Cross-Encoder Reranker (ms-marco)"]
+        ContextBuild["Context Assembly (Token Budget)"]
+    end
+
+    subgraph Knowledge["Governed Knowledge Base"]
+        KB["Markdown Knowledge Base"]
+        Ingest["Ingestion Pipeline (ingest.py)"]
+    end
+
+    ChatUI --> Router
+    HealthUI --> HealthRouter
+    Router --> InputGuard
+
+    InputGuard --> LoadContext
+    LoadContext --> Retrieve
+    Retrieve --> MQE
+    MQE --> Pinecone
+    MQE --> ES
+    Pinecone --> RRF
+    ES --> RRF
+    RRF --> Reranker
+    Reranker --> ContextBuild
+    ContextBuild --> Assess
+    Assess --> Generate
+    Generate --> OutputGuard
+    OutputGuard --> Persist
+    OutputGuard --> Fallback
+    Fallback --> Persist
+    Persist --> Router
+    Router --> ChatUI
+    Router --> Inspector
+
+    KB --> Ingest
+    Ingest --> Pinecone
+    Ingest --> ES
+```
 
     Agent --> Query["Query Understanding"]
     Query --> MQE["Multi-Query Expansion"]
@@ -129,91 +185,81 @@ change guardrail policy, execute tools, or expose hidden prompts.
 ``` mermaid
 flowchart TB
     subgraph Client["Client"]
-        Web["Web / Mobile Client"]
+    Web["Executive Streamlit Web Client (:8501)"]
     end
 
-    subgraph API["FastAPI Application"]
-        Router["API Router"]
-        Auth["Authentication / Authorization"]
-        Chat["Chat Module"]
-        Health["System Module"]
+    subgraph API["FastAPI Modular Monolith (:8000)"]
+        Router["API Router (/api/v1)"]
+        Auth["Authentication / Request ID"]
+        Chat["Chat Module (/chat)"]
+        Health["System Module (/system/health)"]
     end
 
-    subgraph Guardrails["Guardrails"]
-        Input["Input Guards"]
-        RetrievalGuard["Retrieval Guards"]
-        Output["Output Guards"]
+    subgraph Guardrails["Layered Guardrails"]
+        Input["Input Guardrails (Regex + Length + PII Redaction)"]
+        NemoInput["NeMo Colang Rails (Off-Topic, Jailbreaks, Greetings)"]
+        Output["Output Guardrails (Instruction Leak Check)"]
+        NemoOutput["NeMo Colang Output Rails (Forbidden Operational Claims)"]
     end
 
-    subgraph Agent["Agent Orchestration"]
-        Graph["LangGraph Workflow"]
-        Query["Query Analysis"]
-        MQE["MQE"]
-        Generation["Answer Generation"]
+    subgraph Agent["Agent Orchestration (LangGraph)"]
+        StateGraph["StateGraph(AgentState)"]
+        ContextNode["Context Loading & Anaphora Substitution"]
+        AssessNode["Grounding Assessment (Claim Support)"]
+        GenNode["Evidence-Bounded Generation"]
+        PolicyNode["Deterministic Unavailable / Clarification Policy"]
     end
 
-    subgraph Retrieval["Retrieval"]
-        Dense["Dense Retrieval"]
-        Lexical["BM25"]
-        Fusion["RRF"]
-        Rerank["Semantic Reranker"]
-        Validation["Context Validation"]
+    subgraph Retrieval["Hybrid RAG Retrieval"]
+        MQE["MQE + Domain Keyword Extraction"]
+        Dense["Dense Retrieval (Pinecone / InMemory)"]
+        Lexical["Lexical Retrieval (Elasticsearch Native BM25)"]
+        Filter["Strategy 2 Soft Pre-Filtering + Fallback"]
+        Fusion["Reciprocal Rank Fusion (k=60)"]
+        Rerank["Semantic Cross-Encoder (ms-marco-MiniLM)"]
+        ContextAssemble["Context Assembly (Token Budgeting)"]
     end
 
-    subgraph Knowledge["Knowledge"]
-        KB["Governed Knowledge Base"]
-        Pipeline["Knowledge Engineering"]
-        Versioning["Version / Metadata"]
+    subgraph Storage["Persistence & Memory"]
+        PineconeStore[("Pinecone Vector Store")]
+        ESIndex[("Elasticsearch BM25 Index")]
+        SessionMem[("SessionStore (LRU Multi-Turn Memory)")]
     end
 
-    subgraph Models["Models"]
-        LLM["LLM"]
-        Embed["Embedding Model"]
-        Judge["JEV / System One"]
-    end
-
-    subgraph Storage["Storage"]
-        Pinecone[("Pinecone")]
-        Elasticsearch[("Elasticsearch")]
-        Memory[("Conversation State")]
-    end
-
-    subgraph Eval["Evaluation / Observability"]
-        Ragas["Ragas"]
-        Custom["Custom Evaluators"]
-        LangSmith["LangSmith"]
+    subgraph Observability["Observability & Benchmarks"]
+        LangSmith["LangSmith Tracing"]
+        BenchmarkRunner["Benchmark Runner (eval.py)"]
     end
 
     Web --> Router
     Router --> Auth
     Auth --> Chat
     Chat --> Input
-    Input --> Graph
-    Graph --> Query
-    Query --> MQE
+    Input --> NemoInput
+    NemoInput --> StateGraph
+    StateGraph --> ContextNode
+    ContextNode <--> SessionMem
+    ContextNode --> MQE
     MQE --> Dense
     MQE --> Lexical
-    Dense --> Pinecone
-    Lexical --> Elasticsearch
-    Pinecone --> Fusion
-    Elasticsearch --> Fusion
+    Dense --> PineconeStore
+    Lexical --> ESIndex
+    PineconeStore --> Filter
+    ESIndex --> Filter
+    Filter --> Fusion
     Fusion --> Rerank
-    Rerank --> Validation
-    Validation --> Generation
-    Generation --> LLM
-    LLM --> Output
-    Output --> Response["Final Response"]
+    Rerank --> ContextAssemble
+    ContextAssemble --> AssessNode
+    AssessNode --> GenNode
+    AssessNode --> PolicyNode
+    GenNode --> Output
+    PolicyNode --> Output
+    Output --> NemoOutput
+    NemoOutput --> Response["ChatResponseData Envelope"]
+    Response --> Web
 
-    Pipeline --> KB
-    KB --> Versioning
-    Versioning --> Pinecone
-    Versioning --> Elasticsearch
-
-    Graph <--> Memory
-    Ragas -.-> Graph
-    Custom -.-> Graph
-    Judge -.-> Graph
-    LangSmith -.-> Graph
+    StateGraph -. tracing .-> LangSmith
+    BenchmarkRunner -. evaluates .-> Chat
 ```
 
 ------------------------------------------------------------------------
@@ -254,47 +300,41 @@ deployment.
 
 The backend remains a modular monolith.
 
-``` text
 Backend/
-├── run.py
-├── main.py
-├── requirements.txt
-├── pyproject.toml
-├── Dockerfile
-├── docker-compose.yml
-│
 ├── app/
-│   ├── core/
-│   │   ├── config.py
-│   │   ├── exceptions.py
-│   │   ├── responses.py
-│   │   ├── lifecycle.py
-│   │   └── middleware/
-│   │
-│   ├── api/
-│   │   └── v1/
-│   │       └── router.py
-│   │
-│   ├── modules/
-│   │   ├── system/
-│   │   ├── chat/
-│   │   └── knowledge/
-│   │
 │   ├── ai/
-│   │   ├── embeddings/
-│   │   ├── prompts/
-│   │   ├── providers/
-│   │   ├── rag/
-│   │   ├── agents/
-│   │   ├── graphs/
-│   │   └── guardrails/
+│   │   ├── embeddings/          # sentence-transformers & OpenAI embedding adapters
+│   │   ├── graphs/              # workflow.py (LangGraph state machine), state.py (AgentState)
+│   │   ├── guardrails/          # input.py, output.py, pii.py, scope.py, nemo_adapter.py, nemo/
+│   │   ├── memory/              # store.py (SessionStore), context.py (anaphora engine), models.py
+│   │   ├── observability/       # tracer.py (LangSmith run config & metadata tagging)
+│   │   ├── prompts/             # generation.py, mqe.py
+│   │   ├── providers/           # llm.py (OpenAI provider with exponential backoff & fakes)
+│   │   └── rag/
+│   │       ├── generation/      # answer.py, grounding.py, models.py
+│   │       ├── indexing/        # vector_store.py, lexical.py, filters.py
+│   │       └── retrieval/       # hybrid.py, mqe.py, rrf.py, reranker.py, context.py
 │   │
-│   ├── db/
-│   ├── models/
-│   └── shared/
+│   ├── api/v1/                  # router.py (mounts module routers under /api/v1)
+│   ├── core/                    # config.py, exceptions.py, responses.py, lifecycle.py
+│   ├── modules/
+│   │   ├── chat/                # router.py, schemas.py, service.py, dependencies.py
+│   │   ├── knowledge/           # loader.py, parser.py, chunker.py, governance.py
+│   │   └── system/              # health.py
+│   ├── db/                      # Database boundary
+│   ├── models/                  # Shared domain data models
+│   └── shared/                  # Shared utilities
 │
-├── tests/
-└── docs/
+├── evaluation/                  # Benchmark CLI (eval.py), datasets/, evaluators/, runners/
+├── tests/                       # Unit, integration, guardrail & memory test suite (170+ tests)
+├── ingest.py                    # Knowledge base ingestion & indexing CLI
+├── run.py                       # Uvicorn entry point
+└── requirements.txt
+
+frontend/
+├── app.py                       # Streamlit executive chat & reasoning inspector UI
+├── api_client.py                # Typed HTTP client to FastAPI backend
+└── styles.css                   # Obsidian glassmorphic styling
 ```
 
 This represents the intended architecture; implementation should create
@@ -346,45 +386,62 @@ sequenceDiagram
 
 ## 8. Chat API Boundary
 
-The initial chat boundary is intentionally small:
+The chat endpoint is served at:
 
 ``` text
 POST /api/v1/chat
 ```
 
-Example request:
+### Request Envelope (`ChatRequest`):
 
 ``` json
 {
-  "conversation_id": "optional-id",
-  "message": "What are the eligibility requirements for BSBDA?"
+  "question": "How can I open one?",
+  "conversationId": "45e8db12-b0f3-47b7-8486-8ffe3e04bfb2",
+  "fullTrace": true
 }
 ```
+*(Accepts `question`, `query`, or `message` interchangeably; `conversationId` and `fullTrace` camelCase or snake_case).*
 
-Example response:
+### Response Envelope (`ChatResponseData`):
 
 ``` json
 {
   "success": true,
   "data": {
-    "conversation_id": "conversation-id",
-    "answer": "Grounded answer...",
-    "status": "answered"
+    "conversation_id": "45e8db12-b0f3-47b7-8486-8ffe3e04bfb2",
+    "question": "How can I open one?",
+    "query": "How can I open one?",
+    "resolved_query": "How can I open a Savings Account?",
+    "response": "To open a Savings Account, you must submit a completed Account Opening Form, Proof of Identity (Aadhaar, Passport, or PAN), Proof of Address, and recent passport-size photographs at any branch or online via Video-KYC.",
+    "response_type": "answer",
+    "support_level": "fully_supported",
+    "reason_code": "FULLY_SUPPORTED",
+    "chunk_ids": ["ACCT-SAV-001#c0004", "DOC-KYC-001#c0002"],
+    "errors": [],
+    "trace": {
+      "input_guardrail": { "allowed": true, "normalized_query": "How can I open one?" },
+      "conversation": { "conversation_id": "45e8db12-b0f3-47b7-8486-8ffe3e04bfb2", "resolved_query": "How can I open a Savings Account?" },
+      "mqe": { "queries": ["..."], "keywords": ["Savings Account", "account opening"] },
+      "vector_search": [...],
+      "bm25_search": [...],
+      "rrf": { "total_fused": 16 },
+      "reranking": { "total_ranked": 5 },
+      "context": { "item_count": 2, "estimated_tokens": 580 },
+      "grounding": { "status": "fully_supported" },
+      "output_guardrail": { "output_ok": true }
+    },
+    "request_id": "req-123456"
   }
 }
 ```
 
-Possible statuses:
-
--   `answered`
--   `partially_answered`
--   `clarification_required`
--   `information_unavailable`
--   `out_of_scope`
--   `blocked`
-
-The API contract should remain independent of internal agent
-implementation details.
+Runtime `support_level` categories:
+- `fully_supported`
+- `partially_supported`
+- `ambiguous`
+- `insufficient_evidence`
+- `contradictory_evidence`
 
 ------------------------------------------------------------------------
 
@@ -395,35 +452,29 @@ loop.
 
 ``` mermaid
 flowchart TD
-    START((START)) --> Input["Input Guard"]
-    Input --> Analyze["Query Analysis"]
-    Analyze --> Scope{"In Scope?"}
+    START((START)) --> InputGuard["1. input_guard<br/>(Deterministic + NeMo Colang)"]
 
-    Scope -->|No| Out["Out-of-Scope Response"]
-    Scope -->|Yes| MQE["Multi-Query Expansion"]
+    InputGuard -->|reject| Rejection["END<br/>(Rejection Envelope)"]
+    InputGuard -->|allowed| LoadContext["2. load_context<br/>(SessionStore + Pronoun Substitution)"]
 
-    MQE --> Retrieve["Hybrid Retrieval"]
-    Retrieve --> RRF["RRF"]
-    RRF --> Rerank["Semantic Reranking"]
-    Rerank --> Context["Context Validation"]
-    Context --> Evidence{"Sufficient Evidence?"}
+    LoadContext --> Retrieve["3. retrieve<br/>(MQE + Pinecone + BM25 + Soft Filter + RRF + Cross-Encoder)"]
 
-    Evidence -->|Yes| Generate["Generate Answer"]
-    Evidence -->|Ambiguous| Clarify["Ask Clarification"]
-    Evidence -->|No Evidence| Unavailable["Information Unavailable"]
+    Retrieve -->|fail| OutputGuard["6. output_guard<br/>(Deterministic + NeMo Output Rails)"]
+    Retrieve -->|assess| Assess["4. assess<br/>(Claim Grounding Assessment)"]
 
-    Generate --> Validate["Output / Claim Validation"]
-    Validate --> Result{"Response Valid?"}
+    Assess -->|generate| Generate["5a. generate<br/>(Evidence-Bounded Synthesis)"]
+    Assess -->|policy| Policy["5b. policy<br/>(Unavailable / Clarification Policy)"]
+    Assess -->|fail| OutputGuard
 
-    Result -->|Fully supported| Answer["Return Answer"]
-    Result -->|Partially supported| Partial["Return Supported Portion"]
-    Result -->|Needs clarification| Clarify
+    Generate --> OutputGuard
+    Policy --> OutputGuard
 
-    Answer --> END((END))
-    Partial --> END
-    Clarify --> END
-    Unavailable --> END
-    Out --> END
+    OutputGuard -->|fallback| Fallback["7. fallback<br/>(Safe Static Output Fallback)"]
+    OutputGuard -->|done| Persist["8. persist<br/>(SessionStore Audited Turn Commit)"]
+
+    Fallback --> Persist
+    Persist --> END((END))
+    Rejection --> END
 ```
 
 ------------------------------------------------------------------------
@@ -509,6 +560,12 @@ flowchart LR
 The hybrid approach combines semantic similarity with exact lexical
 matching, which is particularly useful for banking terminology, product
 names, policy terms, and natural-language questions.
+
+### Strategy 2 Soft Pre-Filtering with Graceful Fallback
+To ensure high precision without risking false-negative recall collapse:
+1. **Combined MQE + Domain Keyword Extraction**: In a single LLM call, `LLMQueryExpander.expand_detailed` generates diverse search formulations and extracts key banking entities/keywords.
+2. **Casing Expansion**: Extracted keywords are automatically expanded to lowercase, uppercase, and title-case variants before filter construction.
+3. **Soft Filter Execution & Fallback**: Searches on Pinecone and Elasticsearch initially apply active keyword constraints. If the candidate pool size falls below `min_fallback_candidates` (default 3), the system automatically triggers an unfiltered hybrid search fallback (retaining authoritative status and date constraints) to eliminate zero-result recall drops.
 
 ------------------------------------------------------------------------
 
@@ -718,9 +775,18 @@ flowchart LR
     Retrieval --> Answer["Grounded Answer"]
 ```
 
-Memory may resolve conversational references such as "its" to a
+Memory may resolve conversational references such as "its" or "one" to a
 previously discussed product, but the factual answer must still be
 retrieved from the current governed knowledge base.
+
+### Multi-Turn Contextual Query Resolution Engine
+Implemented in `app/ai/memory/context.py` and `store.py`:
+- **SessionStore**: Thread-safe LRU session memory maintaining the last `MAX_MEMORY_TURNS` (default 5).
+- **Deterministic Anaphora Engine**:
+  - `_ANAPHORA_PATTERN`: Detects pronouns and elliptical phrases (`it`, `its`, `one`, `that account`, `this account`, `this card`, `that deposit`, `the same`).
+  - `_substitute_anaphora`: Grammatically substitutes pronouns with the antecedent entity (e.g. `"How can I open one?"` with entity `"Savings Account"` -> `"How can I open a Savings Account?"`).
+  - `extract_recent_entity`: Deterministically scans recent turns for canonical banking products.
+- **Model-Based Contextualization Fallback**: If anaphoric reference cannot be resolved deterministically, invokes GPT-4o-mini with `_CONTEXTUALIZE_PROMPT` to rewrite the question as a standalone query without altering user intent or introducing new facts.
 
 ------------------------------------------------------------------------
 
@@ -762,16 +828,16 @@ deterministic enforcement is possible.
 
 ## 25. Semantic Guardrails
 
-NeMo Guardrails is planned for semantic conversational controls such as:
+NeMo Guardrails is integrated as an embedded semantic control layer (`app/ai/guardrails/nemo_adapter.py`):
 
--   Banking-domain scope
--   Prompt injection detection
--   Jailbreak detection
--   Input policy
--   Output policy
--   Conversational constraints
+- **Singleton Lifecycle**: Compiled once at application startup into `AgentResources` closures to eliminate per-turn initialization latency.
+- **Embedded Colang 1.0 Flows**:
+  - `banking_dialog.co`: Recognizes canonical banking queries and emits the sentinel `PROCEED_TO_RETRIEVAL`; intercepts greetings, thanks, and capability inquiries without RAG overhead.
+  - `jailbreaks.co`: Intercepts system prompt overrides, DAN persona hacks, and instruction bypasses.
+  - `off_topic.co`: Intercepts generic off-topic questions (recipes, poems, homework) and speculative investment/stock advice requests.
+  - `output_rails.co`: Runs the `check forbidden claims` flow with the custom Python action `check_forbidden_operational_claims` to block unauthorized transaction execution promises, fabricated account balances, or card block confirmations.
 
-NeMo Guardrails does not replace application-level security controls.
+NeMo Guardrails operates alongside application-level deterministic controls, failing safely if disabled.
 
 ------------------------------------------------------------------------
 
