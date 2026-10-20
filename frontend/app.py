@@ -1,4 +1,4 @@
-"""RAG Bank — Streamlit UI application.
+"""Cognibank AI — Hybrid, Multi-Turn RAG Agent — Streamlit UI application.
 
 Executive Banking Assistant interface connected to the governed RAG backend.
 """
@@ -25,7 +25,7 @@ BADGE_MAP: dict[str, tuple[str, str]] = {
 
 # ─── Page Configuration ───
 st.set_page_config(
-    page_title="RAG Bank — Intelligent Banking Assistant",
+    page_title="Cognibank AI — Hybrid, Multi-Turn RAG Agent",
     page_icon="🏛️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -61,8 +61,8 @@ with st.sidebar:
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
             <span style="font-size:2rem;">🏛️</span>
             <div>
-                <h2 style="margin:0; font-size:1.25rem; font-weight:700; color:#fff;">RAG Bank</h2>
-                <span style="font-size:0.75rem; color:#94a3b8;">Governed Banking AI</span>
+                <h2 style="margin:0; font-size:1.25rem; font-weight:700; color:#fff;">Cognibank AI</h2>
+                <span style="font-size:0.75rem; color:#94a3b8;">Hybrid, Multi-Turn RAG Agent</span>
             </div>
         </div>
         """,
@@ -187,7 +187,7 @@ st.markdown(
     <div class="brand-header">
         <span class="brand-icon">🏛️</span>
         <div>
-            <h1 class="brand-title">RAG Bank Intelligent Assistant</h1>
+            <h1 class="brand-title">Cognibank AI — Hybrid, Multi-Turn RAG Agent</h1>
             <p class="brand-subtitle">
                 Governed Banking Knowledge &bull; Hybrid Retrieval (Pinecone + BM25) &bull; Claim-Level Grounding &bull; NeMo Safety Rails
             </p>
@@ -325,7 +325,7 @@ if not st.session_state.messages:
             color: #64748b;
         ">
             <div style="font-size: 3.5rem; margin-bottom: 16px; opacity: 0.5;">🏛️</div>
-            <h3 style="color: #94a3b8 !important; font-weight: 500; margin-bottom: 8px;">Welcome to RAG Bank</h3>
+            <h3 style="color: #94a3b8 !important; font-weight: 500; margin-bottom: 8px;">Welcome to Cognibank AI — Hybrid, Multi-Turn RAG Agent</h3>
             <p style="color: #64748b !important; max-width: 420px; margin: 0 auto; font-size: 0.88rem; line-height: 1.6;">
                 Ask any banking question below. Responses are grounded in governed<br/>
                 banking knowledge with full retrieval transparency.

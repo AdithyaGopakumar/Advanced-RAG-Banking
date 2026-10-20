@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class BackendClient:
-    """HTTP client communicating with the RAG Bank FastAPI backend."""
+    """HTTP client communicating with the Cognibank AI FastAPI backend."""
 
     def __init__(self, base_url: str = "http://localhost:8000", timeout: float = 90.0) -> None:
         self.base_url = base_url.rstrip("/")
@@ -89,7 +89,7 @@ class BackendClient:
                 "success": False,
                 "error": {
                     "code": "CONNECTION_OFFLINE",
-                    "message": f"Unable to connect to RAG Bank backend at {self.base_url}. Ensure the server is running (`cd Backend && python run.py`).",
+                    "message": f"Unable to connect to Cognibank AI backend at {self.base_url}. Ensure the server is running (`cd Backend && python run.py`).",
                 },
             }
         except httpx.TimeoutException:

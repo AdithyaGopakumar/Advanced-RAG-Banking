@@ -1,6 +1,6 @@
-# RAG Bank — Streamlit UI Frontend
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent — Frontend
 
-Executive conversational interface and deep pipeline reasoning inspector for the Advanced RAG Banking Assistant.
+Executive conversational interface and deep pipeline reasoning inspector for Cognibank AI — Hybrid, Multi-Turn RAG Agent.
 
 ## Features
 

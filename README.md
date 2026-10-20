@@ -1,4 +1,4 @@
-# Advanced RAG — Banking Knowledge System & AI Agent
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent
 
 Production-oriented, governed banking customer support system featuring **Hybrid RAG** (Dense Pinecone + Lexical Elasticsearch BM25), **LangGraph** agent orchestration, **NVIDIA NeMo Guardrails**, **LangSmith** observability, and an **Executive Streamlit Web Interface**.
 
