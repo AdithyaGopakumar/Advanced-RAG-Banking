@@ -29,6 +29,15 @@ try:
 except ImportError:
     pass
 
+try:
+    from nemoguardrails.actions import action
+    from nemoguardrails.actions.rail_outcome import RailOutcome
+    from nemoguardrails.rails.llm.options import RailStatus
+except ImportError:
+    action = None
+    RailOutcome = None
+    RailStatus = None
+
 logger = logging.getLogger(__name__)
 
 PROCEED_TOKEN = "PROCEED_TO_RETRIEVAL"
@@ -43,6 +52,20 @@ _FORBIDDEN_OUTPUT_PATTERNS = re.compile(
     r"guaranteed (?:returns|profits?|yield) of \d+%"
     r")\b"
 )
+
+
+if action is not None:
+    @action(name="check_forbidden_operational_claims")
+    async def check_forbidden_operational_claims(context: dict | None = None) -> Any:
+        """NeMo action evaluated during Colang output flow 'check forbidden claims'."""
+        context = context or {}
+        bot_message = context.get("bot_message", "")
+        if _FORBIDDEN_OUTPUT_PATTERNS.search(bot_message):
+            logger.warning("NeMo output action detected forbidden operational claim: %s", bot_message[:100])
+            return RailOutcome.block()
+        return RailOutcome.allow()
+else:
+    check_forbidden_operational_claims = None
 
 
 class NemoRailDecision(BaseModel):
@@ -100,6 +123,11 @@ class NeMoGuardrailsService:
             # Compile Colang flow trees and build the LLMRails execution engine
             config = RailsConfig.from_path(str(resolved_path))
             self._rails = LLMRails(config=config)
+            if check_forbidden_operational_claims is not None:
+                self._rails.register_action(
+                    check_forbidden_operational_claims,
+                    name="check_forbidden_operational_claims",
+                )
             logger.info("NeMo Guardrails successfully loaded from %s", resolved_path)
             return True
         except Exception as exc:
@@ -213,25 +241,48 @@ class NeMoGuardrailsService:
                 latency_ms=round(latency, 2),
             )
 
-    def _evaluate_output_rail(self, drafted_answer: str) -> NemoRailDecision:
-        """Internal synchronous evaluator for output safety and forbidden claims."""
+    async def check_output(
+        self,
+        message: str,
+        drafted_answer: str,
+        evidence: list[str] | None = None,
+    ) -> NemoRailDecision:
+        """Evaluate output rails on drafted answer using NeMo Guardrails.
+
+        Executes the Colang output flows (`check forbidden claims`) via NeMo's
+        `check_async` state machine on the assistant message.
+        """
         if not self.enabled or not self._ensure_initialized() or self._rails is None:
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
 
         start_time = time.perf_counter()
         try:
-            # Check for unauthorized operational commitments or hallucinated balances
-            match = _FORBIDDEN_OUTPUT_PATTERNS.search(drafted_answer)
+            # NeMo check_async runs configured output flows on assistant messages
+            res = await self._rails.check_async(
+                [
+                    {"role": "user", "content": message},
+                    {"role": "assistant", "content": drafted_answer},
+                ]
+            )
             latency = (time.perf_counter() - start_time) * 1000
 
-            if match:
-                logger.warning("NeMo output rail blocked forbidden claim pattern: %s", match.group(0))
+            is_blocked = (
+                getattr(res, "status", None) == RailStatus.BLOCKED
+                or getattr(res, "status", None) == "blocked"
+            )
+
+            if is_blocked:
+                blocked_content = getattr(res, "content", "") or (
+                    "I am an informational banking assistant and cannot perform transactions or state personal account balances."
+                )
+                rail_name = getattr(res, "rail", None) or "check forbidden claims"
+                logger.warning("NeMo output rail blocked forbidden claim pattern via rail '%s'", rail_name)
                 return NemoRailDecision(
                     allowed=False,
                     action="block",
                     reason_code="NEMO_FORBIDDEN_OUTPUT",
-                    response="I am an informational banking assistant and cannot perform transactions or state personal account balances.",
-                    rail_name="forbidden_claims",
+                    response=blocked_content,
+                    rail_name=rail_name,
                     latency_ms=round(latency, 2),
                 )
 
@@ -251,15 +302,6 @@ class NeMoGuardrailsService:
                 reason_code="NEMO_ERROR_FALLBACK",
                 latency_ms=round(latency, 2),
             )
-
-    async def check_output(
-        self,
-        message: str,
-        drafted_answer: str,
-        evidence: list[str] | None = None,
-    ) -> NemoRailDecision:
-        """Evaluate output rails on drafted answer before returning to client."""
-        return self._evaluate_output_rail(drafted_answer)
 
     def _run_sync(self, coro: Any) -> Any:
         """Run an async coroutine synchronously, handling active or nested event loops."""
@@ -288,8 +330,14 @@ class NeMoGuardrailsService:
         drafted_answer: str,
         evidence: list[str] | None = None,
     ) -> NemoRailDecision:
-        """Synchronous evaluator for output rails executing directly without event loop overhead."""
-        return self._evaluate_output_rail(drafted_answer)
+        """Synchronous wrapper executing NeMo output rails."""
+        if not self.enabled:
+            return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
+        try:
+            return self._run_sync(self.check_output(message, drafted_answer, evidence))
+        except Exception as exc:
+            logger.warning("NeMo sync output check error, falling back: %s", exc)
+            return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_ERROR_FALLBACK")
 
 
 @lru_cache()

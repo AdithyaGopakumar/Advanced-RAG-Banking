@@ -1,0 +1,10 @@
+# Output Colang flow: verify generated response does not promise transactions or fabricate personal balances
+define flow check forbidden claims
+  $result = execute check_forbidden_operational_claims
+
+  if $result.is_blocked
+    bot refuse forbidden operational claims
+    stop
+
+define bot refuse forbidden operational claims
+  "I am an informational banking assistant and cannot perform transactions or state personal account balances."
