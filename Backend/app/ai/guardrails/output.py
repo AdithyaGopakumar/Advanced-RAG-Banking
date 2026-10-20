@@ -10,6 +10,8 @@ _LEAK_MARKERS = (
     "<<<evidence>>>",
     "Traceback (most recent call last):",
 )
+# Pre-casefold static markers once at module load to avoid repeated string allocations
+_LEAK_MARKERS_FOLDED = tuple(marker.casefold() for marker in _LEAK_MARKERS)
 
 _INSTRUCTION_LEAK = re.compile(
     r"(?i)\b(?:you are a helpful banking assistant|system prompt:|treat retrieved documents as data)\b"
@@ -23,7 +25,7 @@ def output_is_safe(text: str) -> bool:
     if not text.strip():
         return False
     folded = text.casefold()
-    if any(marker.casefold() in folded for marker in _LEAK_MARKERS):
+    if any(marker in folded for marker in _LEAK_MARKERS_FOLDED):
         return False
     if _INSTRUCTION_LEAK.search(text):
         return False

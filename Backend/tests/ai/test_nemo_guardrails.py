@@ -12,6 +12,9 @@ from app.core.config import get_settings
 from main import create_app
 
 
+from app.ai.embeddings.deterministic import DeterministicEmbeddingProvider
+
+
 class _DummyLLM:
     def complete(self, *, system: str, user: str) -> str:
         return "BSBDA is a basic savings bank deposit account."
@@ -22,16 +25,16 @@ class _Lexical:
         return []
 
 
-def _resources(llm: object | None = None) -> AgentResources:
-    class _MockEmbedder:
-        def embed_query(self, text: str) -> list[float]:
-            return [0.1] * 384
+from app.ai.rag.retrieval.mqe import OriginalQueryExpander
 
+
+def _resources(llm: object | None = None) -> AgentResources:
+    embedder = DeterministicEmbeddingProvider("deterministic", 8)
     return AgentResources(
-        embedder=_MockEmbedder(),
+        embedder=embedder,
         vector_store=InMemoryVectorStore(),
         lexical_index=_Lexical(),
-        expander=None,
+        expander=OriginalQueryExpander(),
         reranker=CrossEncoderReranker("test", scorer=lambda query, texts: [0.9 for _ in texts]),
         llm=llm or _DummyLLM(),
         top_k=5,
@@ -154,3 +157,75 @@ def test_workflow_agent_with_nemo_greeting(monkeypatch):
     assert "welcome to rag bank assistant" in turn.response.lower()
     assert turn.trace is not None
     assert turn.trace["input_guardrail"]["nemo_decision"]["reason_code"] == "NEMO_GREETING"
+
+
+def test_workflow_agent_with_nemo_output_block(monkeypatch):
+    from app.ai.guardrails.nemo_adapter import NeMoGuardrailsService
+    from app.ai.rag.indexing.vector_store import VectorRecord
+    from app.ai.rag.indexing.filters import ChunkMetadata
+
+    class _RogueLLM:
+        def __init__(self):
+            self.calls = 0
+
+        def complete(self, *, system: str, user: str) -> str:
+            self.calls += 1
+            if self.calls == 1:
+                return '{"claims": [{"text": "fund transfer limits", "support": "supported"}]}'
+            return "I have transferred Rs. 5000 to your friend's account successfully."
+
+    resources = _resources(llm=_RogueLLM())
+    resources.vector_store.upsert(
+        [
+            VectorRecord(
+                chunk_id="c1",
+                vector=resources.embedder.embed_documents(["BSBDA accounts allow fund transfers up to Rs 10000 per month."]).embeddings[0].vector,
+                metadata=ChunkMetadata(
+                    chunk_id="c1",
+                    document_id="doc1",
+                    document_version="1.0",
+                    document_type="reference",
+                    document_title="Transfers",
+                    status="approved",
+                    source_path="docs/transfers.md",
+                    content_hash="h1",
+                    heading_path=["Transfers"],
+                ),
+                text="BSBDA accounts allow fund transfers up to Rs 10000 per month.",
+            )
+        ]
+    )
+
+    monkeypatch.setattr(
+        "app.ai.graphs.workflow.get_nemo_service",
+        lambda: NeMoGuardrailsService(enabled=True),
+    )
+
+    turn = run_agent("Can I transfer money?", resources, full_trace=True)
+    assert turn.response_type == "fallback", f"Got response_type={turn.response_type}, reason_code={turn.reason_code}, errors={turn.errors}"
+    assert turn.reason_code == "OUTPUT_UNSAFE"
+    assert "informational banking assistant" in turn.response.lower()
+    assert turn.trace is not None
+    assert turn.trace["output_guardrail"]["output_ok"] is False
+    assert turn.trace["output_guardrail"]["nemo_decision"]["reason_code"] == "NEMO_FORBIDDEN_OUTPUT"
+
+
+def test_get_nemo_service_not_called_again_in_output_guard(monkeypatch):
+    import app.ai.graphs.workflow as wf
+    from app.ai.guardrails.nemo_adapter import NeMoGuardrailsService
+
+    call_count = 0
+    service_instance = NeMoGuardrailsService(enabled=False)
+
+    def _counted_get_nemo():
+        nonlocal call_count
+        call_count += 1
+        return service_instance
+
+    monkeypatch.setattr(wf, "get_nemo_service", _counted_get_nemo)
+
+    resources = _resources()
+    turn = run_agent("What is BSBDA?", resources)
+    # Ensure it was called exactly once during build_agent, and never re-invoked during output_guard
+    assert call_count == 1
+

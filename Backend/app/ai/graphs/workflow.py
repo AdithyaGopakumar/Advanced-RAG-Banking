@@ -411,11 +411,25 @@ def build_agent(resources: AgentResources):
         return out
 
     def output_guard(state: AgentState) -> dict[str, object]:
+        """Node 6: Layered Output Guardrails (Deterministic + NeMo Policy Verification).
+
+        Executes defensive post-generation controls in optimal order:
+        1. Fast Deterministic Leak/Integrity Check: Verifies non-empty response, ensures
+           no system prompt leakage, internal tracebacks, or raw evidence tag exposures.
+        2. Semantic NeMo Output Rails: Reuses the compiled singleton `nemo_service` (skipping
+           invocation when disabled) to block unauthorized transaction promises or fabricated balances.
+        3. Sensitive Financial PII Sanitization: Redacts residual card numbers/account IDs
+           only on responses that passed all safety checks.
+        """
         raw_response = state.get("response", "")
+
+        # ── Step 1: Sub-millisecond deterministic safety check ──
         safe = output_is_safe(raw_response)
         nemo_res = None
-        if safe:
-            nemo_service = get_nemo_service()
+
+        # ── Step 2: Semantic NeMo output rails (only evaluated if deterministic check passed and NeMo is active) ──
+        # Reuses the closure `nemo_service` resolved during graph compilation rather than re-resolving singleton
+        if safe and nemo_service.enabled:
             nemo_res = nemo_service.check_output_sync(
                 message=state.get("user_message", ""),
                 drafted_answer=raw_response,
@@ -423,12 +437,15 @@ def build_agent(resources: AgentResources):
             if not nemo_res.allowed:
                 safe = False
 
+        # ── Step 3: Response sanitization and policy fallback assignment ──
         if not safe:
             if nemo_res and not nemo_res.allowed and nemo_res.response:
+                # Retain specific NeMo refusal (e.g. transactional boundary explanation)
                 sanitized = nemo_res.response
             else:
                 sanitized = SAFE_FALLBACK
         else:
+            # Mask any residual PII before returning to the caller
             sanitized = sanitize_output(raw_response)
 
         is_full_trace = state.get("full_trace", False)
@@ -443,18 +460,22 @@ def build_agent(resources: AgentResources):
         return {"output_ok": safe, "response": sanitized, "trace": trace}
 
     def fallback(state: AgentState) -> dict[str, object]:
+        """Node 7 (Fallback): Emits a controlled safe response when output validation fails."""
         errors = list(state.get("errors") or [])
         errors.append("OUTPUT_UNSAFE")
+        safe_response = state.get("response") or SAFE_FALLBACK
         is_full_trace = state.get("full_trace", False)
         trace = dict(state.get("trace") or {})
         if is_full_trace:
-            trace["output_guardrail"] = {
+            output_trace = dict(trace.get("output_guardrail") or {})
+            output_trace.update({
                 "output_ok": False,
                 "fallback_triggered": True,
-                "final_response": SAFE_FALLBACK,
-            }
+                "final_response": safe_response,
+            })
+            trace["output_guardrail"] = output_trace
         return {
-            "response": SAFE_FALLBACK,
+            "response": safe_response,
             "response_type": "fallback",
             "reason_code": "OUTPUT_UNSAFE",
             "output_ok": True,

@@ -213,13 +213,8 @@ class NeMoGuardrailsService:
                 latency_ms=round(latency, 2),
             )
 
-    async def check_output(
-        self,
-        message: str,
-        drafted_answer: str,
-        evidence: list[str] | None = None,
-    ) -> NemoRailDecision:
-        """Evaluate output rails on drafted answer before returning to client."""
+    def _evaluate_output_rail(self, drafted_answer: str) -> NemoRailDecision:
+        """Internal synchronous evaluator for output safety and forbidden claims."""
         if not self.enabled or not self._ensure_initialized() or self._rails is None:
             return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
 
@@ -257,6 +252,15 @@ class NeMoGuardrailsService:
                 latency_ms=round(latency, 2),
             )
 
+    async def check_output(
+        self,
+        message: str,
+        drafted_answer: str,
+        evidence: list[str] | None = None,
+    ) -> NemoRailDecision:
+        """Evaluate output rails on drafted answer before returning to client."""
+        return self._evaluate_output_rail(drafted_answer)
+
     def _run_sync(self, coro: Any) -> Any:
         """Run an async coroutine synchronously, handling active or nested event loops."""
         try:
@@ -284,14 +288,8 @@ class NeMoGuardrailsService:
         drafted_answer: str,
         evidence: list[str] | None = None,
     ) -> NemoRailDecision:
-        """Synchronous wrapper for check_output to support synchronous workflows."""
-        if not self.enabled:
-            return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_DISABLED")
-        try:
-            return self._run_sync(self.check_output(message, drafted_answer, evidence))
-        except Exception as exc:
-            logger.warning("NeMo sync output check error, falling back: %s", exc)
-            return NemoRailDecision(allowed=True, action="allow", reason_code="NEMO_ERROR_FALLBACK")
+        """Synchronous evaluator for output rails executing directly without event loop overhead."""
+        return self._evaluate_output_rail(drafted_answer)
 
 
 @lru_cache()
