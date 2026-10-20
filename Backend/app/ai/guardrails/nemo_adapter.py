@@ -211,7 +211,7 @@ class NeMoGuardrailsService:
                 )
 
             # 5. Friendly conversational greetings or capabilities
-            if "welcome to rag bank assistant" in content.lower():
+            if "welcome to cognibank ai" in content.lower() or "welcome to rag bank assistant" in content.lower():
                 return NemoRailDecision(
                     allowed=False,
                     action="intercept",

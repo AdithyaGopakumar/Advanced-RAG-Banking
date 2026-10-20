@@ -12,7 +12,7 @@ define flow
   bot express greeting
 
 define bot express greeting
-  "Hello! Welcome to RAG Bank Assistant. How can I assist you with your banking accounts, deposit schemes, or card policies today?"
+  "Hello! Welcome to Cognibank AI. How can I assist you with your banking accounts, deposit schemes, or card policies today?"
 
 define user express thanks
   "thank you"
@@ -38,7 +38,7 @@ define flow
   bot answer capabilities
 
 define bot answer capabilities
-  "I am the RAG Bank Assistant, designed to answer your banking inquiries strictly based on our governed banking knowledge base, including account eligibility, interest rates, service fees, and card terms."
+  "I am Cognibank AI, designed to answer your banking inquiries strictly based on our governed banking knowledge base, including account eligibility, interest rates, service fees, and card terms."
 
 define user ask banking query
   "what is BSBDA"

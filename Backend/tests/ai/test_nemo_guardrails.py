@@ -63,7 +63,7 @@ async def test_nemo_greeting_interception():
     assert decision.allowed is False
     assert decision.action == "intercept"
     assert decision.reason_code == "NEMO_GREETING"
-    assert "welcome to rag bank assistant" in (decision.response or "").lower()
+    assert "welcome to cognibank ai" in (decision.response or "").lower()
 
 
 @pytest.mark.asyncio
@@ -154,7 +154,7 @@ def test_workflow_agent_with_nemo_greeting(monkeypatch):
     turn = run_agent("hello", _resources(), full_trace=True)
     assert turn.response_type == "rejected"
     assert turn.reason_code == "NEMO_GREETING"
-    assert "welcome to rag bank assistant" in turn.response.lower()
+    assert "welcome to cognibank ai" in turn.response.lower()
     assert turn.trace is not None
     assert turn.trace["input_guardrail"]["nemo_decision"]["reason_code"] == "NEMO_GREETING"
 

@@ -1,6 +1,6 @@
-# RAG Bank — Backend
+# Cognibank AI — Hybrid, Multi-Turn RAG Agent — Backend
 
-Production-oriented FastAPI backend for the RAG Bank advanced banking assistant. Built around the **modular monolith** pattern — code is organized by domain, not by technical layer.
+Production-oriented FastAPI backend for Cognibank AI — Hybrid, Multi-Turn RAG Agent. Built around the **modular monolith** pattern — code is organized by domain, not by technical layer.
 
 ## Highlights
 

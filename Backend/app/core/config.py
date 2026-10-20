@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     )
 
     # ─── Application ───
-    APP_NAME: str = "RAG Bank"
+    APP_NAME: str = "Cognibank AI — Hybrid, Multi-Turn RAG Agent"
     KNOWLEDGE_ROOT: str = "../knowledge-base"
     CHUNK_MAX_SIZE: int = 2000
     APP_VERSION: str = "0.1.0"
